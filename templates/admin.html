@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - AI Code Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin-style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <div class="admin-sidebar">
+            <div class="admin-sidebar-header">
+                <i class="fas fa-shield-alt"></i>
+                <h2>Admin Panel</h2>
+            </div>
+            <nav class="admin-nav">
+                <a href="#" class="active">
+                    <i class="fas fa-database"></i>
+                    Document Management
+                </a>
+                <a href="#">
+                    <i class="fas fa-users"></i>
+                    User Management
+                </a>
+                <a href="#">
+                    <i class="fas fa-chart-bar"></i>
+                    Analytics
+                </a>
+            </nav>
+            <div class="admin-sidebar-footer">
+                <a href="{{ url_for('logout') }}" class="admin-logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="admin-main">
+            <header class="admin-header">
+                <h1>Document Management</h1>
+                <div class="admin-user-info">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Admin</span>
+                </div>
+            </header>
+
+            <div class="admin-content">
+                <div class="admin-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-file-upload"></i> Embed Documents</h2>
+                    </div>
+                    <div class="card-content">
+                        <form id="embed-form" class="upload-form">
+                            <div class="form-group">
+                                <label for="csv_path">Document Path</label>
+                                <input type="text" id="csv_path" name="csv_path" 
+                                       placeholder="Enter CSV file path" required>
+                            </div>
+                            <button type="submit" class="admin-btn">
+                                <i class="fas fa-upload"></i>
+                                Embed Documents
+                            </button>
+                        </form>
+                        <div id="result" class="result-container"></div>
+                    </div>
+                </div>
+
+                <div class="admin-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-file-alt"></i>
+                        <div class="stat-info">
+                            <h3>Total Documents</h3>
+                            <p class="stat-number">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-clock"></i>
+                        <div class="stat-info">
+                            <h3>Last Upload</h3>
+                            <p class="stat-text">No uploads yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('embed-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const resultDiv = document.getElementById('result');
+            const csvPath = document.getElementById('csv_path').value;
+            
+            resultDiv.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Processing...</div>';
+            
+            try {
+                const response = await fetch('/admin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `csv_path=${encodeURIComponent(csvPath)}`
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i>
+                        ${data.message}
+                    </div>`;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        Error: ${error.message}
+                    </div>`;
+            }
+        });
+    </script>
+</body>
+</html>

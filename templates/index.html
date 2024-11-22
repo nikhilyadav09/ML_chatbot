@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Code Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-history"></i> Previous Chats</h2>
+            </div>
+            <div class="chat-history">
+                {% for chat in chat_history %}
+                <div class="history-item">
+                    <div class="query"><i class="fas fa-question-circle"></i> {{ chat.query }}</div>
+                    <div class="timestamp">{{ chat.timestamp }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="sidebar-footer">
+                <a href="{{ url_for('logout') }}" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h1><i class="fas fa-robot"></i> ML Code Assistant</h1>
+                </div>
+                
+                <div class="chat-messages" id="chat-history">
+                    <!-- Chat messages will be dynamically added here -->
+                </div>
+
+                <div class="query-input">
+                    <form id="search-form" onsubmit="submitQuery(event)">
+                        <input type="text" id="query" placeholder="Ask me anything about Machine Learning...">
+                        <button type="submit">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function submitQuery(event) {
+            event.preventDefault();
+            const query = document.getElementById('query').value;
+            const chatHistory = document.getElementById('chat-history');
+            
+            // Add user query to chat
+            chatHistory.innerHTML += `
+                <div class="message user-message">
+                    <div class="message-content">
+                        <i class="fas fa-user"></i>
+                        <p>${query}</p>
+                    </div>
+                </div>
+            `;
+
+            try {
+                const response = await fetch('/search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ query: query })
+                });
+
+                const results = await response.json();
+                
+                // Add AI response to chat
+                let aiResponse = '<div class="message ai-message"><div class="message-content"><i class="fas fa-robot"></i><div class="ai-responses">';
+                results.forEach(result => {
+                    aiResponse += `
+                        <div class="response-item">
+                            <p>${result.text}</p>
+                            <div class="similarity">Similarity: ${(result.similarity * 100).toFixed(1)}%</div>
+                        </div>
+                    `;
+                });
+                aiResponse += '</div></div></div>';
+                chatHistory.innerHTML += aiResponse;
+                
+                // Clear input and scroll to bottom
+                document.getElementById('query').value = '';
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>

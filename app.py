@@ -210,6 +210,44 @@ def index():
     chat_history = ir_system.get_user_chat_history(session['user_id'])
     return render_template('index.html', chat_history=chat_history)  # Fixed variable name
 
+@app.route('/get_chat/<int:chat_id>')
+def get_chat(chat_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    cursor = ir_system.conn.cursor()
+    cursor.execute("""
+        SELECT query, response 
+        FROM chat_history 
+        WHERE id = %s AND user_id = %s
+    """, (chat_id, session['user_id']))
+    
+    result = cursor.fetchone()
+    cursor.close()
+    
+    if result:
+        return jsonify({
+            'query': result[0],
+            'response': result[1]
+        })
+    return jsonify({'error': 'Chat not found'}), 404
+
+@app.route('/delete_chat/<int:chat_id>', methods=['DELETE'])
+def delete_chat(chat_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    cursor = ir_system.conn.cursor()
+    cursor.execute("""
+        DELETE FROM chat_history 
+        WHERE id = %s AND user_id = %s
+    """, (chat_id, session['user_id']))
+    
+    ir_system.conn.commit()
+    cursor.close()
+    
+    return jsonify({'status': 'success'})
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':

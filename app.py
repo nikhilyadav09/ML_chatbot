@@ -109,81 +109,84 @@ class InformationRetrievalSystem:
             return result[0]  # Return user ID
         return None
 
-    # ... (rest of the methods remain the same)
-    def embed_csv_documents(self, csv_path):
-        cursor = self.conn.cursor()
-        
-        with open(csv_path, 'r', encoding='utf-8') as csvfile:
-            csv_reader = csv.reader(csvfile)
-            next(csv_reader)  # Skip header
-            
-            for row in csv_reader:
-                text = row[1]  # Assuming the content is in the second column
-                embedding = self.model.encode(text).tolist()
-                
-                cursor.execute(
-                    "INSERT INTO document_embeddings (text, source, embedding) VALUES (%s, %s, %s)",
-                    (text, csv_path, embedding)
-                )
-        
-        self.conn.commit()
-        cursor.close()
-        
-        return f"Embedded documents from {csv_path}"
     
-    def search_documents(self, query, user_id, top_k=5):
+    
+    # Update the get_user_chat_history method in InformationRetrievalSystem class
+
+
+    # Update the search_documents method to ensure it stores all required fields
+    def search_documents(self, query, user_id, top_k=1):  # Changed default to 1
         query_embedding = self.model.encode(query).tolist()
         
         cursor = self.conn.cursor()
-        cursor.execute("""
-            SELECT text, source, 1 - (embedding <=> %s::vector) as similarity 
-            FROM document_embeddings 
-            ORDER BY similarity DESC 
-            LIMIT %s
-        """, (query_embedding, top_k))
+        try:
+            # Get only the top result with highest similarity
+            cursor = self.conn.cursor()
+            cursor.execute("""
+                SELECT text, source, 1 - (embedding <=> %s::vector) as similarity 
+                FROM document_embeddings 
+                ORDER BY similarity DESC 
+                LIMIT %s
+            """, (query_embedding, top_k))
+            
+            results = cursor.fetchall()
+            
+            if not results:
+                response_text = "No relevant matches found."
+            else:
+                # Format response text - now only one result
+                response_text = f"{results[0][0]} (Similarity: {results[0][2]:.2f})"
+            
+            # Save chat history - store only the user query and the single best response
+            cursor.execute("""
+                INSERT INTO chat_history (user_id, query, response, timestamp) 
+                VALUES (%s, %s, %s, CURRENT_TIMESTAMP)
+            """, (user_id, query, response_text))
+            
+            self.conn.commit()
+            
+            # Return only unique results
+            return [
+                {
+                    "text": text, 
+                    "source": source, 
+                    "similarity": float(similarity)
+                } 
+                for text, source, similarity in results
+            ]
         
-        results = cursor.fetchall()
-        
-        # Save chat history
-        response_text = "\n\n".join([f"{text} (Similarity: {similarity:.2f})" for text, _, similarity in results])
-        cursor.execute("""
-            INSERT INTO chat_history (user_id, query, response) 
-            VALUES (%s, %s, %s)
-        """, (user_id, query, response_text))
-        
-        self.conn.commit()
-        cursor.close()
-        
-        return [
-            {
-                "text": text, 
-                "source": source, 
-                "similarity": float(similarity)
-            } 
-            for text, source, similarity in results
-        ]
-    
+        except Exception as e:
+            print(f"Error in search_documents: {str(e)}")
+            self.conn.rollback()
+            return []
+        finally:
+            cursor.close()
+
     def get_user_chat_history(self, user_id):
         cursor = self.conn.cursor()
-        cursor.execute("""
-            SELECT query, response, timestamp 
-            FROM chat_history 
-            WHERE user_id = %s 
-            ORDER BY timestamp DESC 
-            LIMIT 20
-        """, (user_id,))
-        
-        history = cursor.fetchall()
-        cursor.close()
-        
-        return [
-            {
+        try:
+            cursor.execute("""
+                SELECT id, query, response, timestamp 
+                FROM chat_history 
+                WHERE user_id = %s 
+                ORDER BY timestamp DESC  
+                LIMIT 20
+            """, (user_id,))
+            
+            history = cursor.fetchall()
+            
+            return [{
+                "id": id,
                 "query": query,
                 "response": response,
                 "timestamp": timestamp.strftime("%Y-%m-%d %H:%M:%S")
-            } 
-            for query, response, timestamp in history
-        ]
+            } for id, query, response, timestamp in history]
+            
+        except Exception as e:
+            print(f"Error in get_user_chat_history: {str(e)}")
+            return []
+        finally:
+            cursor.close()
 
 # Flask Application Setup
 app = Flask(__name__)
@@ -210,43 +213,9 @@ def index():
     chat_history = ir_system.get_user_chat_history(session['user_id'])
     return render_template('index.html', chat_history=chat_history)  # Fixed variable name
 
-@app.route('/get_chat/<int:chat_id>')
-def get_chat(chat_id):
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
-    
-    cursor = ir_system.conn.cursor()
-    cursor.execute("""
-        SELECT query, response 
-        FROM chat_history 
-        WHERE id = %s AND user_id = %s
-    """, (chat_id, session['user_id']))
-    
-    result = cursor.fetchone()
-    cursor.close()
-    
-    if result:
-        return jsonify({
-            'query': result[0],
-            'response': result[1]
-        })
-    return jsonify({'error': 'Chat not found'}), 404
 
-@app.route('/delete_chat/<int:chat_id>', methods=['DELETE'])
-def delete_chat(chat_id):
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
-    
-    cursor = ir_system.conn.cursor()
-    cursor.execute("""
-        DELETE FROM chat_history 
-        WHERE id = %s AND user_id = %s
-    """, (chat_id, session['user_id']))
-    
-    ir_system.conn.commit()
-    cursor.close()
-    
-    return jsonify({'status': 'success'})
+ 
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -354,6 +323,91 @@ def search_documents():
 def logout():
     session.clear()
     return redirect(url_for('login'))
+
+# Add these routes to your app.py
+
+@app.route('/get_chat/<int:chat_id>')
+def get_chat(chat_id):
+    print(f"\n--- GET CHAT DEBUG ---")
+    print(f"Requested chat_id: {chat_id}")
+    print(f"Current session: {session}")
+    
+    if 'user_id' not in session:
+        print("Error: No user_id in session")
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    try:
+        cursor = ir_system.conn.cursor()
+        query = """
+            SELECT id, query, response 
+            FROM chat_history 
+            WHERE id = %s AND user_id = %s
+        """
+        print(f"Executing query with params: id={chat_id}, user_id={session['user_id']}")
+        
+        cursor.execute(query, (chat_id, session['user_id']))
+        result = cursor.fetchone()
+        
+        print(f"Query result: {result}")
+        
+        if result:
+            response_data = {
+                'id': result[0],
+                'query': result[1],
+                'response': result[2]
+            }
+            print(f"Returning data: {response_data}")
+            return jsonify(response_data)
+        
+        print("Error: Chat not found")
+        return jsonify({'error': 'Chat not found'}), 404
+        
+    except Exception as e:
+        print(f"Error occurred: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+    finally:
+        cursor.close()
+
+@app.route('/delete_chat/<int:chat_id>', methods=['DELETE'])
+def delete_chat(chat_id):
+    print(f"\n--- DELETE CHAT DEBUG ---")
+    print(f"Attempting to delete chat_id: {chat_id}")
+    print(f"Current session: {session}")
+    
+    if 'user_id' not in session:
+        print("Error: No user_id in session")
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    try:
+        cursor = ir_system.conn.cursor()
+        query = """
+            DELETE FROM chat_history 
+            WHERE id = %s AND user_id = %s
+            RETURNING id
+        """
+        print(f"Executing delete query with params: id={chat_id}, user_id={session['user_id']}")
+        
+        cursor.execute(query, (chat_id, session['user_id']))
+        deleted = cursor.fetchone()
+        
+        print(f"Delete result: {deleted}")
+        
+        ir_system.conn.commit()
+        
+        if deleted:
+            print("Successfully deleted chat")
+            return jsonify({'status': 'success', 'message': 'Chat deleted successfully'})
+            
+        print("Error: Chat not found")
+        return jsonify({'error': 'Chat not found'}), 404
+        
+    except Exception as e:
+        print(f"Error occurred: {str(e)}")
+        ir_system.conn.rollback()
+        return jsonify({'error': str(e)}), 500
+    finally:
+        cursor.close()
+
 
 if __name__ == '__main__':
     # First-time admin registration (run once)

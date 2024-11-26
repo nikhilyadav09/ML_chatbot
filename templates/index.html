@@ -17,8 +17,18 @@
             <div class="chat-history">
                 {% for chat in chat_history %}
                 <div class="history-item">
-                    <div class="query"><i class="fas fa-question-circle"></i> {{ chat.query }}</div>
-                    <div class="timestamp">{{ chat.timestamp }}</div>
+                    <div class="query">{{ chat.query }}</div>
+                    <div class="history-item-footer">
+                        <div class="timestamp"><i class="far fa-clock"></i> {{ chat.timestamp }}</div>
+                        <div class="history-actions">
+                            <button onclick="viewChat({{ chat.id }})" class="view-chat" title="View Chat">
+                                <i class="far fa-eye"></i>
+                            </button>
+                            <button onclick="deleteChat({{ chat.id }})" class="delete-chat" title="Delete Chat">
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 {% endfor %}
             </div>
@@ -53,6 +63,11 @@
     </div>
 
     <script>
+        // Debug function to log actions
+        function debugLog(action, data) {
+            console.log(`[DEBUG] ${action}:`, data);
+        }
+
         async function submitQuery(event) {
             event.preventDefault();
             const query = document.getElementById('query').value;
@@ -78,6 +93,7 @@
                 });
 
                 const results = await response.json();
+                debugLog('Search results', results);
                 
                 // Add AI response to chat
                 let aiResponse = '<div class="message ai-message"><div class="message-content"><i class="fas fa-robot"></i><div class="ai-responses">';
@@ -92,11 +108,123 @@
                 aiResponse += '</div></div></div>';
                 chatHistory.innerHTML += aiResponse;
                 
-                // Clear input and scroll to bottom
                 document.getElementById('query').value = '';
                 chatHistory.scrollTop = chatHistory.scrollHeight;
             } catch (error) {
                 console.error('Error:', error);
+                debugLog('Submit query error', error);
+            }
+        }
+
+        async function viewChat(chatId) {
+            debugLog('Viewing chat', chatId);
+            try {
+                const response = await fetch(`/get_chat/${chatId}`);
+                debugLog('View chat response status', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                debugLog('View chat data', data);
+                
+                const chatHistory = document.getElementById('chat-history');
+                chatHistory.innerHTML = ''; // Clear current chat
+                
+                // Add user query
+                chatHistory.innerHTML += `
+                    <div class="message user-message">
+                        <div class="message-content">
+                            <i class="fas fa-user"></i>
+                            <p>${data.query}</p>
+                        </div>
+                    </div>
+                `;
+                
+                // Add AI response
+                chatHistory.innerHTML += `
+                    <div class="message ai-message">
+                        <div class="message-content">
+                            <i class="fas fa-robot"></i>
+                            <div class="ai-responses">
+                                <div class="response-item">
+                                    <p>${data.response}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error viewing chat:', error);
+                debugLog('View chat error', error);
+                alert('Failed to load chat: ' + error.message);
+            }
+        }
+
+        async function deleteChat(chatId) {
+            debugLog('Deleting chat', chatId);
+            if (confirm('Are you sure you want to delete this chat?')) {
+                try {
+                    const response = await fetch(`/delete_chat/${chatId}`, {
+                        method: 'DELETE'
+                    });
+                    debugLog('Delete chat response status', response.status);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    debugLog('Delete chat response', data);
+                    
+                    // Reload the page to refresh the chat history
+                    window.location.reload();
+                } catch (error) {
+                    console.error('Error deleting chat:', error);
+                    debugLog('Delete chat error', error);
+                    alert('Failed to delete chat: ' + error.message);
+                }
+            }
+        }
+
+        // Add this to ensure proper scrolling when viewing chat history
+        async function viewChat(chatId) {
+            try {
+                const response = await fetch(`/get_chat/${chatId}`);
+                const data = await response.json();
+                
+                const chatHistory = document.getElementById('chat-history');
+                chatHistory.innerHTML = '';
+                
+                // Add messages with a slight delay for animation
+                setTimeout(() => {
+                    chatHistory.innerHTML += `
+                        <div class="message user-message">
+                            <div class="message-content">
+                                <i class="fas fa-user"></i>
+                                <p>${data.query}</p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    chatHistory.innerHTML += `
+                        <div class="message ai-message">
+                            <div class="message-content">
+                                <i class="fas fa-robot"></i>
+                                <div class="ai-responses">
+                                    <div class="response-item">
+                                        <p>${data.response}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    chatHistory.scrollTop = chatHistory.scrollHeight;
+                }, 100);
+            } catch (error) {
+                console.error('Error viewing chat:', error);
             }
         }
     </script>

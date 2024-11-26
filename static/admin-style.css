@@ -1,15 +1,33 @@
-/* Admin Portal Styles */
 :root {
-    --admin-primary: #2563eb;
-    --admin-secondary: #1e40af;
-    --admin-success: #10b981;
-    --admin-warning: #f59e0b;
-    --admin-error: #ef4444;
-    --admin-bg: #f3f4f6;
-    --admin-sidebar: #1f2937;
-    --admin-text: #111827;
-    --admin-text-light: #6b7280;
-    --admin-border: #e5e7eb;
+    /* Core Colors */
+    --admin-bg: #0f172a;  /* Dark blue background */
+    --admin-primary: #3b82f6;  /* Bright blue for primary actions */
+    --admin-secondary: #1d4ed8;  /* Darker blue for secondary elements */
+    --admin-success: #10b981;  /* Green for success states */
+    --admin-warning: #f59e0b;  /* Amber for warnings */
+    --admin-error: #ef4444;  /* Red for errors */
+    
+    /* Text Colors */
+    --admin-text: #e2e8f0;  /* Light gray for primary text */
+    --admin-text-light: #94a3b8;  /* Muted text */
+    --admin-text-dim: #64748b;  /* Very muted text */
+    
+    /* Surface Colors */
+    --admin-sidebar: #1e293b;  /* Slightly lighter than background */
+    --admin-card-bg: #1e293b;  /* Card background */
+    --admin-card-hover: #334155;  /* Card hover state */
+    
+    /* Borders */
+    --admin-border: #334155;  /* Subtle borders */
+    --admin-border-light: rgba(148, 163, 184, 0.1);  /* Very subtle borders */
+    
+    /* Gradients */
+    --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    --card-gradient: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+    
+    /* Shadows */
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+    --hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
 }
 
 /* Base Styles */
@@ -20,6 +38,7 @@
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
+/* Base Styles Update */
 body {
     background-color: var(--admin-bg);
     color: var(--admin-text);
@@ -31,17 +50,23 @@ body {
     min-height: 100vh;
 }
 
-/* Sidebar Styles */
+/* Admin Sidebar Styles */
 .admin-sidebar {
     width: 280px;
-    background-color: var(--admin-sidebar);
+    min-height: 100vh;
+    background: var(--admin-sidebar);
     color: white;
     display: flex;
     flex-direction: column;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    position: sticky;
+    top: 0;
+    left: 0;
+    transition: all 0.3s ease;
 }
 
 .admin-sidebar-header {
-    padding: 2rem;
+    padding: 1.5rem;
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -51,58 +76,104 @@ body {
 .admin-sidebar-header i {
     font-size: 1.5rem;
     color: var(--admin-primary);
+    background: rgba(37, 99, 235, 0.2);
+    padding: 0.75rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
 }
 
-.admin-nav {
-    padding: 1rem;
-    flex: 1;
+.admin-sidebar-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: white;
 }
 
-.admin-nav a {
+.admin-sidebar-menu {
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.menu-btn {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 1rem;
-    color: white;
-    text-decoration: none;
-    border-radius: 0.5rem;
-    margin-bottom: 0.5rem;
-    transition: all 0.2s;
+    padding: 1rem 1.25rem;
+    color: #e2e8f0;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    width: 100%;
 }
 
-.admin-nav a:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-.admin-nav a.active {
-    background-color: var(--admin-primary);
-}
-
-.admin-nav i {
+.menu-btn i {
     font-size: 1.1rem;
+    width: 20px;
+    text-align: center;
 }
 
-.admin-sidebar-footer {
-    padding: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.admin-logout-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 1rem;
+.menu-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
     color: white;
-    text-decoration: none;
-    border-radius: 0.5rem;
-    background-color: rgba(239, 68, 68, 0.2);
-    transition: all 0.2s;
+    transform: translateX(4px);
 }
 
-.admin-logout-btn:hover {
-    background-color: var(--admin-error);
+.menu-btn.active {
+    background: var(--admin-primary);
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
 }
 
+.menu-btn.active i {
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .admin-sidebar {
+        width: 100%;
+        min-height: auto;
+        position: relative;
+    }
+
+    .admin-sidebar-menu {
+        padding: 1rem;
+    }
+
+    .menu-btn {
+        padding: 0.875rem 1rem;
+    }
+
+    .menu-btn:hover {
+        transform: none;
+    }
+}
+
+/* Optional: Collapsed State */
+.admin-sidebar.collapsed {
+    width: 80px;
+}
+
+.admin-sidebar.collapsed .admin-sidebar-header h2,
+.admin-sidebar.collapsed .menu-btn span {
+    display: none;
+}
+
+.admin-sidebar.collapsed .menu-btn {
+    justify-content: center;
+    padding: 1rem;
+}
+
+.admin-sidebar.collapsed .menu-btn i {
+    margin: 0;
+    font-size: 1.25rem;
+}
 /* Main Content */
 .admin-main {
     flex: 1;
@@ -111,12 +182,18 @@ body {
 }
 
 .admin-header {
-    background-color: white;
     padding: 1.5rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: var(--admin-card-bg);
+    border-bottom: 1px solid var(--admin-border);
+}
+
+
+.header-subtitle {
+    color: var(--admin-text-light);
 }
 
 .admin-header h1 {
@@ -138,10 +215,14 @@ body {
 
 /* Cards */
 .admin-card {
-    background-color: white;
-    border-radius: 0.75rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: var(--admin-card-bg);
+    border: 1px solid var(--admin-border);
+    box-shadow: var(--card-shadow);    border-radius: 0.75rem;
     margin-bottom: 2rem;
+}
+.admin-card:hover {
+    background: var(--admin-card-hover);
+    border-color: var(--admin-border-light);
 }
 
 .card-header {
@@ -158,6 +239,8 @@ body {
 
 .card-content {
     padding: 1.5rem;
+    color: var(--admin-text); /* Ensures visibility on dark backgrounds */
+
 }
 
 /* Forms */
@@ -219,18 +302,20 @@ body {
 }
 
 .stat-card {
-    background-color: white;
     padding: 1.5rem;
     border-radius: 0.75rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     gap: 1rem;
+    background: var(--admin-card-bg);
+    border: 1px solid var(--admin-border);
 }
 
 .stat-card i {
     font-size: 2rem;
     color: var(--admin-primary);
+    background: rgba(59, 130, 246, 0.1);
 }
 
 .stat-info h3 {
@@ -278,7 +363,8 @@ body {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    color: var(--admin-text-light);
+    color: var(--admin-text); /* Changed from #4a5568 */
+
 }
 
 /* Responsive Design */
@@ -307,4 +393,547 @@ body {
     .admin-stats {
         grid-template-columns: 1fr;
     }
+}
+
+
+/* Enhanced Admin Dashboard Styles */
+
+/* Additional Variables */
+:root {
+    --primary-gradient: linear-gradient(135deg, #2a4365 0%, #1a365d 100%);
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --transition-speed: 0.3s ease;
+}
+
+/* Enhanced Cards */
+.admin-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    transition: all var(--transition-speed);
+    margin-bottom: 1.5rem;
+}
+
+.admin-card:hover {
+    box-shadow: var(--hover-shadow);
+    transform: translateY(-2px);
+}
+
+.card-header {
+    background: var(--primary-gradient);
+    color: white;
+    padding: 1.25rem;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.card-content {
+    padding: 1.5rem;
+}
+
+/* Enhanced Stats Cards */
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: var(--card-shadow);
+    transition: all var(--transition-speed);
+}
+
+.stat-card:hover {
+    box-shadow: var(--hover-shadow);
+    transform: translateY(-2px);
+}
+
+.stat-card i {
+    font-size: 2rem;
+    color: #4299e1;
+    background: #ebf8ff;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.stat-info h3 {
+    color: #4a5568;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2d3748;
+}
+
+/* Enhanced User Cards */
+.user-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+    background: var(--admin-card-bg); /* Changed from white to match theme */
+
+}
+
+.user-card {
+    background: var(--admin-card-bg); /* Changed from white to match theme */
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    transition: all var(--transition-speed);
+}
+
+.user-card:hover {
+    box-shadow: var(--hover-shadow);
+    transform: translateY(-2px);
+}
+
+.user-card-header {
+    background: var(--primary-gradient);
+    color: white;
+    padding: 1.25rem;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-card-content {
+    padding: 1.5rem;
+}
+
+/* Enhanced Analytics Section */
+.analytics-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+    background: var(--admin-card-bg);
+    border: 1px solid var(--admin-border);
+}
+
+.analytics-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--card-shadow);
+}
+
+.analytics-card h3 {
+    color: #2d3748;
+    font-size: 1.125rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--admin-card-bg); /* Changed from white to match theme */
+
+}
+
+/* Activity List */
+.activity-list {
+    background: var(--admin-card-bg);
+    border: 1px solid var(--admin-border);
+}
+
+
+/* Enhanced Charts */
+.placeholder-chart {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    height: 200px;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+.chart-bar {
+    width: 60px;
+    border-radius: 6px 6px 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 0.5rem;
+    color: white;
+    transition: all var(--transition-speed);
+    background: var(--primary-gradient);
+
+}
+
+.chart-bar:hover {
+    transform: scaleY(1.05);
+}
+
+/* Enhanced Forms */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--admin-text); /* Changed from var(--admin-text-light) */
+
+
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    transition: all var(--transition-speed);
+    background: var(--admin-bg);
+    border: 2px solid var(--admin-border);
+    color: var(--admin-text);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--admin-primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+
+}
+
+/* Enhanced Buttons */
+.admin-btn, .embed-btn {
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all var(--transition-speed);
+    background: var(--primary-gradient);
+    border: 1px solid var(--admin-border-light);
+
+}
+
+.admin-btn:hover, .embed-btn:hover {
+    filter: brightness(110%);
+    transform: translateY(-1px);
+    background: var(--admin-secondary);
+    border-color: var(--admin-primary);
+}
+
+/* Enhanced Alert Styles */
+.alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.alert-success {
+
+    border: 1px solid #9ae6b4;
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #34d399; 
+    }
+
+.alert-error {
+    border: 1px solid #feb2b2;
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+}
+
+/* Loading Animation */
+.loading {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #4a5568;
+    padding: 1rem;
+}
+
+.fa-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+
+/* Add these styles to your existing CSS */
+
+/* Main Content Styles */
+.admin-main {
+    flex: 1;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    scroll-padding-top: 72px; /* Adjust based on your header height */
+}
+
+/* Section Styles */
+.section {
+    min-height: calc(100vh - 72px); /* Adjust based on your header height */
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+    padding-bottom: 2rem;
+}
+
+.section.active {
+    opacity: 1;
+}
+
+/* Header Styles */
+.admin-header {
+    position: sticky;
+    top: 0;
+    background: var(--admin-card-bg); /* Changed from white */
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar Styles Update */
+.admin-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+/* Active Menu Button Animation */
+.menu-btn.active {
+    position: relative;
+    transform: translateX(4px);
+}
+
+.menu-btn.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 50%;
+    background: var(--admin-primary);
+    border-radius: 0 4px 4px 0;
+}
+
+/* Smooth Transition for Content */
+.admin-content {
+    transition: opacity 0.3s ease;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .section {
+        min-height: calc(100vh - 120px); /* Adjust for mobile header */
+    }
+    
+    .admin-sidebar {
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        width: 100%;
+        height: auto;
+        z-index: 1000;
+    }
+    
+    .admin-main {
+        margin-bottom: 60px; /* Space for mobile sidebar */
+    }
+}
+
+
+/* Logout Button Container */
+.admin-sidebar-footer {
+    padding: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: auto;
+}
+
+/* Logout Button Base Styles */
+.admin-logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background: rgba(239, 68, 68, 0.15);
+    color: #fecaca;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Icon Styles */
+.admin-logout-btn i {
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+}
+
+/* Hover Effects */
+.admin-logout-btn:hover {
+    background: rgb(239, 68, 68);
+    color: white;
+    border-color: rgb(239, 68, 68);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+}
+
+.admin-logout-btn:hover i {
+    transform: translateX(3px) rotate(-180deg);
+}
+
+/* Active/Click State */
+.admin-logout-btn:active {
+    transform: translateY(0px);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+}
+
+/* Ripple Effect */
+.admin-logout-btn::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.2) 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10, 10);
+    opacity: 0;
+    transition: transform 0.5s, opacity 0.5s;
+}
+
+.admin-logout-btn:active::after {
+    transform: scale(0, 0);
+    opacity: 0.3;
+    transition: 0s;
+}
+
+/* Focus State */
+.admin-logout-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3);
+}
+
+/* Loading State (Optional) */
+.admin-logout-btn.loading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.admin-logout-btn.loading i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .admin-sidebar-footer {
+        padding: 1rem;
+    }
+    
+    .admin-logout-btn {
+        padding: 0.875rem 1rem;
+    }
+}
+
+/* Optional: Collapsed Sidebar State */
+.admin-sidebar.collapsed .admin-logout-btn {
+    padding: 1rem;
+    justify-content: center;
+}
+
+.admin-sidebar.collapsed .admin-logout-btn span {
+    display: none;
+}
+
+.admin-sidebar.collapsed .admin-logout-btn i {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+
+
+/* Table Updates */
+table {
+    background: var(--admin-card-bg);
+    border: 1px solid var(--admin-border);
+}
+
+th, td {
+    border-color: var(--admin-border);
+    color: var(--admin-text);
+}
+
+/* ML-specific Elements */
+.model-metrics {
+    background: linear-gradient(45deg, var(--admin-card-bg) 0%, var(--admin-bg) 100%);
+    border: 1px solid var(--admin-border);
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.accuracy-indicator {
+    color: var(--admin-success);
+    background: rgba(16, 185, 129, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Code Snippets */
+pre, code {
+    background: var(--admin-bg);
+    border: 1px solid var(--admin-border);
+    color: var(--admin-text);
+    border-radius: 6px;
+    padding: 1rem;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--admin-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--admin-border);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--admin-text-dim);
 }

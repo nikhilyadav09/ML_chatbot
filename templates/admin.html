@@ -3,32 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - AI Code Assistant</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='admin-style.css') }}">
+    <title>Enhanced Admin Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin-style.css') }}">
 </head>
 <body>
     <div class="admin-container">
-        <!-- Sidebar -->
+        <!-- Enhanced Sidebar -->
         <div class="admin-sidebar">
             <div class="admin-sidebar-header">
-                <i class="fas fa-shield-alt"></i>
+                <i class="fas fa-user-shield"></i>
                 <h2>Admin Panel</h2>
             </div>
-            <nav class="admin-nav">
-                <a href="#" class="active">
-                    <i class="fas fa-database"></i>
+            <div class="admin-sidebar-menu">
+                <button class="menu-btn active" data-section="document-management">
+                    <i class="fas fa-file-alt"></i>
                     Document Management
-                </a>
-                <a href="#">
+                </button>
+                <button class="menu-btn" data-section="user-management">
                     <i class="fas fa-users"></i>
                     User Management
-                </a>
-                <a href="#">
-                    <i class="fas fa-chart-bar"></i>
+                </button>
+                <button class="menu-btn" data-section="analytics">
+                    <i class="fas fa-chart-line"></i>
                     Analytics
-                </a>
-            </nav>
+                </button>
+            </div>
             <div class="admin-sidebar-footer">
                 <a href="{{ url_for('logout') }}" class="admin-logout-btn">
                     <i class="fas fa-sign-out-alt"></i>
@@ -37,50 +37,154 @@
             </div>
         </div>
 
-        <!-- Main Content -->
+        <!-- Enhanced Main Content -->
         <div class="admin-main">
-            <header class="admin-header">
-                <h1>Document Management</h1>
-                <div class="admin-user-info">
-                    <i class="fas fa-user-shield"></i>
-                    <span>Admin</span>
-                </div>
-            </header>
-
-            <div class="admin-content">
-                <div class="admin-card">
-                    <div class="card-header">
-                        <h2><i class="fas fa-file-upload"></i> Embed Documents</h2>
+            <!-- Document Management Section -->
+            <div class="section active" id="document-management">
+                <div class="admin-header">
+                    <div class="header-title">
+                        <h1><i class="fas fa-file-alt"></i> Document Management</h1>
+                        <span class="header-subtitle">Upload and manage your documents</span>
                     </div>
-                    <div class="card-content">
-                        <form id="embed-form" class="upload-form">
-                            <div class="form-group">
-                                <label for="csv_path">Document Path</label>
-                                <input type="text" id="csv_path" name="csv_path" 
-                                       placeholder="Enter CSV file path" required>
-                            </div>
-                            <button type="submit" class="admin-btn">
-                                <i class="fas fa-upload"></i>
-                                Embed Documents
-                            </button>
-                        </form>
-                        <div id="result" class="result-container"></div>
+                    <div class="admin-user-info">
+                        <span class="user-greeting">Welcome, Admin</span>
+                        <i class="fas fa-user-circle"></i>
                     </div>
                 </div>
-
-                <div class="admin-stats">
-                    <div class="stat-card">
-                        <i class="fas fa-file-alt"></i>
-                        <div class="stat-info">
-                            <h3>Total Documents</h3>
-                            <p class="stat-number">0</p>
+                <div class="admin-content">
+                    <!-- Upload Card -->
+                    <div class="admin-card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-file-upload"></i> Embed Documents</h2>
+                            <span class="card-subtitle">Upload and process your documents</span>
+                        </div>
+                        <div class="card-content">
+                            <form id="embed-form" class="upload-form">
+                                <div class="form-group">
+                                    <label><i class="fas fa-folder-open"></i> Document Path</label>
+                                    <div class="input-group">
+                                        <input type="text" id="csv-path" placeholder="Enter document path" required>
+                                        <button type="button" class="browse-btn">
+                                            <i class="fas fa-search"></i> Browse
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="embed-btn primary">
+                                        <i class="fas fa-upload"></i> Embed Documents
+                                    </button>
+                                    <button type="reset" class="embed-btn secondary">
+                                        <i class="fas fa-redo"></i> Reset
+                                    </button>
+                                </div>
+                            </form>
+                            <div id="result" class="result-container"></div>
                         </div>
                     </div>
-                    <div class="stat-card">
-                        <i class="fas fa-clock"></i>
-                        <div class="stat-info">
-                            <h3>Last Upload</h3>
-                            <p class="stat-text">No uploads yet</p>
+
+                    <!-- Enhanced Stats Section -->
+                    <div class="admin-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Total Documents</h3>
+                                <p id="total-docs">0</p>
+                                <span class="stat-change increase">
+                                    <i class="fas fa-arrow-up"></i> 0% from last month
+                                </span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Last Upload</h3>
+                                <p id="last-upload">No uploads yet</p>
+                                <span class="stat-time">Updated just now</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Storage Used</h3>
+                                <p id="storage-used">0 MB</p>
+                                <div class="storage-bar">
+                                    <div class="storage-progress" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="admin-card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-history"></i> Recent Activity</h2>
+                        </div>
+                        <div class="card-content">
+                            <div class="activity-list" id="activity-list">
+                                <!-- Activity items will be dynamically added here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Management Section -->
+            <div class="section" id="user-management">
+                <div class="admin-header">
+                    <div class="header-title">
+                        <h1><i class="fas fa-users"></i> User Management</h1>
+                        <span class="header-subtitle">Manage system users and permissions</span>
+                    </div>
+                    <div class="header-actions">
+                        <button class="admin-btn">
+                            <i class="fas fa-plus"></i> Add New User
+                        </button>
+                    </div>
+                </div>
+                <div class="admin-content">
+                    <div class="user-cards-container" id="user-cards">
+                        <!-- User cards will be dynamically populated -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div class="section" id="analytics">
+                <div class="admin-header">
+                    <div class="header-title">
+                        <h1><i class="fas fa-chart-line"></i> Analytics</h1>
+                        <span class="header-subtitle">System performance and usage metrics</span>
+                    </div>
+                    <div class="header-actions">
+                        <div class="date-filter">
+                            <i class="fas fa-calendar"></i>
+                            <select id="time-range">
+                                <option value="7">Last 7 days</option>
+                                <option value="30">Last 30 days</option>
+                                <option value="90">Last 90 days</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-content">
+                    <div class="analytics-cards">
+                        <div class="analytics-card">
+                            <h3><i class="fas fa-trophy"></i> Top Users by Search Count</h3>
+                            <div id="top-users-chart" class="chart-container"></div>
+                        </div>
+                        <div class="analytics-card">
+                            <h3><i class="fas fa-clock"></i> User Activity Timeline</h3>
+                            <div id="activity-timeline" class="chart-container"></div>
+                        </div>
+                        <div class="analytics-card">
+                            <h3><i class="fas fa-search"></i> Most Common Search Terms</h3>
+                            <div id="search-terms-chart" class="chart-container"></div>
                         </div>
                     </div>
                 </div>
@@ -89,10 +193,32 @@
     </div>
 
     <script>
+        // Navigation functionality
+        document.querySelectorAll('.menu-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and sections
+                document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding section
+                button.classList.add('active');
+                const sectionId = button.getAttribute('data-section');
+                document.getElementById(sectionId).classList.add('active');
+                
+                // Load section-specific data
+                if (sectionId === 'user-management') {
+                    loadUserData();
+                } else if (sectionId === 'analytics') {
+                    loadAnalytics();
+                }
+            });
+        });
+
+        // Form submission handler
         document.getElementById('embed-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             const resultDiv = document.getElementById('result');
-            const csvPath = document.getElementById('csv_path').value;
+            const csvPath = document.getElementById('csv-path').value;
             
             resultDiv.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Processing...</div>';
             
@@ -111,6 +237,9 @@
                         <i class="fas fa-check-circle"></i>
                         ${data.message}
                     </div>`;
+                
+                // Update stats
+                updateStats();
             } catch (error) {
                 resultDiv.innerHTML = `
                     <div class="alert alert-error">
@@ -119,6 +248,156 @@
                     </div>`;
             }
         });
+
+        // Mock user data loader
+        function loadUserData() {
+            const mockUsers = [
+                {
+                    id: 1,
+                    username: "user1",
+                    searchCount: 150,
+                    topSearches: ["python", "javascript", "machine learning"],
+                    lastActive: "2024-03-20"
+                },
+                {
+                    id: 2,
+                    username: "user2",
+                    searchCount: 89,
+                    topSearches: ["react", "node.js", "express"],
+                    lastActive: "2024-03-19"
+                }
+            ];
+
+            const userCardsContainer = document.getElementById('user-cards');
+            userCardsContainer.innerHTML = '';
+
+            mockUsers.forEach(user => {
+                const userCard = document.createElement('div');
+                userCard.className = 'user-card';
+                userCard.innerHTML = `
+                    <div class="user-card-header">
+                        <i class="fas fa-user"></i>
+                        <h3>${user.username}</h3>
+                        <span class="search-count">
+                            <i class="fas fa-search"></i>
+                            ${user.searchCount} searches
+                        </span>
+                    </div>
+                    <div class="user-card-content">
+                        <div class="top-searches">
+                            <h4>Top Searches:</h4>
+                            <div class="search-tags">
+                                ${user.topSearches.map(search => `
+                                    <span class="search-tag">${search}</span>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div class="last-active">
+                            <i class="fas fa-clock"></i>
+                            Last Active: ${user.lastActive}
+                        </div>
+                    </div>
+                `;
+                userCardsContainer.appendChild(userCard);
+            });
+        }
+
+        // Mock analytics loader
+        function loadAnalytics() {
+            // Load charts and analytics data
+            document.getElementById('top-users-chart').innerHTML = `
+                <div class="placeholder-chart">
+                    <div class="chart-bar" style="height: 80%;">
+                        <span class="bar-label">User1</span>
+                        <div class="bar-value">150</div>
+                    </div>
+                    <div class="chart-bar" style="height: 60%;">
+                        <span class="bar-label">User2</span>
+                        <div class="bar-value">89</div>
+                    </div>
+                    <div class="chart-bar" style="height: 40%;">
+                        <span class="bar-label">User3</span>
+                        <div class="bar-value">45</div>
+                    </div>
+                </div>
+            `;
+
+            // Add more analytics visualizations as needed
+        }
+
+        // Initial load
+        loadUserData();
+        loadAnalytics();
+        // Add this to your existing JavaScript
+
+document.querySelectorAll('.menu-btn').forEach(button => {
+    button.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        // Remove active class from all buttons and sections
+        document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.section').forEach(section => {
+            section.classList.remove('active');
+            section.style.display = 'block'; // Make all sections visible for scrolling
+        });
+        
+        // Add active class to clicked button
+        button.classList.add('active');
+        
+        // Get corresponding section
+        const sectionId = button.getAttribute('data-section');
+        const targetSection = document.getElementById(sectionId);
+        targetSection.classList.add('active');
+        
+        // Calculate header height for offset
+        const headerHeight = document.querySelector('.admin-header')?.offsetHeight || 0;
+        
+        // Smooth scroll to section
+        window.scrollTo({
+            top: targetSection.offsetTop - headerHeight,
+            behavior: 'smooth'
+        });
+        
+        // Load section-specific data
+        if (sectionId === 'user-management') {
+            loadUserData();
+        } else if (sectionId === 'analytics') {
+            loadAnalytics();
+        }
+        
+        // Update URL hash without scrolling
+        history.pushState(null, null, `#${sectionId}`);
+    });
+});
+
+// Handle initial load from URL hash
+window.addEventListener('load', () => {
+    const hash = window.location.hash.slice(1);
+    if (hash) {
+        const targetButton = document.querySelector(`[data-section="${hash}"]`);
+        if (targetButton) {
+            targetButton.click();
+        }
+    }
+});
+
+// Update active section on scroll
+window.addEventListener('scroll', () => {
+    const headerHeight = document.querySelector('.admin-header')?.offsetHeight || 0;
+    const scrollPosition = window.scrollY + headerHeight + 50; // Add some offset for better detection
+
+    document.querySelectorAll('.section').forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionBottom = sectionTop + section.offsetHeight;
+
+        if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+            const sectionId = section.id;
+            document.querySelectorAll('.menu-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-section') === sectionId);
+            });
+        }
+    });
+});
     </script>
 </body>
 </html>

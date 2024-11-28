@@ -94,22 +94,51 @@
                 });
 
                 const results = await response.json();
-                debugLog('Search results', results);
+                console.log('Received results:', results);
+                
+                // // Add AI response to chat
+                // let aiResponse = '<div class="message ai-message"><div class="message-content"><i class="fas fa-robot"></i><div class="ai-responses">';
+                // // results.forEach(result => {
+                //     results.forEach((result, index) => {
+                // if (!result.text) {
+                //     console.warn(`Skipping result ${index + 1}: Missing 'text' field`, result);
+                //     return;
+                // }
+
+                // // Replace escaped characters for proper rendering                      // for ai response             <p>${result.text}</p>
+
+                // const formattedText = result.text
+                //     .replaceAll("\\n", "<br>") // Line breaks
+                //     .replaceAll("â\\x80\\x99", "'"); // Apostrophe replacement
+                //     aiResponse += `
+                //         <div class="response-item">
+                //             <p>${formattedText}</p>
+                //             <div class="similarity">Similarity: ${(result.similarity * 100).toFixed(1)}%</div>
+                //             <div class="source-info">
+                //                 <i class="fas fa-book"></i> Chapter: ${data.chapter_name || 'N/A'}<br>
+                //                 <i class="fas fa-file-alt"></i> 
+                //                 Source: <a href="${data.source || '#'}" target="_blank">${data.source || 'N/A'}</a>
+                //             </div>
+                //         </div>
+                //     `;
+                // });
                 
                 // Add AI response to chat
                 let aiResponse = '<div class="message ai-message"><div class="message-content"><i class="fas fa-robot"></i><div class="ai-responses">';
                 results.forEach(result => {
                     aiResponse += `
-                        <div class="response-item">
-                            <p>${result.text}</p>
-                            <div class="similarity">Similarity: ${(result.similarity * 100).toFixed(1)}%</div>
-                            <div class="source-info">
-                                <i class="fas fa-book"></i> Chapter: ${data.chapter_name || 'N/A'}<br>
-                                <i class="fas fa-file-alt"></i> 
-                                Source: <a href="${data.source || '#'}" target="_blank">${data.source || 'N/A'}</a>
-                            </div>
-                        </div>
-                    `;
+                <div class="response-item">
+                    <p>${result.text}</p>
+                    <div class="similarity">Similarity: ${(result.similarity * 100).toFixed(1) || 'N/A'}%</div>
+                    <p></p>
+                    <p>${result.Llama_Model}</p>
+                    <div class="source-info">
+                        <i class="fas fa-book"></i> Chapter: ${result.chapter_name || 'N/A'}<br>
+                        <i class="fas fa-file-alt"></i> 
+                        Source: <a href="${result.source || '#'}" target="_blank">${result.source || 'N/A'}</a>
+                    </div>
+                </div>
+            `;
                 });
                 aiResponse += '</div></div></div>';
                 chatHistory.innerHTML += aiResponse;

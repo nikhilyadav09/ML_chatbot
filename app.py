@@ -210,7 +210,6 @@ class InformationRetrievalSystem:
                 response_data = []  # Empty response if no matches
             else:
                 # Format results into structured response
-                print("it comes in result data")
                 response_data = [
                     {
                         "text": text, 
@@ -221,7 +220,7 @@ class InformationRetrievalSystem:
                     for text, source, chapter_name, similarity in results
 
                 ]
-                print("response:", response_data)
+                print("response: recieved........")
                 
                 # Prepare chat history text for the best match
                 top_result = response_data[0]  # The single best result
@@ -231,7 +230,6 @@ class InformationRetrievalSystem:
                     f"Chapter: {top_result['chapter_name']}, "
                     f"Source: {top_result['source']})"
                 )
-                print(top_result)
                 cursor.execute("""
                     CREATE TABLE IF NOT EXISTS chat_history (
                         id SERIAL PRIMARY KEY,
@@ -325,9 +323,7 @@ ir_system = InformationRetrievalSystem(DB_PARAMS)
 def index():
     if 'user_id' not in session:
         return redirect(url_for('login'))
-    
-    print("session['user_id']",session['user_id'])
-    
+        
     # Get user's chat history
     chat_history = ir_system.get_user_chat_history(session['user_id'])
     return render_template('index.html', chat_history=chat_history)  # Fixed variable name

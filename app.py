@@ -10,6 +10,8 @@ from sentence_transformers import SentenceTransformer
 from pgvector.psycopg2 import register_vector
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+from groq import Groq
+
 
 
 class InformationRetrievalSystem:

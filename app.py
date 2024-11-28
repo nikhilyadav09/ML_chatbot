@@ -51,7 +51,7 @@ class InformationRetrievalSystem:
                 response TEXT,
                 source VARCHAR(255),
                 chapter_name VARCHAR(255),
-                similarity VARCHAR(10),
+                similarity DOUBLE PRECISION,
                 timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users(id)
             );
@@ -189,77 +189,7 @@ class InformationRetrievalSystem:
         finally:
             if not cursor.closed:
                 cursor.close()
-    # Update the get_user_chat_history method in InformationRetrievalSystem class
-
-
-    # Update the search_documents method to ensure it stores all required fields
-    # def search_documents(self, query, user_id, top_k=1):  # Changed default to 1
-    #     query_embedding = self.model.encode(query).tolist()
-        
-    #     cursor = self.conn.cursor()
-    #     try:
-    #         # Get only the top result with highest similarity
-    #         cursor.execute("""
-    #             SELECT text, source,chapter_name, 1 - (embedding <=> %s::vector) as similarity 
-    #             FROM document_embeddings 
-    #             ORDER BY similarity DESC 
-    #             LIMIT %s
-    #         """, (query_embedding, top_k))
-            
-    #         results = cursor.fetchall()
-            
-    #         if not results:
-    #             response_text = "No relevant matches found."
-    #         else:
-    #             # # Format response text - now only one result
-    #             # top_result = results[0]
-    #             # response_text = f"{results[0][0]} (Similarity: {results[0][2]:.2f})"
-    #                 # Format response text with all required fields
-    #             response_data = []
-    #             for result in results:
-    #                 response_data.append({
-    #                     'text': result[0],
-    #                     'similarity': result[3],  # Similarity score
-    #                     'chapter_name': result[2],  # Chapter name
-    #                     'source': result[1]  # Source link
-    #                 })
-                        
-    #         # Save chat history - store only the user query and the single best response
-    #         # cursor.execute("""
-    #         #     INSERT INTO chat_history (user_id, query, response, timestamp) 
-    #         #     VALUES (%s, %s, %s, CURRENT_TIMESTAMP)
-    #         # """, (user_id, query, response_text))
-            
-    #         # Save chat history - include similarity, source, and chapter_name
-    #         cursor.execute("""
-    #             INSERT INTO chat_history (user_id, query, response, similarity, source, chapter_name, timestamp) 
-    #             VALUES (%s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP)
-    #         """, (
-    #             user_id, 
-    #             query, 
-    #             response_text, 
-    #             top_result[3] if top_result else None, 
-    #             top_result[1] if top_result else None, 
-    #             top_result[2] if top_result else None
-    #         ))
-    #         self.conn.commit()
-            
-    #         # Return only unique results
-    #         return [
-    #             {
-    #                 "text": text, 
-    #                 "source": source, 
-    #                 "chapter_name": chapter_name,
-    #                 "similarity": float(similarity)
-    #             } 
-    #             for text, source, chapter_name, similarity in results
-    #         ]
-    #     except Exception as e:
-    #         print(f"Error in search_documents: {str(e)}")
-    #         self.conn.rollback()
-    #         return []
-    #     finally:
-    #         cursor.close()
+   
     def search_documents(self, query, user_id, top_k=1):  # Default top_k to 1 for single best match
         query_embedding = self.model.encode(query).tolist()
         
@@ -274,8 +204,6 @@ class InformationRetrievalSystem:
             """, (query_embedding, top_k))
             
             results = cursor.fetchall()
-            print(results)
-            
             if not results:
                 # No matches found
                 response_text = "No relevant matches found."
@@ -291,33 +219,47 @@ class InformationRetrievalSystem:
                         "similarity": float(similarity)
                     } 
                     for text, source, chapter_name, similarity in results
+
                 ]
-            #     print("response:", response_data)
+                print("response:", response_data)
                 
-            #     # Prepare chat history text for the best match
-            #     top_result = response_data[0]  # The single best result
-            #     response_text = (
-            #         f"{top_result['text']} "
-            #         f"(Similarity: {top_result['similarity']:.2f}, "
-            #         f"Chapter: {top_result['chapter_name']}, "
-            #         f"Source: {top_result['source']})"
-            #     )
-            #     print(top_result)
-            #     # Save chat history with relevant context
-            #     cursor.execute("""
-            #         INSERT INTO chat_history (
-            #             user_id, query, response, similarity, source, chapter_name, timestamp
-            #         ) VALUES (%s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP)
-            #     """, (
-            #         user_id,
-            #         query,
-            #         response_text,  # Formatted response text
-            #         str(top_result["similarity"]),  # Similarity score
-            #         top_result["source"],  # Source link
-            #         top_result["chapter_name"]  # Chapter name
-            #     ))
-            #     self.conn.commit()
-            # print("error got")
+                # Prepare chat history text for the best match
+                top_result = response_data[0]  # The single best result
+                response_text = (
+                    f"{top_result['text']} "
+                    f"(Similarity: {top_result['similarity']:.2f}, "
+                    f"Chapter: {top_result['chapter_name']}, "
+                    f"Source: {top_result['source']})"
+                )
+                print(top_result)
+                cursor.execute("""
+                    CREATE TABLE IF NOT EXISTS chat_history (
+                        id SERIAL PRIMARY KEY,
+                        user_id INTEGER,
+                        query TEXT,
+                        response TEXT,
+                        source VARCHAR(255),
+                        chapter_name VARCHAR(255),
+                        similarity DOUBLE PRECISION,
+                        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        FOREIGN KEY (user_id) REFERENCES users(id)
+                    )
+                """)
+                # Save chat history with relevant context
+                cursor.execute("""
+                    INSERT INTO chat_history (
+                        user_id, query, response, similarity, source, chapter_name, timestamp
+                    ) VALUES (%s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP)
+                """, (
+                    user_id,
+                    query,
+                    response_text,  # Formatted response text
+                    (top_result["similarity"]),  # Similarity score
+                    top_result["source"],  # Source link
+                    top_result["chapter_name"]  # Chapter name
+                ))
+                self.conn.commit()
+            
             return response_data  # Return structured response data to the caller
         
         except Exception as e:
@@ -483,17 +425,6 @@ def search_documents():
         return redirect(url_for('login'))
     
     query = request.json.get('query', '')
-    # Get only unique results
-    results = ir_system.search_documents(query, session['user_id'])
-    # # Return only unique results
-    # unique_results = []
-    # seen = set()
-    # for result in results:
-    #     result_text = result['text']
-    #     if result_text not in seen:
-    #         seen.add(result_text)
-    #         unique_results.append(result)
-    query = request.json.get('query', '')
     results = ir_system.search_documents(query, session['user_id'])
     unique_results = list({result['text']: result for result in results}.values())  
     # unique_results = {result['text']: result for result in results}.values()  # Ensure uniqueness
@@ -518,10 +449,13 @@ def get_chat(chat_id):
         return jsonify({'error': 'Unauthorized'}), 401
     
     try:
+        # Connect to the database
         cursor = ir_system.conn.cursor()
+        
+        # Query to fetch the chat by ID and user_id
         query = """
-            SELECT id, query, response 
-            FROM chat_history 
+            SELECT id, query, response, similarity, source, chapter_name, timestamp
+            FROM chat_history
             WHERE id = %s AND user_id = %s
         """
         print(f"Executing query with params: id={chat_id}, user_id={session['user_id']}")
@@ -532,22 +466,31 @@ def get_chat(chat_id):
         print(f"Query result: {result}")
         
         if result:
+            # Map the result to a dictionary
             response_data = {
                 'id': result[0],
                 'query': result[1],
-                'response': result[2]
+                'response': result[2],
+                'similarity': float(result[3]) if result[3] is not None else None,
+                'source': result[4],
+                'chapter_name': result[5],
+                'timestamp': result[6].strftime("%Y-%m-%d %H:%M:%S") if result[6] else None
             }
             print(f"Returning data: {response_data}")
             return jsonify(response_data)
         
+        # Chat not found
         print("Error: Chat not found")
         return jsonify({'error': 'Chat not found'}), 404
         
     except Exception as e:
+        # Handle unexpected errors
         print(f"Error occurred: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': 'An error occurred while fetching the chat'}), 500
     finally:
+        # Ensure cursor is closed
         cursor.close()
+
 
 @app.route('/delete_chat/<int:chat_id>', methods=['DELETE'])
 def delete_chat(chat_id):

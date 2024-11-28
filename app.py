@@ -151,9 +151,9 @@ class InformationRetrievalSystem:
                             print(f"Warning: Skipping row {row_count} - insufficient columns")
                             continue
                         
-                        chapter_name = row[0]  # First column is chapter name
-                        source = row[1]  # Second column is source
-                        text = row[2]  # Third column is text                        
+                        chapter_name = row[1]  # First column is chapter name
+                        source = row[2]  # Second column is source
+                        text = row[3]  # Third column is text                        
                         # Truncate very long texts if necessary
                         
                         print(f"Embedding text: {text[:50]}...")  # Print first 50 chars
@@ -251,7 +251,7 @@ class InformationRetrievalSystem:
                 """, (
                     user_id,
                     query,
-                    response_text,  # Formatted response text
+                    (top_result['text']),  # Formatted response text
                     (top_result["similarity"]),  # Similarity score
                     top_result["source"],  # Source link
                     top_result["chapter_name"]  # Chapter name

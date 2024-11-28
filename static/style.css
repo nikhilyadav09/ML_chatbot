@@ -1018,3 +1018,126 @@ button[type="submit"]:hover {
 .ai-message .message-content {
     padding: 0.8rem; /* Adjust padding */
 }
+
+
+/* Logout Button Base Styles */
+.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background: rgba(239, 68, 68, 0.15);
+    color: #fecaca;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+
+/* Icon Styles */
+.logout-btn i {
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+}
+
+/* Hover Effects */
+.logout-btn:hover {
+    background: rgb(239, 68, 68);
+    color: white;
+    border-color: rgb(239, 68, 68);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+}
+
+.logout-btn:hover i {
+    transform: translateX(3px) rotate(-180deg);
+}
+
+/* Active/Click State */
+.logout-btn:active {
+    transform: translateY(0px);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+}
+
+/* Ripple Effect */
+.logout-btn::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.2) 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10, 10);
+    opacity: 0;
+    transition: transform 0.5s, opacity 0.5s;
+}
+
+.logout-btn:active::after {
+    transform: scale(0, 0);
+    opacity: 0.3;
+    transition: 0s;
+}
+
+/* Focus State */
+.logout-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3);
+}
+
+/* Loading State (Optional) */
+.logout-btn.loading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.logout-btn.loading i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .sidebar-footer {
+        padding: 1rem;
+    }
+    
+    .logout-btn {
+        padding: 0.875rem 1rem;
+    }
+}
+
+
+/* Optional: Collapsed Sidebar State */
+.sidebar.collapsed .logout-btn {
+    padding: 1rem;
+    justify-content: center;
+}
+
+.sidebar.collapsed .logout-btn span {
+    display: none;
+}
+
+.sidebar.collapsed .logout-btn i {
+    margin: 0;
+    font-size: 1.25rem;
+}
+

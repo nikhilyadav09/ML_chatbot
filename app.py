@@ -331,6 +331,33 @@ def index():
 
  
 
+def use_api(text, trial, question):
+    key1 = "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"
+    key2 = "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"
+    key3 = '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'
+    if trial%3==1:
+        key = key1
+    elif trial%3==2:
+        key = key2
+    else:
+        key = key3
+    client = Groq(
+        # api_key="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"
+        api_key=key
+    )
+    chat_completion = client.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": f" this is asked question by a user :{question} and this is the text retreive from database on based of question :  {text}. Now you need to generate a answer based on given question and based on retrival answer from database. and you have to just give the answer, you don't need to",
+            }
+        ],
+        model="llama3-8b-8192",
+    )
+    return chat_completion.choices[0].message.content
+ 
+
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -424,6 +451,15 @@ def search_documents():
     results = ir_system.search_documents(query, session['user_id'])
     unique_results = list({result['text']: result for result in results}.values())  
     # unique_results = {result['text']: result for result in results}.values()  # Ensure uniqueness
+    try:
+        text = unique_results[0]["text"]
+        trial = 0
+        api_respose = use_api(text, trial, query)
+        trial+=1
+    except:
+        print("got some error in api response")
+    print(unique_results)
+    unique_results[0]["api_response"] = str(api_respose)
 
     return jsonify(unique_results)
 

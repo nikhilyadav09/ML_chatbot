@@ -29,6 +29,13 @@ body {
     background-color: var(--secondary-color);
     position: relative;
 }
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal overflow */
+    box-sizing: border-box;
+}
+
 
 body::before {
     content: '';
@@ -248,12 +255,20 @@ body::before, body::after {
 }
 
 .message-content {
+    max-width: 90%; /* Reduce width for smaller screens */
+    word-wrap: break-word;
     display: flex;
     gap: 1rem;
     padding: 1rem;
     border-radius: 1rem;
     background-color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+}
+
+.message-content p {
+    word-break: break-word; /* Ensures long words break */
+    white-space: pre-wrap; /* Retains formatting and handles large text blocks */
 }
 
 .user-message .message-content {
@@ -890,7 +905,8 @@ history-item {
 .query-input {
     position: fixed;
     bottom: 0;
-    left: 300px; /* Width of sidebar */
+    left: 300px; 
+    /* left: 0;  */
     right: 0;
     padding: 1rem 2rem;
     background: var(--background-dark);
@@ -965,4 +981,40 @@ button[type="submit"]:hover {
     .message {
         max-width: 100%;
     }
+}
+
+
+/* For smaller screens (e.g., mobile devices) */
+@media (max-width: 768px) {
+    .chat-messages {
+        padding: 1rem;
+    }
+
+    .message {
+        max-width: 95%; /* Use a smaller width on smaller screens */
+        font-size: 0.9rem; /* Reduce font size */
+    }
+
+    .query-input {
+        left: 0; /* Adjust position for smaller screens */
+        padding: 1rem;
+    }
+
+    #query {
+        font-size: 0.9rem; /* Adjust input box font size */
+        padding: 0.75rem;
+    }
+
+    .chat-container {
+        padding: 1rem;
+    }
+
+    .chat-header h1 {
+        font-size: 1.5rem; /* Reduce header size for mobile */
+    }
+}
+
+.user-message .message-content,
+.ai-message .message-content {
+    padding: 0.8rem; /* Adjust padding */
 }

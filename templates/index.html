@@ -53,17 +53,25 @@
 
                 <div class="query-input">
                     <form id="search-form" onsubmit="submitQuery(event)">
-                        <input type="text" id="query" placeholder="Ask me anything about Machine Learning...">
-                        <button type="submit">
+                        <input type="text" id="query" placeholder="Ask me anything about Machine Learning..." oninput="toggleSubmitButton()">
+                        <button type="submit" id="submit-btn" disabled>
                             <i class="fas fa-paper-plane"></i>
                         </button>
                     </form>
-                </div>
+                </div>                
             </div>
         </div>
     </div>
 
     <script>
+        function toggleSubmitButton() {
+            const queryInput = document.getElementById('query');
+            const submitButton = document.getElementById('submit-btn');
+
+            // Enable the button only if the input has text
+            submitButton.disabled = queryInput.value.trim() === '';
+        }
+        
         // Debug function to log actions
         function debugLog(action, data) {
             console.log(`[DEBUG] ${action}:`, data);
@@ -71,9 +79,14 @@
 
         async function submitQuery(event) {
             event.preventDefault();
-            const query = document.getElementById('query').value;
+            // const query = document.getElementById('query').value;
+            const queryInput = document.getElementById('query');
+            const query = queryInput.value.trim(); // Trim to avoid empty space submissions
             const chatHistory = document.getElementById('chat-history');
-            
+            if (!query) {
+                console.warn("Empty query submitted. Action ignored.");
+                return; // Prevent further processing if the query is empty
+            }
             // Add user query to chat
             chatHistory.innerHTML += `
                 <div class="message user-message">
@@ -95,35 +108,7 @@
 
                 const results = await response.json();
                 console.log('Received results:', results);
-                
-                // // Add AI response to chat
-                // let aiResponse = '<div class="message ai-message"><div class="message-content"><i class="fas fa-robot"></i><div class="ai-responses">';
-                // // results.forEach(result => {
-                //     results.forEach((result, index) => {
-                // if (!result.text) {
-                //     console.warn(`Skipping result ${index + 1}: Missing 'text' field`, result);
-                //     return;
-                // }
-
-                // // Replace escaped characters for proper rendering                      // for ai response             <p>${result.text}</p>
-
-                // const formattedText = result.text
-                //     .replaceAll("\\n", "<br>") // Line breaks
-                //     .replaceAll("â\\x80\\x99", "'"); // Apostrophe replacement
-                //     aiResponse += `
-                //         <div class="response-item">
-                //             <p>${formattedText}</p>
-                //             <div class="similarity">Similarity: ${(result.similarity * 100).toFixed(1)}%</div>
-                //             <div class="source-info">
-                //                 <i class="fas fa-book"></i> Chapter: ${data.chapter_name || 'N/A'}<br>
-                //                 <i class="fas fa-file-alt"></i> 
-                //                 Source: <a href="${data.source || '#'}" target="_blank">${data.source || 'N/A'}</a>
-                //             </div>
-                //         </div>
-                //     `;
-                // });
-                
-                // Add AI response to chat
+               // Add AI response to chat
                 let aiResponse = '<div class="message ai-message"><div class="message-content"><i class="fas fa-robot"></i><div class="ai-responses">';
                 results.forEach(result => {
                     aiResponse += `
@@ -135,7 +120,7 @@
                     <div class="source-info">
                         <i class="fas fa-book"></i> Chapter: ${result.chapter_name || 'N/A'}<br>
                         <i class="fas fa-file-alt"></i> 
-                        Source: <a href="${result.source || '#'}" target="_blank">${result.source || 'N/A'}</a>
+                        Source: <a href="${result.source || '#'}" target="_blank">${result.source ? 'Source Link' : 'N/A'}</a>
                     </div>
                 </div>
             `;
@@ -224,6 +209,8 @@
                 }
             }
         }
+
+
     </script>
 </body>
 </html>

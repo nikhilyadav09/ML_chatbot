@@ -55,17 +55,25 @@
 
                 <div class="query-input">
                     <form id="search-form" onsubmit="submitQuery(event)">
-                        <input type="text" id="query" placeholder="Ask me anything about Machine Learning...">
-                        <button type="submit">
+                        <input type="text" id="query" placeholder="Ask me anything about Machine Learning..." oninput="toggleSubmitButton()">
+                        <button type="submit" id="submit-btn" disabled>
                             <i class="fas fa-paper-plane"></i>
                         </button>
                     </form>
-                </div>
+                </div>                
             </div>
         </div>
     </div>
 
     <script>
+        function toggleSubmitButton() {
+            const queryInput = document.getElementById('query');
+            const submitButton = document.getElementById('submit-btn');
+
+            // Enable the button only if the input has text
+            submitButton.disabled = queryInput.value.trim() === '';
+        }
+        
         // Debug function to log actions
         function debugLog(action, data) {
             console.log(`[DEBUG] ${action}:`, data);
@@ -73,9 +81,14 @@
 
         async function submitQuery(event) {
             event.preventDefault();
-            const query = document.getElementById('query').value;
+            // const query = document.getElementById('query').value;
+            const queryInput = document.getElementById('query');
+            const query = queryInput.value.trim(); // Trim to avoid empty space submissions
             const chatHistory = document.getElementById('chat-history');
-
+            if (!query) {
+                console.warn("Empty query submitted. Action ignored.");
+                return; // Prevent further processing if the query is empty
+            }
             // Add user query to chat
             chatHistory.innerHTML += `
         <div class="message user-message">
@@ -96,6 +109,8 @@
                 });
 
                 const results = await response.json();
+                console.log('Received results:', results);
+               // Add AI response to chat
                 debugLog('Search results', results);
 
                 // Add AI response to chat
@@ -111,7 +126,7 @@
                     <div class="source-info">
                         <i class="fas fa-book"></i> Chapter: ${result.chapter_name || 'N/A'}<br>
                         <i class="fas fa-file-alt"></i> 
-                        Source: <a href="${result.source || '#'}" target="_blank">${result.source || 'N/A'}</a>
+                        Source: <a href="${result.source || '#'}" target="_blank">${result.source ? 'Source Link' : 'N/A'}</a>
                     </div>
                 </div>
             `;
@@ -160,7 +175,7 @@
                                     <div class="source-info">
                                         <i class="fas fa-book"></i> Chapter: ${data.chapter_name || 'N/A'}<br>
                                         <i class="fas fa-file-alt"></i> 
-                                        Source: <a href="${data.source || '#'}" target="_blank">${data.source || 'N/A'}</a>
+                                        Source: <a href="${data.source || '#'}" target="_blank">${data.source ? 'Source Link' : 'N/A'}</a>
                                     </div>
                                 </div>
                             </div>
@@ -200,6 +215,8 @@
                 }
             }
         }
+
+
     </script>
 </body>
 

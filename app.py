@@ -40,6 +40,7 @@ class InformationRetrievalSystem:
                 id SERIAL PRIMARY KEY,
                 text TEXT NOT NULL,
                 source VARCHAR(255),
+                chapter_name VARCHAR(255),
                 embedding vector(384)
             );
             
@@ -48,13 +49,15 @@ class InformationRetrievalSystem:
                 user_id INTEGER,
                 query TEXT,
                 response TEXT,
+                source VARCHAR(255),
+                chapter_name VARCHAR(255),
+                similarity VARCHAR(10),
                 timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users(id)
             );
         """)
         self.conn.commit()
         cursor.close()
-    
     def register_admin(self, username, password):
         cursor = self.conn.cursor()
         hashed_password = generate_password_hash(password)
@@ -110,63 +113,230 @@ class InformationRetrievalSystem:
         return None
 
     
-    
+    def embed_csv_documents(self, csv_path):
+        print(f"Starting to embed documents from {csv_path}")
+        
+        cursor = self.conn.cursor()
+        
+        # Ensure the table exists
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS document_embeddings (
+                id SERIAL PRIMARY KEY,
+                text TEXT NOT NULL,
+                source VARCHAR(255),
+                chapter_name VARCHAR(255),
+                embedding vector(384)
+            )
+        """)
+        self.conn.commit()
+        
+        try:
+            with open(csv_path, 'r', encoding='utf-8') as csvfile:
+                csv_reader = csv.reader(csvfile)
+                headers = next(csv_reader)  # Capture headers for debugging
+                print(f"CSV Headers: {headers}")
+                
+                # Prepare a new cursor for transaction
+                cursor = self.conn.cursor()
+                
+                row_count = 0
+                successful_rows = 0
+                
+                for row in csv_reader:
+                    row_count += 1
+                    
+                    try:
+                        # Validate row has enough columns
+                        if len(row) < 3:
+                            print(f"Warning: Skipping row {row_count} - insufficient columns")
+                            continue
+                        
+                        chapter_name = row[0]  # First column is chapter name
+                        source = row[1]  # Second column is source
+                        text = row[2]  # Third column is text                        
+                        # Truncate very long texts if necessary
+                        
+                        print(f"Embedding text: {text[:50]}...")  # Print first 50 chars
+                        
+                        embedding = self.model.encode(text).tolist()
+                            
+                        cursor.execute(
+                            "INSERT INTO document_embeddings (text, source, chapter_name, embedding) VALUES (%s, %s, %s, %s)",
+                            (text, source, chapter_name, embedding)
+                        )
+                        
+                        successful_rows += 1
+                    
+                    except Exception as row_error:
+                        print(f"Error embedding row {row_count}: {row_error}")
+                        # Continue processing other rows instead of stopping entire process
+                        continue
+                
+                self.conn.commit()
+                print(f"Committed {successful_rows}/{row_count} rows to database")
+            
+            return f"Successfully embedded {successful_rows} documents from {csv_path}"
+        
+        except FileNotFoundError:
+            print(f"Error: File not found - {csv_path}")
+            return f"Failed to embed documents from {csv_path} - File not found"
+        
+        except Exception as e:
+            print(f"Unexpected error during CSV processing: {e}")
+            self.conn.rollback()
+            return f"Failed to embed documents from {csv_path}"
+        
+        finally:
+            if not cursor.closed:
+                cursor.close()
     # Update the get_user_chat_history method in InformationRetrievalSystem class
 
 
     # Update the search_documents method to ensure it stores all required fields
-    def search_documents(self, query, user_id, top_k=1):  # Changed default to 1
+    # def search_documents(self, query, user_id, top_k=1):  # Changed default to 1
+    #     query_embedding = self.model.encode(query).tolist()
+        
+    #     cursor = self.conn.cursor()
+    #     try:
+    #         # Get only the top result with highest similarity
+    #         cursor.execute("""
+    #             SELECT text, source,chapter_name, 1 - (embedding <=> %s::vector) as similarity 
+    #             FROM document_embeddings 
+    #             ORDER BY similarity DESC 
+    #             LIMIT %s
+    #         """, (query_embedding, top_k))
+            
+    #         results = cursor.fetchall()
+            
+    #         if not results:
+    #             response_text = "No relevant matches found."
+    #         else:
+    #             # # Format response text - now only one result
+    #             # top_result = results[0]
+    #             # response_text = f"{results[0][0]} (Similarity: {results[0][2]:.2f})"
+    #                 # Format response text with all required fields
+    #             response_data = []
+    #             for result in results:
+    #                 response_data.append({
+    #                     'text': result[0],
+    #                     'similarity': result[3],  # Similarity score
+    #                     'chapter_name': result[2],  # Chapter name
+    #                     'source': result[1]  # Source link
+    #                 })
+                        
+    #         # Save chat history - store only the user query and the single best response
+    #         # cursor.execute("""
+    #         #     INSERT INTO chat_history (user_id, query, response, timestamp) 
+    #         #     VALUES (%s, %s, %s, CURRENT_TIMESTAMP)
+    #         # """, (user_id, query, response_text))
+            
+    #         # Save chat history - include similarity, source, and chapter_name
+    #         cursor.execute("""
+    #             INSERT INTO chat_history (user_id, query, response, similarity, source, chapter_name, timestamp) 
+    #             VALUES (%s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP)
+    #         """, (
+    #             user_id, 
+    #             query, 
+    #             response_text, 
+    #             top_result[3] if top_result else None, 
+    #             top_result[1] if top_result else None, 
+    #             top_result[2] if top_result else None
+    #         ))
+    #         self.conn.commit()
+            
+    #         # Return only unique results
+    #         return [
+    #             {
+    #                 "text": text, 
+    #                 "source": source, 
+    #                 "chapter_name": chapter_name,
+    #                 "similarity": float(similarity)
+    #             } 
+    #             for text, source, chapter_name, similarity in results
+    #         ]
+    #     except Exception as e:
+    #         print(f"Error in search_documents: {str(e)}")
+    #         self.conn.rollback()
+    #         return []
+    #     finally:
+    #         cursor.close()
+    def search_documents(self, query, user_id, top_k=1):  # Default top_k to 1 for single best match
         query_embedding = self.model.encode(query).tolist()
         
         cursor = self.conn.cursor()
         try:
-            # Get only the top result with highest similarity
-            cursor = self.conn.cursor()
+            # Execute SQL query to find top_k matches ordered by similarity
             cursor.execute("""
-                SELECT text, source, 1 - (embedding <=> %s::vector) as similarity 
+                SELECT text, source, chapter_name, 1 - (embedding <=> %s::vector) as similarity 
                 FROM document_embeddings 
                 ORDER BY similarity DESC 
                 LIMIT %s
             """, (query_embedding, top_k))
             
             results = cursor.fetchall()
+            print(results)
             
             if not results:
+                # No matches found
                 response_text = "No relevant matches found."
+                response_data = []  # Empty response if no matches
             else:
-                # Format response text - now only one result
-                response_text = f"{results[0][0]} (Similarity: {results[0][2]:.2f})"
-            
-            # Save chat history - store only the user query and the single best response
-            cursor.execute("""
-                INSERT INTO chat_history (user_id, query, response, timestamp) 
-                VALUES (%s, %s, %s, CURRENT_TIMESTAMP)
-            """, (user_id, query, response_text))
-            
-            self.conn.commit()
-            
-            # Return only unique results
-            return [
-                {
-                    "text": text, 
-                    "source": source, 
-                    "similarity": float(similarity)
-                } 
-                for text, source, similarity in results
-            ]
+                # Format results into structured response
+                print("it comes in result data")
+                response_data = [
+                    {
+                        "text": text, 
+                        "source": source, 
+                        "chapter_name": chapter_name,
+                        "similarity": float(similarity)
+                    } 
+                    for text, source, chapter_name, similarity in results
+                ]
+            #     print("response:", response_data)
+                
+            #     # Prepare chat history text for the best match
+            #     top_result = response_data[0]  # The single best result
+            #     response_text = (
+            #         f"{top_result['text']} "
+            #         f"(Similarity: {top_result['similarity']:.2f}, "
+            #         f"Chapter: {top_result['chapter_name']}, "
+            #         f"Source: {top_result['source']})"
+            #     )
+            #     print(top_result)
+            #     # Save chat history with relevant context
+            #     cursor.execute("""
+            #         INSERT INTO chat_history (
+            #             user_id, query, response, similarity, source, chapter_name, timestamp
+            #         ) VALUES (%s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP)
+            #     """, (
+            #         user_id,
+            #         query,
+            #         response_text,  # Formatted response text
+            #         str(top_result["similarity"]),  # Similarity score
+            #         top_result["source"],  # Source link
+            #         top_result["chapter_name"]  # Chapter name
+            #     ))
+            #     self.conn.commit()
+            # print("error got")
+            return response_data  # Return structured response data to the caller
         
         except Exception as e:
+            # Error handling
             print(f"Error in search_documents: {str(e)}")
-            self.conn.rollback()
+            self.conn.rollback()  # Rollback on failure
             return []
+        
         finally:
+            # Ensure cursor is always closed
             cursor.close()
+
 
     def get_user_chat_history(self, user_id):
         cursor = self.conn.cursor()
         try:
+            # Fetch the chat history, including new fields
             cursor.execute("""
-                SELECT id, query, response, timestamp 
+                SELECT id, query, response, similarity, source, chapter_name, timestamp 
                 FROM chat_history 
                 WHERE user_id = %s 
                 ORDER BY timestamp DESC  
@@ -175,18 +345,23 @@ class InformationRetrievalSystem:
             
             history = cursor.fetchall()
             
+            # Return history with all required fields
             return [{
                 "id": id,
                 "query": query,
                 "response": response,
+                "similarity": float(similarity) if similarity is not None else None,
+                "source": source,
+                "chapter_name": chapter_name,
                 "timestamp": timestamp.strftime("%Y-%m-%d %H:%M:%S")
-            } for id, query, response, timestamp in history]
-            
+            } for id, query, response, similarity, source, chapter_name, timestamp in history]
+        
         except Exception as e:
             print(f"Error in get_user_chat_history: {str(e)}")
             return []
         finally:
             cursor.close()
+
 
 # Flask Application Setup
 app = Flask(__name__)
@@ -208,6 +383,8 @@ ir_system = InformationRetrievalSystem(DB_PARAMS)
 def index():
     if 'user_id' not in session:
         return redirect(url_for('login'))
+    
+    print("session['user_id']",session['user_id'])
     
     # Get user's chat history
     chat_history = ir_system.get_user_chat_history(session['user_id'])
@@ -308,15 +485,19 @@ def search_documents():
     query = request.json.get('query', '')
     # Get only unique results
     results = ir_system.search_documents(query, session['user_id'])
-    # Return only unique results
-    unique_results = []
-    seen = set()
-    for result in results:
-        result_text = result['text']
-        if result_text not in seen:
-            seen.add(result_text)
-            unique_results.append(result)
-    
+    # # Return only unique results
+    # unique_results = []
+    # seen = set()
+    # for result in results:
+    #     result_text = result['text']
+    #     if result_text not in seen:
+    #         seen.add(result_text)
+    #         unique_results.append(result)
+    query = request.json.get('query', '')
+    results = ir_system.search_documents(query, session['user_id'])
+    unique_results = list({result['text']: result for result in results}.values())  
+    # unique_results = {result['text']: result for result in results}.values()  # Ensure uniqueness
+
     return jsonify(unique_results)
 
 @app.route('/logout')
@@ -408,9 +589,20 @@ def delete_chat(chat_id):
     finally:
         cursor.close()
 
-
+@app.route('/get_document_count')
+def get_document_count():
+    cursor = ir_system.conn.cursor()
+    try:
+        cursor.execute("SELECT COUNT(*) FROM document_embeddings")
+        count = cursor.fetchone()[0]
+        return jsonify({"count": count})
+    except Exception as e:
+        print(f"Error getting document count: {e}")
+        return jsonify({"count": 0}), 500
+    finally:
+        cursor.close()
 if __name__ == '__main__':
     # First-time admin registration (run once)
     ir_system.register_admin('nikhilyadav09', '9301')
     
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=8000)

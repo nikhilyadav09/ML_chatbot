@@ -21,10 +21,10 @@
                     <div class="history-item-footer">
                         <div class="timestamp"><i class="far fa-clock"></i> {{ chat.timestamp }}</div>
                         <div class="history-actions">
-                            <button onclick="viewChat({{ chat.id }})" class="view-chat" title="View Chat">
+                            <button onclick="viewChat('{{ chat.id }}')" class="view-chat" title="View Chat">
                                 <i class="far fa-eye"></i>
                             </button>
-                            <button onclick="deleteChat({{ chat.id }})" class="delete-chat" title="Delete Chat">
+                            <button onclick="deleteChat('{{ chat.id }}')" class="delete-chat" title="Delete Chat">
                                 <i class="far fa-trash-alt"></i>
                             </button>
                         </div>
@@ -32,6 +32,7 @@
                 </div>
                 {% endfor %}
             </div>
+            
             <div class="sidebar-footer">
                 <a href="{{ url_for('logout') }}" class="logout-btn">
                     <i class="fas fa-sign-out-alt"></i> Logout
@@ -97,11 +98,34 @@
                 
                 // Add AI response to chat
                 let aiResponse = '<div class="message ai-message"><div class="message-content"><i class="fas fa-robot"></i><div class="ai-responses">';
+                // results.forEach(result => {
+                //     aiResponse += `
+                //         <div class="response-item">
+                //             <p>${result.text}</p>
+                //             <div class="similarity">Similarity: ${(result.similarity * 100).toFixed(1)}%</div>
+                //         </div>
+                //     `;
+                // });
+                // aiResponse += `
+                //         <div class="response-item">
+                //             <p>${result.text}</p>
+                //             <div class="similarity">Similarity: ${(result.similarity * 100).toFixed(1)}%</div>
+                //             <div class="source-info">
+                //                 <i class="fas fa-book"></i> Chapter: ${result.chapter_name || 'N/A'}
+                //                 <i class="fas fa-file-alt"></i> Source: ${result.source || 'N/A'}
+                //             </div>
+                //         </div>
+                //     `;
+                // });
                 results.forEach(result => {
                     aiResponse += `
                         <div class="response-item">
                             <p>${result.text}</p>
                             <div class="similarity">Similarity: ${(result.similarity * 100).toFixed(1)}%</div>
+                            <div class="source-info">
+                                <i class="fas fa-book"></i> Chapter: ${result.chapter_name || 'N/A'}
+                                <i class="fas fa-file-alt"></i> Source: ${result.source || 'N/A'}
+                            </div>
                         </div>
                     `;
                 });
@@ -132,7 +156,29 @@
                 const chatHistory = document.getElementById('chat-history');
                 chatHistory.innerHTML = ''; // Clear current chat
                 
-                // Add user query
+                // // Add user query
+                // chatHistory.innerHTML += `
+                //     <div class="message user-message">
+                //         <div class="message-content">
+                //             <i class="fas fa-user"></i>
+                //             <p>${data.query}</p>
+                //         </div>
+                //     </div>
+                // `;
+                
+                // // Add AI response
+                // chatHistory.innerHTML += `
+                //     <div class="message ai-message">
+                //         <div class="message-content">
+                //             <i class="fas fa-robot"></i>
+                //             <div class="ai-responses">
+                //                 <div class="response-item">
+                //                     <p>${data.response}</p>
+                //                 </div>
+                //             </div>
+                //         </div>
+                //     </div>
+                // `;
                 chatHistory.innerHTML += `
                     <div class="message user-message">
                         <div class="message-content">
@@ -140,21 +186,23 @@
                             <p>${data.query}</p>
                         </div>
                     </div>
-                `;
-                
-                // Add AI response
-                chatHistory.innerHTML += `
                     <div class="message ai-message">
                         <div class="message-content">
                             <i class="fas fa-robot"></i>
                             <div class="ai-responses">
                                 <div class="response-item">
                                     <p>${data.response}</p>
+                                    <div class="similarity">Similarity: ${(data.similarity * 100).toFixed(1)}%</div>
+                                    <div class="source-info">
+                                        <i class="fas fa-book"></i> Chapter: ${data.chapter_name || 'N/A'}
+                                        <i class="fas fa-file-alt"></i> Source: ${data.source || 'N/A'}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 `;
+                chatHistory.scrollTop = chatHistory.scrollHeight;
             } catch (error) {
                 console.error('Error viewing chat:', error);
                 debugLog('View chat error', error);
@@ -188,45 +236,61 @@
             }
         }
 
-        // Add this to ensure proper scrolling when viewing chat history
-        async function viewChat(chatId) {
-            try {
-                const response = await fetch(`/get_chat/${chatId}`);
-                const data = await response.json();
+        // // Add this to ensure proper scrolling when viewing chat history
+        // async function viewChat(chatId) {
+        //     try {
+        //         const response = await fetch(`/get_chat/${chatId}`);
+        //         const data = await response.json();
                 
-                const chatHistory = document.getElementById('chat-history');
-                chatHistory.innerHTML = '';
+        //         const chatHistory = document.getElementById('chat-history');
+        //         chatHistory.innerHTML = '';
                 
-                // Add messages with a slight delay for animation
-                setTimeout(() => {
-                    chatHistory.innerHTML += `
-                        <div class="message user-message">
-                            <div class="message-content">
-                                <i class="fas fa-user"></i>
-                                <p>${data.query}</p>
-                            </div>
-                        </div>
-                    `;
+        //         // Add messages with a slight delay for animation
+        //         setTimeout(() => {
+        //             chatHistory.innerHTML += `
+        //                 <div class="message user-message">
+        //                     <div class="message-content">
+        //                         <i class="fas fa-user"></i>
+        //                         <p>${data.query}</p>
+        //                     </div>
+        //                 </div>
+        //             `;
                     
-                    chatHistory.innerHTML += `
-                        <div class="message ai-message">
-                            <div class="message-content">
-                                <i class="fas fa-robot"></i>
-                                <div class="ai-responses">
-                                    <div class="response-item">
-                                        <p>${data.response}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    
-                    chatHistory.scrollTop = chatHistory.scrollHeight;
-                }, 100);
-            } catch (error) {
-                console.error('Error viewing chat:', error);
-            }
-        }
+        //             // chatHistory.innerHTML += `
+        //             //     <div class="message ai-message">
+        //             //         <div class="message-content">
+        //             //             <i class="fas fa-robot"></i>
+        //             //             <div class="ai-responses">
+        //             //                 <div class="response-item">
+        //             //                     <p>${data.response}</p>
+        //             //                 </div>
+        //             //             </div>
+        //             //         </div>
+        //             //     </div>
+        //             // `;
+        //             chatHistory.innerHTML += `
+        //             <div class="message ai-message">
+        //                 <div class="message-content">
+        //                     <i class="fas fa-robot"></i>
+        //                     <div class="ai-responses">
+        //                         <div class="response-item">
+        //                             <p>${data.response}</p>
+        //                             <div class="similarity">Similarity: ${(data.similarity * 100).toFixed(1)}%</div>
+        //                             <div class="source-info">
+        //                                 <i class="fas fa-book"></i> Chapter: ${data.chapter_name || 'N/A'}
+        //                                 <i class="fas fa-file-alt"></i> Source: ${data.source || 'N/A'}
+        //                             </div>
+        //                         </div>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //         `;
+        //             chatHistory.scrollTop = chatHistory.scrollHeight;
+        //         }, 100);
+        //     } catch (error) {
+        //         console.error('Error viewing chat:', error);
+        //     }
+        // }
     </script>
 </body>
 </html>

@@ -64,18 +64,18 @@
                                     <label><i class="fas fa-folder-open"></i> Document Path</label>
                                     <div class="input-group">
                                         <input type="text" id="csv-path" placeholder="Enter document path" required>
-                                        <button type="button" class="browse-btn">
+                                        <!-- <button type="button" class="browse-btn">
                                             <i class="fas fa-search"></i> Browse
-                                        </button>
+                                        </button> -->
                                     </div>
                                 </div>
                                 <div class="form-actions">
                                     <button type="submit" class="embed-btn primary">
                                         <i class="fas fa-upload"></i> Embed Documents
                                     </button>
-                                    <button type="reset" class="embed-btn secondary">
+                                    <!-- <button type="reset" class="embed-btn secondary">
                                         <i class="fas fa-redo"></i> Reset
-                                    </button>
+                                    </button> -->
                                 </div>
                             </form>
                             <div id="result" class="result-container"></div>
@@ -103,7 +103,6 @@
                             <div class="stat-info">
                                 <h3>Last Upload</h3>
                                 <p id="last-upload">No uploads yet</p>
-                                <span class="stat-time">Updated just now</span>
                             </div>
                         </div>
                         <div class="stat-card">
@@ -398,6 +397,41 @@ window.addEventListener('scroll', () => {
         }
     });
 });
+
+
+async function updateStats() {
+    try {
+        // Fetch total document count
+        const totalDocsResponse = await fetch('/get_document_count');
+        const totalDocsData = await totalDocsResponse.json();
+        document.getElementById('total-docs').textContent = totalDocsData.count;
+
+        // Update last upload time
+        document.getElementById('last-upload').textContent = new Date().toLocaleString();
+
+        // Estimate storage used (simplistic approach)
+        const storageUsed = (totalDocsData.count * 0.1).toFixed(2); // Assuming ~0.1 MB per document
+        document.getElementById('storage-used').textContent = `${storageUsed} MB`;
+
+        // Update storage progress bar
+        const storageBar = document.querySelector('.storage-progress');
+        const usagePercentage = Math.min((storageUsed / 1000) * 100, 100); // Assuming 1 GB total
+        storageBar.style.width = `${usagePercentage}%`;
+
+        // Add recent activity
+        const activityList = document.getElementById('activity-list');
+        const activityItem = document.createElement('div');
+        activityItem.className = 'activity-item';
+        activityItem.innerHTML = `
+            <i class="fas fa-upload"></i>
+            <span>Uploaded ${totalDocsData.count} documents</span>
+            <small>${new Date().toLocaleTimeString()}</small>
+        `;
+        activityList.insertBefore(activityItem, activityList.firstChild);
+    } catch (error) {
+        console.error('Error updating stats:', error);
+    }
+}
     </script>
 </body>
 </html>

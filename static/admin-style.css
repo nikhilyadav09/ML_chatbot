@@ -257,6 +257,7 @@ body {
     margin-bottom: 0.5rem;
     font-weight: 500;
     color: var(--admin-text);
+    /* color: var(--admin-bg); */
 }
 
 .form-group input {
@@ -565,7 +566,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 0.5rem;
+    padding-top: 0.5rem;    
     color: white;
     transition: all var(--transition-speed);
     background: var(--primary-gradient);

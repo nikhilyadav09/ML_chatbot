@@ -19,7 +19,7 @@
             <div class="chat-history">
                 {% for chat in chat_history %}
                 <div class="history-item">
-                    <div class="query">{{ chat.query }}</div>
+                    <div class="query" data-chat-id="{{ chat.id }}">{{ chat.query }}</div>
                     <div class="history-item-footer">
                         <div class="timestamp"><i class="far fa-clock"></i> {{ chat.timestamp }}</div>
                         <div class="history-actions">
@@ -66,32 +66,95 @@
     </div>
 
     <script>
-        function toggleSubmitButton() {
+
+
+        // Add this function to handle copying text
+        function copyToClipboard(text, buttonElement) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Temporarily change button style to show it was copied
+                buttonElement.classList.add('copied');
+                buttonElement.innerHTML = '<i class="fas fa-check"></i>';
+                
+                // Reset button after 2 seconds
+                setTimeout(() => {
+                    buttonElement.classList.remove('copied');
+                    buttonElement.innerHTML = '<i class="fas fa-copy"></i>';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                alert('Failed to copy text');
+            });
+        }
+
+        function generateResponseHash(responseText) {
+    // Create a simple hash function for the response text
+    let hash = 0;
+    for (let i = 0; i < responseText.length; i++) {
+        const char = responseText.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32-bit integer
+    }
+    return Math.abs(hash).toString();
+}
+
+function toggleSubmitButton() {
             const queryInput = document.getElementById('query');
             const submitButton = document.getElementById('submit-btn');
 
             // Enable the button only if the input has text
             submitButton.disabled = queryInput.value.trim() === '';
         }
-        
-        // Debug function to log actions
-        function debugLog(action, data) {
-            console.log(`[DEBUG] ${action}:`, data);
+
+        function generateChatId() {
+            // Generate a numeric ID similar to a timestamp
+            return Date.now();
         }
 
-        async function submitQuery(event) {
-            event.preventDefault();
-            // const query = document.getElementById('query').value;
-            const queryInput = document.getElementById('query');
-            const query = queryInput.value.trim(); // Trim to avoid empty space submissions
-            const chatHistory = document.getElementById('chat-history');
-            if (!query) {
-                console.warn("Empty query submitted. Action ignored.");
-                return; // Prevent further processing if the query is empty
-            }
-            // Add user query to chat
-            chatHistory.innerHTML += `
-        <div class="message user-message">
+function saveFeedback(chatId, feedbackType = '', feedbackText = '') {
+    // Ensure chatId is converted to a consistent format
+    const normalizedChatId = chatId.toString().replace('chat-', '');
+
+    fetch('/save_feedback', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            chat_id: normalizedChatId,
+            response_type: feedbackType,
+            feedback: feedbackText,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Feedback save response:', data);
+        if (data.status === 'success') {
+            // Optional: Show success message to user
+            alert('Feedback saved successfully');
+        } else {
+            // Optional: Show error message
+            console.error('Feedback save failed:', data);
+            alert('Failed to save feedback');
+        }
+    })
+    .catch(error => {
+        console.error('Error saving feedback:', error);
+        alert('An error occurred while saving feedback');
+    });
+}
+
+async function submitQuery(event) {
+    event.preventDefault();
+    const queryInput = document.getElementById('query');
+    const query = queryInput.value.trim();
+    const chatHistory = document.getElementById('chat-history');
+
+    // Generate a consistent chat ID
+    const chatId = generateChatId();
+    
+    // Add user query to chat
+    chatHistory.innerHTML += `
+        <div class="message user-message" data-chat-id="${chatId}">
             <div class="message-content">
                 <i class="fas fa-user"></i>
                 <p>${query}</p>
@@ -99,124 +162,257 @@
         </div>
     `;
 
-            try {
-                const response = await fetch('/search', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ query: query })
-                });
+    try {
+        const response = await fetch('/search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                query: query,
+                chat_id: chatId  // Pass chat_id with the request if needed
+            })
+        });
 
-                const results = await response.json();
-                console.log('Received results:', results);
-               // Add AI response to chat
-                debugLog('Search results', results);
+        const results = await response.json();
+        console.log('Received results:', results);
 
-                // Add AI response to chat
-                let aiResponse = '<div class="message ai-message"><div class="message-content"><i class="fas fa-robot"></i><div class="ai-responses">';
-                results.forEach(result => {
-                    aiResponse += `
-                <div class="response-item" style="line-space:1.4">
+        // Add AI response to chat
+        let aiResponse = '<div class="message ai-message"><div class="message-content"><i class="fas fa-robot"></i><div class="ai-responses">';
+            results.forEach(result => {
+            aiResponse += `
+                <div class="response-item">
+                            <div class="response-header">
+                                <button class="copy-btn" onclick="copyToClipboard(\`${result.text.replace(/`/g, '\\`')}\`, this)" title="Copy Response">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
                     <p>${result.text}</p>
                     <div class="similarity">Similarity: ${(result.similarity * 100).toFixed(1) || 'N/A'}%</div>
-
-                    <p>Llama response : </p>
-                    <p>${result.api_response}</p>
+                    <p>Llama response: ${result.api_response || 'N/A'}</p>
                     <div class="source-info">
-                        <i class="fas fa-book"></i> Chapter: ${result.chapter_name || 'N/A'}<br>
-                        <i class="fas fa-file-alt"></i> 
-                        Source: <a href="${result.source || '#'}" target="_blank">${result.source ? 'Source Link' : 'N/A'}</a>
+                        <strong><i class="fas fa-book"></i> Chapter:</strong> ${result.chapter_name || 'N/A'}<br>
+                        <strong><i class="fas fa-file-alt"></i> Source:</strong> 
+                        <a href="${result.source || '#'}" target="_blank">${result.source ? 'Source Link' : 'N/A'}</a>
+                    </div>
+                    <div class="response-type">
+                        <button class="speak-btn" onclick="speakResponse(\`${result.text.replace(/`/g, '\\`')}\`)" title="Speak Response">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                        <button class="feedback-btn good-response" title="Good Response" 
+                            onclick="saveFeedback(event, 'good')">
+                            <i class="fas fa-thumbs-up"></i>
+                        </button>
+                        <button class="feedback-btn bad-response" title="Bad Response" 
+                            onclick="saveFeedback(event, 'bad')">
+                            <i class="fas fa-thumbs-down"></i>
+                        </button>
+                        <input type="text" class="feedback-input" placeholder="Add feedback" 
+                            onchange="saveFeedback(event, '', this.value)">
+                        <div class="feedback-status"></div>
                     </div>
                 </div>
             `;
-                });
-                aiResponse += '</div></div></div>';
-                chatHistory.innerHTML += aiResponse;
+        });
+        aiResponse += '</div></div></div>';
+        chatHistory.innerHTML += aiResponse;
 
-                document.getElementById('query').value = '';
-                chatHistory.scrollTop = chatHistory.scrollHeight;
-            } catch (error) {
-                console.error('Error:', error);
-                debugLog('Submit query error', error);
-            }
+        queryInput.value = '';
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+    } catch (error) {
+        console.error('Error:', error);
+        chatHistory.innerHTML += `
+            <div class="message error-message">
+                <div class="message-content">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Something went wrong. Please try again later.</p>
+                </div>
+            </div>
+        `;
+    }
+}
+async function viewChat(chatId) {
+    console.log('Attempting to view chat', chatId);
+    try {
+        const response = await fetch(`/get_chat/${chatId}`);
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to load chat');
         }
 
-        async function viewChat(chatId) {
-            debugLog('Viewing chat', chatId);
-            try {
-                const response = await fetch(`/get_chat/${chatId}`);
-                debugLog('View chat response status', response.status);
+        const data = await response.json();
+        console.log('View chat data', data);
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+        const chatHistory = document.getElementById('chat-history');
+        chatHistory.innerHTML = ''; // Clear current chat
 
-                const data = await response.json();
-                debugLog('View chat data', data);
-
-                const chatHistory = document.getElementById('chat-history');
-                chatHistory.innerHTML = ''; // Clear current chat
-
-                chatHistory.innerHTML += `
-                    <div class="message user-message">
-                        <div class="message-content">
-                            <i class="fas fa-user"></i>
-                            <p>${data.query}</p>
-                        </div>
-                    </div>
-                    <div class="message ai-message">
-                        <div class="message-content">
-                            <i class="fas fa-robot"></i>
-                            <div class="ai-responses">
-                                <div class="response-item">
-                                    <p>${data.response}</p>
-                                    <div class="similarity">Similarity: ${(data.similarity * 100).toFixed(1)}%</div>
-                                    <div class="source-info">
-                                        <i class="fas fa-book"></i> Chapter: ${data.chapter_name || 'N/A'}<br>
-                                        <i class="fas fa-file-alt"></i> 
-                                        Source: <a href="${data.source || '#'}" target="_blank">${data.source ? 'Source Link' : 'N/A'}</a>
-                                    </div>
-                                </div>
+        chatHistory.innerHTML += `
+            <div class="message user-message">
+                <div class="message-content">
+                    <i class="fas fa-user"></i>
+                    <p>${data.query}</p>
+                </div>
+            </div>
+            <div class="message ai-message">
+                <div class="message-content">
+                    <i class="fas fa-robot"></i>
+                    <div class="ai-responses">
+                        <div class="response-item">
+                            <div class="response-header">
+                                <button class="copy-btn" onclick="copyToClipboard(\`${data.response.replace(/`/g, '\\`')}\`, this)" title="Copy Response">
+                                    <i class="fas fa-copy"></i>
+                                </button>
                             </div>
+                            <p>${data.response}</p>
+                            <div class="similarity">Similarity: ${data.similarity ? (data.similarity * 100).toFixed(1) + '%' : 'N/A'}</div>
+                            <div class="source-info">
+                                <i class="fas fa-book"></i> Chapter: ${data.chapter_name || 'N/A'}<br>
+                                <i class="fas fa-file-alt"></i> 
+                                Source: <a href="${data.source || '#'}" target="_blank">${data.source ? 'Source Link' : 'N/A'}</a>
+                            </div>
+                            <div class="timestamp">
+                                <i class="far fa-clock"></i> ${data.timestamp || 'N/A'}
+                            </div>
+                                <button class="speak-btn" onclick="speakResponse('${data.response}')" title="Speak Response">
+                                    <i class="fas fa-volume-up"></i>
+                                </button>
+
+                                
+                        </div>
                         </div>
                     </div>
-                `;
-                chatHistory.scrollTop = chatHistory.scrollHeight;
-            } catch (error) {
-                console.error('Error viewing chat:', error);
-                debugLog('View chat error', error);
-                alert('Failed to load chat: ' + error.message);
-            }
+                </div>
+            </div>
+        `;
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+    } catch (error) {
+        console.error('Error viewing chat:', error);
+        alert(error.message);
+    }
+}
+
+async function deleteChat(chatId) {
+    console.log('Attempting to delete chat', chatId);
+    
+    if (!confirm('Are you sure you want to delete this chat?')) {
+        return;  // Exit if user cancels
+    }
+
+    try {
+        const response = await fetch(`/delete_chat/${chatId}`, {
+            method: 'DELETE'
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to delete chat');
         }
 
-        async function deleteChat(chatId) {
-            debugLog('Deleting chat', chatId);
-            if (confirm('Are you sure you want to delete this chat?')) {
-                try {
-                    const response = await fetch(`/delete_chat/${chatId}`, {
-                        method: 'DELETE'
-                    });
-                    debugLog('Delete chat response status', response.status);
+        const data = await response.json();
+        console.log('Delete chat response', data);
 
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-
-                    const data = await response.json();
-                    debugLog('Delete chat response', data);
-
-                    // Reload the page to refresh the chat history
-                    window.location.reload();
-                } catch (error) {
-                    console.error('Error deleting chat:', error);
-                    debugLog('Delete chat error', error);
-                    alert('Failed to delete chat: ' + error.message);
-                }
-            }
+        // Remove the chat item from the sidebar
+        const chatItemToRemove = document.querySelector(`.history-item [data-chat-id="${chatId}"]`);
+        if (chatItemToRemove) {
+            chatItemToRemove.closest('.history-item').remove();
         }
 
+        // Optional: Refresh the page or update the view
+        alert('Chat deleted successfully');
+    } catch (error) {
+        console.error('Error deleting chat:', error);
+        alert(error.message);
+    }
+}
+function saveFeedback(event, feedbackType = '', feedbackText = '') {
+    // Find the closest response item
+    const responseItem = event.target.closest('.response-item');
+    
+    // Extract the response text
+    const responseTextElement = responseItem.querySelector('p');
+    const responseText = responseTextElement ? responseTextElement.textContent : 'Unknown Response';
+    
+    // Generate a hash for the response text
+    const responseHash = generateResponseHash(responseText);
 
+    fetch('/save_feedback', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            chat_id: responseHash, // Use response hash instead of chat ID
+            response_type: feedbackType,
+            feedback: feedbackText,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Feedback save response:', data);
+        if (data.status === 'success') {
+            // Show success message
+            const feedbackStatus = responseItem.querySelector('.feedback-status');
+            if (feedbackStatus) {
+                feedbackStatus.textContent = 'Feedback saved successfully';
+                feedbackStatus.style.color = 'green';
+            } else {
+                // Fallback to alert if no status element exists
+                alert('Feedback saved successfully');
+            }
+        } else {
+            // Show error message
+            console.error('Feedback save failed:', data);
+            const feedbackStatus = responseItem.querySelector('.feedback-status');
+            if (feedbackStatus) {
+                feedbackStatus.textContent = 'Failed to save feedback';
+                feedbackStatus.style.color = 'red';
+            } else {
+                alert('Failed to save feedback');
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error saving feedback:', error);
+        const feedbackStatus = responseItem.querySelector('.feedback-status');
+        if (feedbackStatus) {
+            feedbackStatus.textContent = 'An error occurred while saving feedback';
+            feedbackStatus.style.color = 'red';
+        } else {
+            alert('An error occurred while saving feedback');
+        }
+    });
+}
+function speakResponse(text) {
+    if ('speechSynthesis' in window) {
+        try {
+            // Cancel any ongoing speech first
+            window.speechSynthesis.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            
+            // Add more detailed error handling
+            utterance.onerror = (event) => {
+                console.error('Speech synthesis error:', event);
+                alert('Speech synthesis error: ' + event.error);
+            };
+            
+            utterance.onstart = () => {
+                console.log('Speech synthesis started');
+            };
+            
+            utterance.rate = 1.0;  // Normal speaking rate
+            utterance.pitch = 1.0; // Normal pitch
+            
+            window.speechSynthesis.speak(utterance);
+        } catch (error) {
+            console.error('Error in speech synthesis:', error);
+            alert('Failed to speak: ' + error.message);
+        }
+    } else {
+        alert('Text-to-Speech is not supported in this browser');
+    }
+}
     </script>
 </body>
 

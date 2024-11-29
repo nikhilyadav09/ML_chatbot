@@ -54,9 +54,12 @@ class InformationRetrievalSystem:
                 source VARCHAR(255),
                 chapter_name VARCHAR(255),
                 similarity DOUBLE PRECISION,
+                feedback BOOLEAN DEFAULT NULL, 
+                feedback_comment TEXT DEFAULT NULL,        
                 timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users(id)
             );
+
         """)
         self.conn.commit()
         cursor.close()
@@ -241,6 +244,8 @@ class InformationRetrievalSystem:
                         source VARCHAR(255),
                         chapter_name VARCHAR(255),
                         similarity DOUBLE PRECISION,
+                        feedback BOOLEAN DEFAULT NULL, 
+                        feedback_comment TEXT DEFAULT NULL,        
                         timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (user_id) REFERENCES users(id)
                     )
@@ -276,6 +281,22 @@ class InformationRetrievalSystem:
     def get_user_chat_history(self, user_id):
         cursor = self.conn.cursor()
         try:
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS chat_history (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER,
+                query TEXT,
+                response TEXT,
+                source VARCHAR(255),
+                chapter_name VARCHAR(255),
+                similarity DOUBLE PRECISION,
+                feedback BOOLEAN DEFAULT NULL, 
+                feedback_comment TEXT DEFAULT NULL,        
+                timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            )
+        """)
+    
             # Fetch the chat history, including new fields
             cursor.execute("""
                 SELECT id, query, response, similarity, source, chapter_name, timestamp 
@@ -358,8 +379,95 @@ def use_api(text, trial, question):
     )
     return chat_completion.choices[0].message.content
  
+@app.route('/save_feedback', methods=['POST'])
+def save_feedback():
+    # Check user session
+    if 'user_id' not in session:
+        app.logger.warning("Unauthorized access: No user session")
+        return jsonify({'status': 'error', 'message': 'Unauthorized'}), 401
+    
+    # Retrieve request data
+    data = request.json
+    app.logger.info(f"Raw received data: {data}")
 
+    # Extract parameters with logging
+    chat_id = data.get('chat_id')
+    response_type = data.get('response_type', '').strip()
+    feedback = data.get('feedback', '').strip()
+    
+    app.logger.info(f"Parsed feedback data:")
+    app.logger.info(f"- chat_id: {chat_id}")
+    app.logger.info(f"- response_type: {response_type}")
+    app.logger.info(f"- feedback: {feedback}")
+    app.logger.info(f"- user_id from session: {session['user_id']}")
 
+    try:
+        cursor = ir_system.conn.cursor()
+        
+        # First, ensure the required columns exist in the chat_history table
+        cursor.execute("""
+            ALTER TABLE chat_history 
+            ADD COLUMN IF NOT EXISTS feedback BOOLEAN DEFAULT NULL,
+            ADD COLUMN IF NOT EXISTS feedback_comment TEXT DEFAULT NULL
+        """)
+        
+        # Validate chat_id
+        if not chat_id:
+            app.logger.error("No chat_id provided")
+            return jsonify({'status': 'error', 'message': 'Missing chat ID'}), 400
+        
+        # Determine update type
+        if response_type in ['good', 'bad']:
+            # Update the most recent chat history entry for this user
+            cursor.execute("""
+                UPDATE chat_history
+                SET feedback = %s
+                WHERE user_id = %s
+                AND id = (
+                    SELECT id 
+                    FROM chat_history 
+                    WHERE user_id = %s 
+                    ORDER BY timestamp DESC 
+                    LIMIT 1
+                )
+            """, (response_type == 'good', session['user_id'], session['user_id']))
+            
+        if feedback:
+            # Update the feedback comment for the most recent chat history entry
+            cursor.execute("""
+                UPDATE chat_history
+                SET feedback_comment = %s
+                WHERE user_id = %s
+                AND id = (
+                    SELECT id 
+                    FROM chat_history 
+                    WHERE user_id = %s 
+                    ORDER BY timestamp DESC 
+                    LIMIT 1
+                )
+            """, (feedback, session['user_id'], session['user_id']))
+        
+        # Commit the transaction
+        ir_system.conn.commit()
+        
+        return jsonify({
+            'status': 'success', 
+            'message': 'Feedback saved successfully'
+        })
+    
+    except Exception as e:
+        # Comprehensive error logging
+        app.logger.error(f"Error saving feedback:", exc_info=True)
+        ir_system.conn.rollback()
+        return jsonify({
+            'status': 'error', 
+            'message': f'An error occurred: {str(e)}'
+        }), 500
+    
+    finally:
+        # Ensure cursor is closed
+        if 'cursor' in locals() and not cursor.closed:
+            cursor.close()
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -451,17 +559,26 @@ def search_documents():
     
     query = request.json.get('query', '')
     results = ir_system.search_documents(query, session['user_id'])
-    unique_results = list({result['text']: result for result in results}.values())  
-    # unique_results = {result['text']: result for result in results}.values()  # Ensure uniqueness
+    
+    # Check if results are empty
+    if not results:
+        return jsonify([])
+    
+    unique_results = list({result['text']: result for result in results}.values())
+    
+    # Initialize api_response to handle potential API call failures
+    api_response = "No API response available"
+    
     try:
         text = unique_results[0]["text"]
         trial = 0
-        api_respose = use_api(text, trial, query)
-        trial+=1
-    except:
-        print("got some error in api response")
-    print(unique_results)
-    unique_results[0]["api_response"] = str(api_respose)
+        api_response = use_api(text, trial, query)
+    except Exception as e:
+        print(f"Error in API response: {e}")
+        # If API call fails, keep the default "No API response available"
+    
+    # Add API response to the first result
+    unique_results[0]["api_response"] = str(api_response)
 
     return jsonify(unique_results)
 
@@ -492,13 +609,10 @@ def get_chat(chat_id):
             FROM chat_history
             WHERE id = %s AND user_id = %s
         """
-        print(f"Executing query with params: id={chat_id}, user_id={session['user_id']}")
         
         cursor.execute(query, (chat_id, session['user_id']))
         result = cursor.fetchone()
-        
-        print(f"Query result: {result}")
-        
+                
         if result:
             # Map the result to a dictionary
             response_data = {
@@ -510,7 +624,6 @@ def get_chat(chat_id):
                 'chapter_name': result[5],
                 'timestamp': result[6].strftime("%Y-%m-%d %H:%M:%S") if result[6] else None
             }
-            print(f"Returning data: {response_data}")
             return jsonify(response_data)
         
         # Chat not found

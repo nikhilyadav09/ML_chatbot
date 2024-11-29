@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Code Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-history"></i> Previous Chats</h2>
+            </div>
+            <div class="chat-history">
+                {% for chat in chat_history %}
+                <div class="history-item">
+                    <div class="query">{{ chat.query }}</div>
+                    <div class="history-item-footer">
+                        <div class="timestamp"><i class="far fa-clock"></i> {{ chat.timestamp }}</div>
+                        <div class="history-actions">
+                            <button onclick="viewChat('{{ chat.id }}')" class="view-chat" title="View Chat">
+                                <i class="far fa-eye"></i>
+                            </button>
+                            <button onclick="deleteChat('{{ chat.id }}')" class="delete-chat" title="Delete Chat">
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="sidebar-footer">
+                <a href="{{ url_for('logout') }}" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h1><i class="fas fa-robot"></i> ML Code Assistant</h1>
+                </div>
+
+                <div class="chat-messages" id="chat-history">
+                    <!-- Chat messages will be dynamically added here -->
+                </div>
+
+                <div class="query-input">
+                    <form id="search-form" onsubmit="submitQuery(event)">
+                        <input type="text" id="query" placeholder="Ask me anything about Machine Learning...">
+                        <button type="submit">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Debug function to log actions
+        function debugLog(action, data) {
+            console.log(`[DEBUG] ${action}:`, data);
+        }
+
+        async function submitQuery(event) {
+            event.preventDefault();
+            const query = document.getElementById('query').value;
+            const chatHistory = document.getElementById('chat-history');
+
+            // Add user query to chat
+            chatHistory.innerHTML += `
+        <div class="message user-message">
+            <div class="message-content">
+                <i class="fas fa-user"></i>
+                <p>${query}</p>
+            </div>
+        </div>
+    `;
+
+            try {
+                const response = await fetch('/search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ query: query })
+                });
+
+                const results = await response.json();
+                debugLog('Search results', results);
+
+                // Add AI response to chat
+                let aiResponse = '<div class="message ai-message"><div class="message-content"><i class="fas fa-robot"></i><div class="ai-responses">';
+                results.forEach(result => {
+                    aiResponse += `
+                <div class="response-item">
+                    <p>${result.text}</p>
+                    <div class="similarity">Similarity: ${(result.similarity * 100).toFixed(1) || 'N/A'}%</div>
+                    <p></p>
+                    <p>${result.Llama_Model}</p>
+                    <div class="source-info">
+                        <i class="fas fa-book"></i> Chapter: ${result.chapter_name || 'N/A'}<br>
+                        <i class="fas fa-file-alt"></i> 
+                        Source: <a href="${result.source || '#'}" target="_blank">${result.source || 'N/A'}</a>
+                    </div>
+                </div>
+            `;
+                });
+                aiResponse += '</div></div></div>';
+                chatHistory.innerHTML += aiResponse;
+
+                document.getElementById('query').value = '';
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            } catch (error) {
+                console.error('Error:', error);
+                debugLog('Submit query error', error);
+            }
+        }
+
+        async function viewChat(chatId) {
+            debugLog('Viewing chat', chatId);
+            try {
+                const response = await fetch(`/get_chat/${chatId}`);
+                debugLog('View chat response status', response.status);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                debugLog('View chat data', data);
+
+                const chatHistory = document.getElementById('chat-history');
+                chatHistory.innerHTML = ''; // Clear current chat
+
+                chatHistory.innerHTML += `
+                    <div class="message user-message">
+                        <div class="message-content">
+                            <i class="fas fa-user"></i>
+                            <p>${data.query}</p>
+                        </div>
+                    </div>
+                    <div class="message ai-message">
+                        <div class="message-content">
+                            <i class="fas fa-robot"></i>
+                            <div class="ai-responses">
+                                <div class="response-item">
+                                    <p>${data.response}</p>
+                                    <div class="similarity">Similarity: ${(data.similarity * 100).toFixed(1)}%</div>
+                                    <div class="source-info">
+                                        <i class="fas fa-book"></i> Chapter: ${data.chapter_name || 'N/A'}<br>
+                                        <i class="fas fa-file-alt"></i> 
+                                        Source: <a href="${data.source || '#'}" target="_blank">${data.source || 'N/A'}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            } catch (error) {
+                console.error('Error viewing chat:', error);
+                debugLog('View chat error', error);
+                alert('Failed to load chat: ' + error.message);
+            }
+        }
+
+        async function deleteChat(chatId) {
+            debugLog('Deleting chat', chatId);
+            if (confirm('Are you sure you want to delete this chat?')) {
+                try {
+                    const response = await fetch(`/delete_chat/${chatId}`, {
+                        method: 'DELETE'
+                    });
+                    debugLog('Delete chat response status', response.status);
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    debugLog('Delete chat response', data);
+
+                    // Reload the page to refresh the chat history
+                    window.location.reload();
+                } catch (error) {
+                    console.error('Error deleting chat:', error);
+                    debugLog('Delete chat error', error);
+                    alert('Failed to delete chat: ' + error.message);
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

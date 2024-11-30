@@ -1,32 +1,26 @@
 import os
 import csv
-import torch
 import psycopg2
-import hashlib
-import uuid
 from flask import Flask, request, jsonify, render_template, session, redirect, url_for
 from flask_cors import CORS
 from sentence_transformers import SentenceTransformer
 from pgvector.psycopg2 import register_vector
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime
 from groq import Groq
-import psycopg2
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
-import json
-import os
-import numpy as np
-import psycopg2
 import base64
 import io
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
-from sklearn.cluster import KMeans
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.feature_extraction.text import CountVectorizer
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, r2_score
+from nltk.sentiment import SentimentIntensityAnalyzer
+import nltk
 
 
 class InformationRetrievalSystem:
@@ -535,17 +529,6 @@ def query_classification():
 
 @app.route('/api/sentiment-analysis', methods=['GET'])
 def sentiment_analysis_visualization():
-    import pandas as pd
-    import numpy as np
-    from sklearn.linear_model import LinearRegression
-    from sklearn.model_selection import train_test_split
-    from sklearn.metrics import mean_squared_error, r2_score
-    from nltk.sentiment import SentimentIntensityAnalyzer
-    import nltk
-    import matplotlib.pyplot as plt
-    import io
-    import base64
-
     # Ensure VADER lexicon is downloaded
     nltk.download('vader_lexicon', quiet=True)
 

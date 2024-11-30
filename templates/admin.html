@@ -62,9 +62,9 @@
                         <div class="card-content">
                             <form id="embed-form" class="upload-form">
                                 <div class="form-group">
-                                    <label><i class="fas fa-folder-open"></i> Document Path(only CSV)</label>
+                                    <!-- <label><i class="fas fa-folder-open"></i> Document Path(only CSV)</label> -->
                                     <div class="input-group">
-                                        <input type="text" id="csv-path" placeholder="Enter document path" required>
+                                        <input type="text" id="csv-path" placeholder="EnterDocument Path (only CSV)" required>
                                         <!-- <button type="button" class="browse-btn">
                                             <i class="fas fa-search"></i> Browse
                                         </button> -->
@@ -88,9 +88,9 @@
                             </div>
                             <div class="stat-info">
                                 <h3>Total Documents</h3>
-                                <p id="total-docs">0</p>
+                                <p id="total-docs">1</p>
                                 <span class="stat-change increase">
-                                    <i class="fas fa-arrow-up"></i> 0% from last month
+                                    <i class="fas fa-arrow-up"></i> 100% from last month
                                 </span>
                             </div>
                         </div>
@@ -100,7 +100,7 @@
                             </div>
                             <div class="stat-info">
                                 <h3>Last Upload</h3>
-                                <p id="last-upload">No uploads yet</p>
+                                <p id="last-upload">10 days ago</p>
                             </div>
                         </div>
                         <div class="stat-card">
@@ -109,7 +109,7 @@
                             </div>
                             <div class="stat-info">
                                 <h3>Storage Used</h3>
-                                <p id="storage-used">0 MB</p>
+                                <p id="storage-used">254 MB</p>
                                 <div class="storage-bar">
                                     <div class="storage-progress" style="width: 0%"></div>
                                 </div>
@@ -140,7 +140,7 @@
                     </div>
                     <div class="header-actions">
                         <button class="admin-btn">
-                            <i class="fas fa-plus"></i> Add New User
+                            <!-- <i class="fas fa-plus"></i> Add New User -->
                         </button>
                     </div>
                 </div>
@@ -161,13 +161,13 @@
                 </div>
                 <div class="admin-content">
                     <div class="analytics-card">
-                        <h3><i class="fas fa-chart-line"></i> Sentiment Analysis</h3>
-                        <div id="sentiment-analysis-chart" class="chart-container"></div>
-                    </div><br>
-                    <div class="analytics-card">
                         <h3><i class="fas fa-project-diagram"></i> Document Embeddings Visualization</h3>
                         <div id="embeddings-chart" class="chart-container"></div>
                         <div id="embedding-tooltip" class="tooltip" style="display: none;"></div>
+                    </div><br>
+                    <div class="analytics-card">
+                        <h3><i class="fas fa-chart-line"></i> Sentiment Analysis</h3>
+                        <div id="sentiment-analysis-chart" class="chart-container"></div>
                     </div>
                 </div>
                 </div>
@@ -175,6 +175,123 @@
         </div>
     </div>
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const embeddingsChartContainer = document.getElementById('embeddings-chart');
+    const embeddingTooltip = document.getElementById('embedding-tooltip');
+
+    // Fallback to default visualization if d3 is not available
+    function fallbackVisualization(data) {
+        embeddingsChartContainer.innerHTML = `
+            <p>Embeddings Visualization</p>
+            <p>Total Embeddings: ${data.visualizationData.embeddings.length}</p>
+            <p>Clusters: ${new Set(data.visualizationData.clusters).size}</p>
+        `;
+    }
+
+    // Fetch and visualize embeddings
+    async function visualizeEmbeddings() {
+        try {
+            const response = await fetch('/api/embedding-visualization');
+            const data = await response.json();
+
+            if (data.status === 'success' && window.d3) {
+                renderD3Visualization(data.visualizationData);
+            } else {
+                fallbackVisualization(data);
+            }
+        } catch (error) {
+            console.error('Error fetching embeddings:', error);
+            embeddingsChartContainer.innerHTML = `
+                <p>Error loading embeddings visualization</p>
+                <p>${error.message}</p>
+            `;
+        }
+    }
+
+    function renderD3Visualization(visualizationData) {
+        // Clear previous visualization
+        embeddingsChartContainer.innerHTML = '';
+
+        // Create SVG
+        const margin = {top: 20, right: 20, bottom: 30, left: 40};
+        const width = 600 - margin.left - margin.right;
+        const height = 400 - margin.top - margin.bottom;
+
+        const svg = d3.select('#embeddings-chart')
+            .append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .append('g')
+            .attr('transform', `translate(${margin.left},${margin.top})`);
+
+        const embeddings = visualizationData.embeddings;
+        const clusters = visualizationData.clusters;
+
+        // Color scale
+        const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+        // X and Y scales
+        const xScale = d3.scaleLinear()
+            .domain(d3.extent(embeddings, d => d[0]))
+            .range([0, width]);
+
+        const yScale = d3.scaleLinear()
+            .domain(d3.extent(embeddings, d => d[1]))
+            .range([height, 0]);
+
+        // Create scatter plot
+        svg.selectAll('circle')
+            .data(embeddings)
+            .enter()
+            .append('circle')
+            .attr('cx', d => xScale(d[0]))
+            .attr('cy', d => yScale(d[1]))
+            .attr('r', 5)
+            .attr('fill', (d, i) => colorScale(clusters[i]))
+            .on('mouseover', function(event, d) {
+                const clusterIndex = clusters[embeddings.indexOf(d)];
+                embeddingTooltip.innerHTML = `
+                    <strong>Embedding Details</strong><br>
+                    X: ${d[0].toFixed(2)}<br>
+                    Y: ${d[1].toFixed(2)}<br>
+                    Cluster: ${clusterIndex}
+                `;
+                embeddingTooltip.style.display = 'block';
+            })
+            .on('mouseout', function() {
+                embeddingTooltip.style.display = 'none';
+            });
+
+        // Add axes
+        svg.append('g')
+            .attr('transform', `translate(0,${height})`)
+            .call(d3.axisBottom(xScale));
+
+        svg.append('g')
+            .call(d3.axisLeft(yScale));
+
+        // Title
+        svg.append('text')
+            .attr('x', width / 2)
+            .attr('y', 0 - margin.top / 2)
+            .attr('text-anchor', 'middle')
+            .text('Document Embeddings Visualization');
+    }
+
+    // Load D3.js dynamically and then visualize
+    function loadD3AndVisualize() {
+        if (!window.d3) {
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js';
+            script.onload = visualizeEmbeddings;
+            document.head.appendChild(script);
+        } else {
+            visualizeEmbeddings();
+        }
+    }
+
+    loadD3AndVisualize();
+});
 
 // Navigation functionality
 document.querySelectorAll('.menu-btn').forEach(button => {
@@ -238,16 +355,16 @@ document.querySelectorAll('.menu-btn').forEach(button => {
                 {
                     id: 1,
                     username: "user1",
-                    searchCount: 150,
-                    topSearches: ["python", "javascript", "machine learning"],
-                    lastActive: "2024-03-20"
+                    searchCount: 25,
+                    topSearches: [ "machine learning"],
+                    lastActive: "2024-11-30"
                 },
                 {
                     id: 2,
                     username: "user2",
-                    searchCount: 89,
-                    topSearches: ["react", "node.js", "express"],
-                    lastActive: "2024-03-19"
+                    searchCount: 5,
+                    topSearches: ["types of ML", "diffrence b/w ML and DL"],
+                    lastActive: "2024-11-26"
                 }
             ];
 

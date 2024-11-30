@@ -217,7 +217,8 @@ body {
 .admin-card {
     background: var(--admin-card-bg);
     border: 1px solid var(--admin-border);
-    box-shadow: var(--card-shadow);    border-radius: 0.75rem;
+    box-shadow: var(--card-shadow);    
+    border-radius: 0.75rem;
     margin-bottom: 2rem;
 }
 .admin-card:hover {
@@ -590,6 +591,14 @@ body {
     z-index: 10;
 }
 
+.tooltip {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    pointer-events: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
 /* Ensure responsive images within cards */
 .analytics-card img {
     max-width: 100%;

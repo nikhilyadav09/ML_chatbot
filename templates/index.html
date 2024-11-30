@@ -66,6 +66,7 @@
     </div>
 
     <script>
+        
 
 
         // Add this function to handle copying text
@@ -179,43 +180,49 @@ async function submitQuery(event) {
 
         // Add AI response to chat
         let aiResponse = '<div class="message ai-message"><div class="message-content"><i class="fas fa-robot"></i><div class="ai-responses">';
-            results.forEach(result => {
-            aiResponse += `
-                <div class="response-item">
-                            <div class="response-header">
-                                <button class="copy-btn" onclick="copyToClipboard(\`${result.text.replace(/`/g, '\\`')}\`, this)" title="Copy Response">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </div>
-                    <p>${result.text}</p>
-                    <div class="similarity">Similarity: ${(result.similarity * 100).toFixed(1) || 'N/A'}%</div>
-                    <p><strong>Llama response:</strong> ${result.api_response || 'N/A'}</p>
-                    <div class="source-info">
-                        <strong><i class="fas fa-book"></i> Chapter:</strong> ${result.chapter_name || 'N/A'}<br>
-                        <strong><i class="fas fa-file-alt"></i> Source:</strong> 
-                        <a href="${result.source || '#'}" target="_blank">${result.source ? ' Link' : 'N/A'}</a>
-                    </div>
-                    <div class="response-type">
-                        <button class="speak-btn" onclick="speakResponse(\`${result.text.replace(/`/g, '\\`')}\`)" title="Speak Response">
-                            <i class="fas fa-volume-up"></i>
-                        </button>
-                        <button class="feedback-btn good-response" title="Good Response" 
-                            onclick="saveFeedback(event, 'good')">
-                            <i class="fas fa-thumbs-up"></i>
-                        </button>
-                        <button class="feedback-btn bad-response" title="Bad Response" 
-                            onclick="saveFeedback(event, 'bad')">
-                            <i class="fas fa-thumbs-down"></i>
-                        </button>
-                        <input type="text" class="feedback-input" placeholder="Add feedback" 
-                            onchange="saveFeedback(event, '', this.value)">
-                        <div class="feedback-status"></div>
-                    </div>
-                </div>
-            `;
-        });
-        aiResponse += '</div></div></div>';
-        chatHistory.innerHTML += aiResponse;
+results.forEach((result, index) => {
+    aiResponse += `
+        <div class="response-item">
+            <div class="response-header">
+                <button class="copy-btn" onclick="copyToClipboard(\`${result.api_response.replace(/`/g, '\\`')}\`, this)" title="Copy Response">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+            <p> ${result.api_response || 'N/A'}</p>
+            <div class="result-container">
+                <span class="raw-data-toggle" onclick="toggleRawData(${index})">
+                    <i class="fas fa-file-alt raw-data-icon"></i>
+                    Show Raw Data
+                </span>
+                <pre class="raw-data-container" id="raw-data-${index}" style="display:none;">${result.text || 'No raw data available'}</pre>
+            </div>
+            <div class="similarity">Similarity: ${(result.similarity * 100).toFixed(1) || 'N/A'}%</div>
+            <div class="source-info">
+                <strong><i class="fas fa-book"></i> Chapter:</strong> ${result.chapter_name || 'N/A'}<br>
+                <strong><i class="fas fa-file-alt"></i> Source:</strong> 
+                <a href="${result.source || '#'}" target="_blank">${result.source ? ' Link' : 'N/A'}</a>
+            </div>
+            <div class="response-type">
+                <button class="speak-btn" onclick="speakResponse(\`${result.text.replace(/`/g, '\\`')}\`)" title="Speak Response">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+                <button class="feedback-btn good-response" title="Good Response" 
+                    onclick="saveFeedback(event, 'good')">
+                    <i class="fas fa-thumbs-up"></i>
+                </button>
+                <button class="feedback-btn bad-response" title="Bad Response" 
+                    onclick="saveFeedback(event, 'bad')">
+                    <i class="fas fa-thumbs-down"></i>
+                </button>
+                <input type="text" class="feedback-input" placeholder="Add feedback" 
+                    onchange="saveFeedback(event, '', this.value)">
+                <div class="feedback-status"></div>
+            </div>
+        </div>
+    `;
+});
+aiResponse += '</div></div></div>';
+chatHistory.innerHTML += aiResponse;
 
         queryInput.value = '';
         chatHistory.scrollTop = chatHistory.scrollHeight;
@@ -411,6 +418,31 @@ function speakResponse(text) {
         }
     } else {
         alert('Text-to-Speech is not supported in this browser');
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+function toggleRawData(index) {
+    const rawDataContainer = document.getElementById(`raw-data-${index}`);
+    const toggleButton = document.querySelector(`#response-item-${index} .raw-data-toggle`);
+    
+    if (rawDataContainer.style.display === 'none' || rawDataContainer.style.display === '') {
+        rawDataContainer.style.display = 'block';
+        toggleButton.textContent = 'Hide Raw Data';
+    } else {
+        rawDataContainer.style.display = 'none';
+        toggleButton.textContent = 'Show Raw Data';
     }
 }
     </script>

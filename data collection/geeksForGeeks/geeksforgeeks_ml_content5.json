@@ -1,0 +1,482 @@
+{
+    "https://www.geeksforgeeks.org/introduction-deep-learning/": {
+        "title": "Untitled",
+        "What is Deep Learning?": [
+            "The definition of Deep learning is that it is the branch of machine learning that is based on artificial neural network architecture. An artificial neural network or ANN uses layers of interconnected nodes called neurons that work together to process and learn from the input data.",
+            "In a fully connected Deep neural network, there is an input layer and one or more hidden layers connected one after the other. Each neuron receives input from the previous layer neurons or the input layer. The output of one neuron becomes the input to other neurons in the next layer of the network, and this process continues until the final layer produces the output of the network. The layers of the neural network transform the input data through a series of nonlinear transformations, allowing the network to learn complex representations of the input data.",
+            "Today Deep learning AI has become one of the most popular and visible areas of machine learning, due to its success in a variety of applications, such as computer vision, natural language processing, and Reinforcement learning.",
+            "Deep learning AI can be used for supervised, unsupervised as well as reinforcement machine learning. it uses a variety of ways to process these.",
+            "Supervised Machine Learning: Supervised machine learning is the machine learning technique in which the neural network learns to make predictions or classify data based on the labeled datasets. Here we input both input features along with the target variables. the neural network learns to make predictions based on the cost or error that comes from the difference between the predicted and the actual target, this process is known as backpropagation. Deep learning algorithms like Convolutional neural networks, Recurrent neural networks are used for many supervised tasks like image classifications and recognization, sentiment analysis, language translations, etc.",
+            "Unsupervised Machine Learning: Unsupervised machine learning is the machine learning technique in which the neural network learns to discover the patterns or to cluster the dataset based on unlabeled datasets. Here there are no target variables. while the machine has to self-determined the hidden patterns or relationships within the datasets. Deep learning algorithms like autoencoders and generative models are used for unsupervised tasks like clustering, dimensionality reduction, and anomaly detection.",
+            "Reinforcement Machine Learning: Reinforcement Machine Learning is the machine learning technique in which an agent learns to make decisions in an environment to maximize a reward signal. The agent interacts with the environment by taking action and observing the resulting rewards. Deep learning can be used to learn policies, or a set of actions, that maximizes the cumulative reward over time. Deep reinforcement learning algorithms like Deep Q networks and Deep Deterministic Policy Gradient (DDPG) are used to reinforce tasks like robotics and game playing etc."
+        ],
+        "Artificial neural networks": [
+            "Artificial neural networks are built on the principles of the structure and operation of human neurons. It is also known as neural networks or neural nets. An artificial neural network’s input layer, which is the first layer, receives input from external sources and passes it on to the hidden layer, which is the second layer. Each neuron in the hidden layer gets information from the neurons in the previous layer, computes the weighted total, and then transfers it to the neurons in the next layer. These connections are weighted, which means that the impacts of the inputs from the preceding layer are more or less optimized by giving each input a distinct weight. These weights are then adjusted during the training process to enhance the performance of the model.",
+            "Artificial neurons, also known as units, are found in artificial neural networks. The whole Artificial Neural Network is composed of these artificial neurons, which are arranged in a series of layers. The complexities of neural networks will depend on the complexities of the underlying patterns in the dataset whether a layer has a dozen units or millions of units. Commonly, Artificial Neural Network has an input layer, an output layer as well as hidden layers. The input layer receives data from the outside world which the neural network needs to analyze or learn about.",
+            "In a fully connected artificial neural network, there is an input layer and one or more hidden layers connected one after the other. Each neuron receives input from the previous layer neurons or the input layer. The output of one neuron becomes the input to other neurons in the next layer of the network, and this process continues until the final layer produces the output of the network. Then, after passing through one or more hidden layers, this data is transformed into valuable data for the output layer. Finally, the output layer provides an output in the form of an artificial neural network’s response to the data that comes in.",
+            "Units are linked to one another from one layer to another in the bulk of neural networks. Each of these links has weights that control how much one unit influences another. The neural network learns more and more about the data as it moves from one unit to another, ultimately producing an output from the output layer."
+        ],
+        "Difference between Machine Learning and Deep Learning :": [
+            "machine learning and deep learning AI both are subsets of artificial intelligence but there are many similarities and differences between them."
+        ],
+        "Types of neural networks": [
+            "Deep Learning models are able to automatically learn features from the data, which makes them well-suited for tasks such as image recognition, speech recognition, and natural language processing. The most widely used architectures in deep learning are feedforward neural networks, convolutional neural networks (CNNs), and recurrent neural networks (RNNs).",
+            "Feedforward neural networks (FNNs) are the simplest type of ANN, with a linear flow of information through the network. FNNs have been widely used for tasks such as image classification, speech recognition, and natural language processing.",
+            "Convolutional Neural Networks (CNNs) are specifically for image and video recognition tasks. CNNs are able to automatically learn features from the images, which makes them well-suited for tasks such as image classification, object detection, and image segmentation.",
+            "Recurrent Neural Networks (RNNs) are a type of neural network that is able to process sequential data, such as time series and natural language. RNNs are able to maintain an internal state that captures information about the previous inputs, which makes them well-suited for tasks such as speech recognition, natural language processing, and language translation."
+        ],
+        "Deep Learning Applications:": [
+            "The main applications of deep learning AI can be divided into computer vision, natural language processing (NLP), and reinforcement learning."
+        ],
+        "1. Computer vision": [
+            "The first Deep Learning applications is Computer vision. In computer vision, Deep learning AI models can enable machines to identify and understand visual data. Some of the main applications of deep learning in computer vision include:",
+            "Object detection and recognition: Deep learning model can be used to identify and locate objects within images and videos, making it possible for machines to perform tasks such as self-driving cars, surveillance, and robotics.",
+            "Image classification: Deep learning models can be used to classify images into categories such as animals, plants, and buildings. This is used in applications such as medical imaging, quality control, and image retrieval.",
+            "Image segmentation: Deep learning models can be used for image segmentation into different regions, making it possible to identify specific features within images."
+        ],
+        "2. Natural language processing (NLP):": [
+            "In Deep learning applications, second application is NLP. NLP, the Deep learning model can enable machines to understand and generate human language. Some of the main applications of deep learning in NLP include:",
+            "Automatic Text Generation – Deep learning model can learn the corpus of text and new text like summaries, essays can be automatically generated using these trained models.",
+            "Language translation: Deep learning models can translate text from one language to another, making it possible to communicate with people from different linguistic backgrounds.",
+            "Sentiment analysis: Deep learning models can analyze the sentiment of a piece of text, making it possible to determine whether the text is positive, negative, or neutral. This is used in applications such as customer service, social media monitoring, and political analysis.",
+            "Speech recognition: Deep learning models can recognize and transcribe spoken words, making it possible to perform tasks such as speech-to-text conversion, voice search, and voice-controlled devices."
+        ],
+        "3. Reinforcement learning:": [
+            "In reinforcement learning, deep learning works as training agents to take action in an environment to maximize a reward. Some of the main applications of deep learning in reinforcement learning include:",
+            "Game playing: Deep reinforcement learning models have been able to beat human experts at games such as Go, Chess, and Atari.",
+            "Robotics: Deep reinforcement learning models can be used to train robots to perform complex tasks such as grasping objects, navigation, and manipulation.",
+            "Control systems: Deep reinforcement learning models can be used to control complex systems such as power grids, traffic management, and supply chain optimization."
+        ],
+        "Challenges in Deep Learning": [
+            "Deep learning has made significant advancements in various fields, but there are still some challenges that need to be addressed. Here are some of the main challenges in deep learning:",
+            "Data availability: It requires large amounts of data to learn from. For using deep learning it’s a big concern to gather as much data for training.",
+            "Computational Resources: For training the deep learning model, it is computationally expensive because it requires specialized hardware like GPUs and TPUs.",
+            "Time-consuming: While working on sequential data depending on the computational resource it can take very large even in days or months.",
+            "Interpretability: Deep learning models are complex, it works like a black box. it is very difficult to interpret the result.",
+            "Overfitting: when the model is trained again and again, it becomes too specialized for the training data, leading to overfitting and poor performance on new data."
+        ],
+        "Advantages of Deep Learning:": [
+            "High accuracy: Deep Learning algorithms can achieve state-of-the-art performance in various tasks, such as image recognition and natural language processing.",
+            "Automated feature engineering: Deep Learning algorithms can automatically discover and learn relevant features from data without the need for manual feature engineering.",
+            "Scalability: Deep Learning models can scale to handle large and complex datasets, and can learn from massive amounts of data.",
+            "Flexibility: Deep Learning models can be applied to a wide range of tasks and can handle various types of data, such as images, text, and speech.",
+            "Continual improvement: Deep Learning models can continually improve their performance as more data becomes available."
+        ],
+        "Disadvantages of Deep Learning:": [
+            "High computational requirements: Deep Learning AI models require large amounts of data and computational resources to train and optimize.",
+            "Requires large amounts of labeled data: Deep Learning models often require a large amount of labeled data for training, which can be expensive and time- consuming to acquire.",
+            "Interpretability: Deep Learning models can be challenging to interpret, making it difficult to understand how they make decisions.Overfitting: Deep Learning models can sometimes overfit to the training data, resulting in poor performance on new and unseen data.",
+            "Black-box nature: Deep Learning models are often treated as black boxes, making it difficult to understand how they work and how they arrived at their predictions."
+        ],
+        "Conclusion": [
+            "In conclusion, the field of Deep Learning represents a transformative leap in artificial intelligence. By mimicking the human brain’s neural networks, Deep Learning AI algorithms have revolutionized industries ranging from healthcare to finance, from autonomous vehicles to natural language processing. As we continue to push the boundaries of computational power and dataset sizes, the potential applications of Deep Learning are limitless. However, challenges such as interpretability and ethical considerations remain significant. Yet, with ongoing research and innovation, Deep Learning promises to reshape our future, ushering in a new era where machines can learn, adapt, and solve complex problems at a scale and speed previously unimaginable."
+        ]
+    },
+    "https://www.geeksforgeeks.org/ml-introduction-to-transfer-learning/?ref=next_article": {
+        "title": "Untitled",
+        "What is Transfer Learning?": [
+            "Transfer learning is a machine learning technique where a model trained on one task is repurposed as the foundation for a second task. This approach is beneficial when the second task is related to the first or when data for the second task is limited. Leveraging learned features from the initial task, the model can adapt more efficiently to the new task, accelerating learning and improving performance. Transfer learning also reduces overfitting risk, as the model already incorporates generalizable features useful for the second task."
+        ],
+        "Why is Transfer Learning Important?": [
+            "Transfer learning is a critical technique in machine learning, offering solutions to key challenges:",
+            "Limited Data: Acquiring extensive labeled data is often challenging and costly. Transfer learning enables us to use pre-trained models, reducing the dependency on large datasets.",
+            "Enhanced Performance: Starting with a pre-trained model, which has already learned from substantial data, allows for faster and more accurate results on new tasks—ideal for applications needing high accuracy and efficiency.",
+            "Time and Cost Efficiency: Transfer learning shortens training time and conserves resources by utilizing existing models, eliminating the need for training from scratch.",
+            "Adaptability: Models trained on one task can be fine-tuned for related tasks, making transfer learning versatile for various applications, from image recognition to natural language processing."
+        ],
+        "How Does Transfer Learning Work?": [
+            "Transfer learning involves a structured process to leverage existing knowledge from a pre-trained model for new tasks:",
+            "Pre-trained Model: Start with a model already trained on a large dataset for a specific task. This pre-trained model has learned general features and patterns that are relevant across related tasks.",
+            "Base Model: This pre-trained model, known as the base model, includes layers that have processed data to learn hierarchical representations, capturing low-level to complex features.",
+            "Transfer Layers: Identify layers within the base model that hold generic information applicable to both the original and new tasks. These layers, often near the top of the network, capture broad, reusable features.",
+            "Fine-tuning: Fine-tune these selected layers with data from the new task. This process helps retain the pre-trained knowledge while adjusting parameters to meet the specific requirements of the new task, improving accuracy and adaptability.",
+            "The Block diagram is shown below as follows:",
+            "Low-level features learned for task A should be beneficial for learning of model for task B."
+        ],
+        "Frozen and Trainable Layers": [
+            "In Transfer Learning, two main components help in adapting models effectively: frozen layers and modifiable layers.",
+            "Frozen Layers: These layers from a pre-trained model remain unchanged during fine-tuning. They retain general features learned from the original task, extracting universal patterns from input data.",
+            "Modifiable Layers: These layers are adjusted during fine-tuning to learn task-specific features from the new dataset, allowing the model to meet the new task’s unique requirements."
+        ],
+        "Deciding Which Layers to Freeze or Modify": [
+            "Now, one may ask how to determine which layers we need to freeze, and which layers need to train. The answer is simple, the more you want to inherit features from a pre-trained model, the more you have to freeze layers.",
+            "The extent to which you inherit features from a pre-trained model depends on the size and similarity of the target dataset to the original dataset:",
+            "Small and Similar Target Dataset: When the dataset is limited but similar to the base dataset, fine-tuning only a few layers may lead to overfitting. In this case, the last one or two fully connected layers are removed and replaced with a new layer that fits the target classes. The rest of the model is frozen, and only the newly added layers are trained.",
+            "Large and Similar Target Dataset: If the target dataset is large and similar, overfitting is less likely. The last fully connected layer is removed, replaced to match the new classes, and the entire model is fine-tuned on the new dataset, preserving the architecture while adapting to the larger dataset.",
+            "Small and Different Target Dataset: When the target dataset is small and distinct, the high-level features from the original model are less useful. Here, remove most of the top layers, add new layers to accommodate the target classes, and train from these lower layers onward to fit the unique dataset.",
+            "Large and Different Target Dataset: For large and distinct datasets, the model benefits most from removing the final layers and adding new layers tailored to the new task. The entire model is then retrained without frozen layers to ensure complete adaptation.",
+            "Transfer learning provides an efficient and effective starting point, often leading to highly accurate results and faster adaptation to new tasks."
+        ],
+        "Leveraging Transfer Learning with MobileNetV2 for MNIST Classification": [
+            "Transfer learning approach can significantly speed up training and improve accuracy, especially when data or computational resources are limited. In this section, we’ll explore transfer learning by fine-tuning a MobileNetV2 model, pre-trained on ImageNet, for classifying MNIST digits."
+        ],
+        "Step 1: Preparing the Dataset": [
+            "We start by loading the MNIST dataset, a widely-used dataset of handwritten digits. Since MobileNetV2 is pre-trained on three-channel RGB images of size 224×224, we make a few adjustments to match its expected input shape:",
+            "Reshape the images from grayscale (28×28, 1 channel) to RGB (28×28, 3 channels).",
+            "Resize images to 32×32 pixels, aligning with our model’s configuration.",
+            "Normalize pixel values to fall between 0 and 1 by dividing by 255."
+        ],
+        "Step 2: Building the Model": [
+            "We load MobileNetV2 with pre-trained weights from ImageNet, excluding the fully connected top layers to customize for our 10-class classification task:",
+            "Freeze the base model to retain learned features and avoid overfitting.",
+            "Add a global average pooling layer to reduce model complexity.",
+            "Add a dense layer with softmax activation for the output classes.",
+            "Output:"
+        ],
+        "Step 3: Compiling and Training the Model": [
+            "The model is compiled with categorical cross-entropy as the loss function and accuracy as the evaluation metric. Using Adam optimizer, we train the model on the MNIST training data for ten epochs.",
+            "Output:"
+        ],
+        "Step 4: Fine-Tuning the Model": [
+            "After initial training, we unfreeze the last few layers of the base model to perform fine-tuning. This allows the model to adjust high-level features for the MNIST data while retaining its foundational knowledge.",
+            "Output:"
+        ],
+        "Step 5: Model Evaluation": [
+            "Once the model has been trained and fine-tuned, we evaluate it on the test set, measuring its loss and accuracy. This step assesses how well the transfer learning model has adapted to the MNIST dataset and demonstrates its effectiveness in digit classification.",
+            "Output:"
+        ],
+        "Step 6: Visualizing Model Performance": [
+            "To visualize the performance further, a confusion matrix provides a breakdown of correct and incorrect classifications.",
+            "Output:"
+        ],
+        "Step 7: Sample Image Visualization": [
+            "Finally, we select a few test images to visualize the model’s predictions against their true labels.",
+            "Output:"
+        ],
+        "Complete Code": [
+            "You can get the complete source code from here."
+        ],
+        "Applications of Transfer Learning": [
+            "Transfer learning is widely used across multiple domains, including:",
+            "Computer Vision: Transfer learning is prevalent in image recognition tasks, where models pre-trained on large image datasets are adapted to specific tasks such as medical imaging, facial recognition, and object detection.",
+            "Natural Language Processing (NLP): In NLP, models like BERT, GPT, and ELMo are pre-trained on vast text corpora and later fine-tuned for specific tasks such as sentiment analysis, machine translation, and question-answering.",
+            "Healthcare: Transfer learning helps develop medical diagnostic tools, leveraging knowledge from general image recognition models to analyze medical images like X-rays or MRIs.",
+            "Finance: Transfer learning in finance assists in fraud detection, risk assessment, and credit scoring by transferring patterns learned from related financial datasets."
+        ],
+        "Advantages of Transfer Learning": [
+            "Speed up the training process: By using a pre-trained model, the model can learn more quickly and effectively on the second task, as it already has a good understanding of the features and patterns in the data.",
+            "Better performance: Transfer learning can lead to better performance on the second task, as the model can leverage the knowledge it has gained from the first task.",
+            "Handling small datasets: When there is limited data available for the second task, transfer learning can help to prevent overfitting, as the model will have already learned general features that are likely to be useful in the second task."
+        ],
+        "Disadvantages of Transfer Learning": [
+            "Domain mismatch: The pre-trained model may not be well-suited to the second task if the two tasks are vastly different or the data distribution between the two tasks is very different.",
+            "Overfitting: Transfer learning can lead to overfitting if the model is fine-tuned too much on the second task, as it may learn task-specific features that do not generalize well to new data.",
+            "Complexity: The pre-trained model and the fine-tuning process can be computationally expensive and may require specialized hardware."
+        ],
+        "Conclusion": [
+            "Transfer learning is a powerful technique in machine learning that enhances model performance by leveraging knowledge from previously trained models. By starting with pre-existing models and fine-tuning them for specific tasks, transfer learning saves time, improves accuracy, and enables effective learning even with limited data."
+        ]
+    },
+    "https://www.geeksforgeeks.org/collaborative-learning-federated-learning/?ref=next_article": {
+        "title": "Untitled",
+        "What is Federated Learning?": [
+            "Federated Learning is a technique of training machine learning models on decentralized data, where the data is distributed across multiple devices or nodes, such as smartphones, IoT devices, edge devices, etc. Instead of centralizing the data and training the model in a single location, in Federated Learning, the model is trained locally on each device and the updates are then aggregated and shared with a central server.",
+            "To state a technical definition, I would say federated learning is to help learn a shared prediction model while maintaining all the training data on the device (mobile phone here specifically). This concept is purely based on Machine Learning. To be more specific it caters to mobile devices. We know that to perform modeling through a machine learning algorithm we need a sufficient amount of data to get the right prediction accuracy and then to implement it into production. Federated learning is a concept that eliminates the issue of storage of large training data. Data is stored at multiple locations. These locations are nothing but our devices."
+        ],
+        "Types of Federated Learning": [
+            "There are various strategies that are used for Federated Learning. Let’s take a brief look at them.",
+            "Centralized Federated Learning: In this, a central server is used to perform different steps of the algorithm. The central system is subjected to selecting the nodes at the beginning of the training process and then it is also responsible for aggregating the model updates that we received from different nodes/devices. Here, all the selected nodes, send the updates to this central server and hence it is the bottleneck of the system. This method can cause bottleneck problems.",
+            "Decentralized Federated Learning: In this, the nodes themselves can coordinate to get the updated model. This approach can help in preventing the single server problems, that we can get from the centralized federated learning, as in this the model updates are shared between the interconnected nodes without the need of the central system. Here, the model’s performance is totally dependent on what network topology we opt for.",
+            "Heterogeneous Federated Learning: This learning involves a large no of heterogenous clients e.g., mobile devices, and IoT devices. These devices can differ in software or hardware configurations. Recently, a Federated learning framework called HeteroFL has emerged, specifically designed to tackle the challenges posed by heterogeneous clients with varying computation and communication capabilities."
+        ],
+        "How Federated Learning work?": [
+            "Let us understand federated learning in a more detailed manner, i.e. the steps. The base model is stored at the central server, and a copy of this model is stored on all devices. Whenever the user enters some information, the following step takes place:",
+            "Step 1: The particular device will download the current model.",
+            "Step 2: The model would make improvements from the new data that we got from the device.",
+            "Step 3: The model changes are summarized as an update and communicated to the cloud. This communication is encrypted.",
+            "Step 4: On the cloud, there are many updates coming in from multiple users. These all updates are aggregated and the final model is built.",
+            "So, there is no huge amount of data being uploaded to the cloud and also the model is trained with the different data. In this process, the trained data resides within your own smartphone/mobile device."
+        ],
+        "Real-Life Application of Federated Learning": [
+            "So everyone is familiar with the Google Keyboard. How does it give us accurate suggestions when we are searching? So, let us take an example:You want to eat a pizza and you are searching for a good restaurant. You know 2-3 restaurants. So, when you search for those, their names are captured and the history is saved in the backend. Federated Learning comes into the role at this point. It takes up your data which is present in history. After that, the above-mentioned steps are followed in chronological order."
+        ],
+        "Advantages of Federated Learning": [
+            "Less Power Consumption – As the data is not that huge, the time for computation that is required for training the model will be less and hence the power consumption will also be less.",
+            "Ensures Privacy – The data that is used to update the model, i.e. the data we got from the user’s history remains on the device only, and hence, the privacy problem that we got when the data was huge is solved, with no interference in training.",
+            "Doesn’t Interfere with the device performance – The model on the device is only trained when the device is plugged in or not in use, and hence there is no effect on the device performance. So, when the device is idle this federated learning system is in motion. It is the best time since there is minimal interaction of the user with the device and also the performance of the phone is not affected.",
+            "Scalability: Federated Learning can handle large-scale datasets that are distributed across multiple devices.",
+            "Improved model performance: Federated Learning can improve the performance of models by leveraging the diversity of the data across different devices.",
+            "Real-time updates: Federated Learning allows for real-time updates of the model, as the updates are performed locally on each device."
+        ],
+        "Disadvantages of Federated Learning": [
+            "Network Latency: The communication between the devices and the central server can be a bottleneck and may add latency to the training process.",
+            "Heterogeneous devices: The devices can be heterogeneous in terms of hardware and software, which can make it difficult to ensure the compatibility and consistency of the models.",
+            "Data Quality: The quality of data can vary across the devices, which can lead to poor model performance."
+        ],
+        "Conclusion": [
+            "Federated Learning is not a one-stop solution to all the existing machine learning problems. This method put forth into the Machine Learning community has brought a different kind of revolution in Data Science. Ongoing research continues to refine this method and its applications in the field of data science."
+        ]
+    },
+    "https://www.geeksforgeeks.org/100-days-of-machine-learning/?ref=next_article": {
+        "title": "Untitled",
+        "ML in the Job Industry": [
+            "If you're interested in pursuing a career in machine learning, you may be wondering about the salary and career options available to you. Machine learning professionals are in high demand and can earn competitive salaries. According to Glassdoor, the average base pay for a machine learning engineer in the United States is around $114,000 per year, with some earning well over $150,000 per year. The field also offers a variety of career paths, including roles such as Data Scientist, Machine Learning Engineer, and AI researcher.",
+            "When it comes to finding a job in machine learning, some companies are more actively hiring than others. Some of the top companies in this field include Google, Microsoft, Amazon, IBM, and Facebook. These companies are known for their innovative use of machine learning and AI and offer exciting opportunities for those looking to advance their careers.",
+            "Whether you're just starting to explore machine learning or you're already well-versed in the subject, there are many resources available to help you learn and grow in this exciting field. This guide is intended to serve as a roadmap for your journey, providing an overview of the basics and pointing you in the direction of more advanced topics and resources."
+        ],
+        "Day 1 - 10: Linear Algebra": [
+            "The first 10 days of your Machine Learning journey should focus on understanding the basics of Linear Algebra. You should start by learning about the different types of Linear equations, matrices, mathematical operations, and their applications. You should also familiarize yourself with the key concepts and terminologies used in Linear algebra. Here are the key topics to be covered in Linear Algebra:",
+            "System of Linear Equation",
+            "Matrix OperationAddition, Multiplication, and Division InverseTranspose",
+            "Addition, Multiplication, and Division",
+            "Inverse",
+            "Transpose",
+            "Properties of Matrix",
+            "Solving Linear Equations using Gaussian Elimination",
+            "LU Decomposition of Linear Equation",
+            "Row Echelon Form",
+            "Determinant",
+            "Eigenvalues and Eigenvectors",
+            "Eigenspace",
+            "Orthogonal and Orthonormal Vectors",
+            "Eigen Decomposition",
+            "Diagonalization",
+            "Singular Value Decomposition — Implementation",
+            "Matrix Approximation",
+            "Vector Operations",
+            "Differentiation",
+            "Minima and Maxima",
+            "Area Under Curve"
+        ],
+        "Day 11 - 20: Statistics": [
+            "After a decent understanding of linear algebra and its operations, it's time to move forward one step ahead with Statistics in order to deal with data. Having good knowledge of Stats will eventually help in Data analysis, modeling, and evaluation in your journey of machine learning. There are numerous applications of statistics in machine learning such as Data exploration and preprocessing, Feature selection, Model selection and evaluation, uncertainty estimation, etc. So let's dive into the core of statistics:",
+            "Mean, Standard Deviation, and Variance — Implementation",
+            "Descriptive Statistics",
+            "Descriptive and Inferential Statistics",
+            "Probability Theory and DistributionNormal DistributionBinomial DistributionUniform Distribution",
+            "Normal Distribution",
+            "Binomial Distribution",
+            "Uniform Distribution",
+            "Types of Sampling DistributionDegrees of FreedomZ-Testt-TestChi-Square Test",
+            "Degrees of Freedom",
+            "Z-Test",
+            "t-Test",
+            "Chi-Square Test",
+            "Linear Regression",
+            "Sample Error and True Error",
+            "Bias Vs Variance and Its Trade-Off",
+            "Hypothesis Testing",
+            "Confidence Intervals",
+            "Correlation and Covariance",
+            "Correlation Coefficient",
+            "Covariance Matrix",
+            "Pearson Correlation",
+            "Spearman’s Rank Correlation Measure",
+            "Kendall Rank Correlation Measure",
+            "Robust Correlations",
+            "Maximum Likelihood Estimation"
+        ],
+        "Day 21 - 27 Python Programming": [
+            "For the implementation of machine learning techniques, one needs to know a language that the device can understand and here Python comes to play. Whenever there is a need of selecting a language for programming, the first language that pops out is PYTHON. It can be used in Machine Learning in several ways such as Data preprocessing and manipulation, building ML models, Data visualization, etc.",
+            "To learn Python programming, you should have the knowledge of the following topics:",
+            "Python BasicsData TypesExpressionsVariablesString Methods",
+            "Data Types",
+            "Expressions",
+            "Variables",
+            "String Methods",
+            "Python Data StructuresList and TupleSetDictionary",
+            "List and Tuple",
+            "Set",
+            "Dictionary",
+            "Python Programming FundamentalsConditional StatementsLooping StatementsFunctionsUser Defined FunctionsBuilt-In FunctionsObjects and Classes",
+            "Conditional Statements",
+            "Looping Statements",
+            "FunctionsUser Defined FunctionsBuilt-In Functions",
+            "User Defined Functions",
+            "Built-In Functions",
+            "Objects and Classes",
+            "Working with Data in PythonReading Files With PythonWriting to a file in PythonPandas for Data HandlingNumPy Arrays for Loading Data",
+            "Reading Files With Python",
+            "Writing to a file in Python",
+            "Pandas for Data Handling",
+            "NumPy Arrays for Loading Data"
+        ],
+        "Day 28 - 45: Data Preprocessing and Visualization": [
+            "It is imperative to comprehend the significance of Data preprocessing and visualization. These procedures aid in readying your data for analysis and detecting patterns and trends that can be instrumental in shaping your models. It is advisable to acquaint yourself with techniques such as Data cleansing, Data normalization, and Data transformation. Additionally, learning how to use visualization tools such as Matplotlib and Seaborn to represent your data and gain valuable insights from it is crucial.",
+            "NumPy",
+            "Pandas",
+            "Matplotlib",
+            "Seaborn",
+            "Introduction to Data Preprocessing",
+            "Data Cleaning",
+            "Missing Values",
+            "Inconsistent Data",
+            "Data Transformation",
+            "Data ReductionPrincipal Components Analysis Bar Graphs and Histograms Under Sampling and Over Sampling",
+            "Principal Components Analysis",
+            "Bar Graphs and Histograms",
+            "Under Sampling and Over Sampling",
+            "Feature extraction",
+            "Feature Transformation",
+            "Feature Selection",
+            "Introduction to data visualization",
+            "Exploratory Data Analysis",
+            "Descriptive Statistical Analysis",
+            "Data Visualization with Different Charts",
+            "Visualization using MatplotlibLine plotsScatter PlotsBar PlotsPie ChartsDonut ChartGantt ChartError Bar Graph",
+            "Line plots",
+            "Scatter Plots",
+            "Bar Plots",
+            "Pie Charts",
+            "Donut Chart",
+            "Gantt Chart",
+            "Error Bar Graph",
+            "Advanced visualization using Matplotlibstacked plotsarea plots3D plotsBoxplots",
+            "stacked plots",
+            "area plots",
+            "3D plots",
+            "Boxplots",
+            "Visualization using Seaborn heatmapspair plotsswarm plotsPoint plotCount plotViolin plotKDE Plot",
+            "heatmaps",
+            "pair plots",
+            "swarm plots",
+            "Point plot",
+            "Count plot",
+            "Violin plot",
+            "KDE Plot",
+            "In conclusion, data preprocessing and visualization are crucial steps in the machine learning pipeline, and days 28-45 of the \"100 days of Machine Learning\" challenge focus on these fundamental topics. Preprocessing helps in preparing data for analysis by handling missing values, outliers, and duplicates, normalizing data through scaling and standardization, and transforming data by encoding categorical variables, selecting features, and reducing dimensionality. Visualization, on the other hand, helps in gaining insights from data by representing it through charts and graphs, and tools such as Matplotlib and Seaborn can be used to create a variety of visualizations. By mastering these techniques, learners can gain a solid foundation in data preprocessing and visualization, which will help them in their future machine-learning projects."
+        ],
+        "Day 46 - 76: Introduction to Machine Learning and its Algorithms": [
+            "The next few days of your machine learning journey should focus on understanding the basics of machine learning. You should start by learning about the different types of machine learning and their applications. You should also familiarize yourself with the key concepts and terminologies used in machine learning. After that, it is time to delve into the realm of algorithms. There exist several machine learning algorithms to opt from, and the selection of an algorithm hinges on the nature of the problem you seek to resolve.Here are the key topics to be covered in the Introduction to Machine Learning and its Algorithms:",
+            "What is Machine Learning?",
+            "Types of Machine LearningDifferences between supervised learning, unsupervised learningReinforcement learning",
+            "Differences between supervised learning, unsupervised learning",
+            "Reinforcement learning",
+            "ML – Applications",
+            "Getting Started with Classification",
+            "Basic Concept of Classification",
+            "Types of Regression Techniques",
+            "Classification vs Regression",
+            "ML | Types of Learning – Supervised Learning",
+            "Multiclass classification using scikit-learn",
+            "Gradient Descent:Gradient Descent algorithm and its variantsStochastic Gradient Descent (SGD)Mini-Batch Gradient Descent with PythonOptimization Techniques for Gradient DescentIntroduction to Momentum-based Gradient Optimizer",
+            "Gradient Descent algorithm and its variants",
+            "Stochastic Gradient Descent (SGD)",
+            "Mini-Batch Gradient Descent with Python",
+            "Optimization Techniques for Gradient Descent",
+            "Introduction to Momentum-based Gradient Optimizer",
+            "Linear RegressionIntroduction to Linear RegressionGradient Descent in Linear RegressionMathematical explanation for Linear Regression workingNormal Equation in Linear RegressionLinear Regression (Python Implementation)Univariate Linear Regression in PythonMultiple Linear Regression using PythonLocally weighted Linear RegressionPython | Linear Regression using sklearn",
+            "Introduction to Linear Regression",
+            "Gradient Descent in Linear Regression",
+            "Mathematical explanation for Linear Regression working",
+            "Normal Equation in Linear Regression",
+            "Linear Regression (Python Implementation)",
+            "Univariate Linear Regression in Python",
+            "Multiple Linear Regression using Python",
+            "Locally weighted Linear Regression",
+            "Python | Linear Regression using sklearn",
+            "Logistic RegressionUnderstanding Logistic RegressionWhy Logistic Regression in Classification?Logistic Regression using PythonCost function in Logistic RegressionLogistic Regression using Tensorflow",
+            "Understanding Logistic Regression",
+            "Why Logistic Regression in Classification?",
+            "Logistic Regression using Python",
+            "Cost function in Logistic Regression",
+            "Logistic Regression using Tensorflow",
+            "Naive Bayes Classifiers",
+            "Support Vector MachineSupport Vector Machines(SVMs) in PythonSVM Hyperparameter Tuning using GridSearchCVUsing SVM to perform classification on a non-linear dataset",
+            "Support Vector Machines(SVMs) in Python",
+            "SVM Hyperparameter Tuning using GridSearchCV",
+            "Using SVM to perform classification on a non-linear dataset",
+            "Decision TreeDecision TreeDecision Tree Regression using sklearnDecision tree implementation using Python",
+            "Decision Tree",
+            "Decision Tree Regression using sklearn",
+            "Decision tree implementation using Python",
+            "Random ForestRandom Forest Regression in PythonEnsemble ClassifierVoting Classifier using SklearnBagging classifier",
+            "Random Forest Regression in Python",
+            "Ensemble Classifier",
+            "Voting Classifier using Sklearn",
+            "Bagging classifier"
+        ],
+        "Day 77 - 84: Evaluation and Model Selection": [
+            "Once you have trained your models, you need to evaluate their performance and select the best one for your problem.",
+            "Bias Variance Trade-Off",
+            "Model evaluation techniques",
+            "Importance of Splitting the data into training, validation, and testing",
+            "Cross-validation techniques",
+            "ML Evaluation Metrics",
+            "Classification Evaluation MetricsAccuracy ScorePrecision, recall, and F1 scoreConfusion MatrixROC curve",
+            "Accuracy Score",
+            "Precision, recall, and F1 score",
+            "Confusion Matrix",
+            "ROC curve",
+            "Regression Evaluation MetricsMean Absolute ErrorMean Squared ErrorMean Absolute Percentage ErrorR2 Score",
+            "Mean Absolute Error",
+            "Mean Squared Error",
+            "Mean Absolute Percentage Error",
+            "R2 Score",
+            "Hyperparameter tuningGridSearchCVRandomizedSearchCV",
+            "GridSearchCV",
+            "RandomizedSearchCV",
+            "In conclusion, days 77-84 of the \"100 days of Machine Learning\" challenge focus on the crucial steps of evaluating and selecting the best model for a given problem. Evaluation is the process of measuring a model's performance using various metrics such as precision, recall, and F1 score, and techniques such as cross-validation and ROC curves can be used for this purpose. Model selection involves choosing the best model from a set of candidate models, and hyperparameter tuning can be used to optimize the performance of these models. Techniques such as GridSearchCV and RandomizedSearchCV can be used to automate the hyperparameter tuning process. By mastering these techniques, learners can develop the ability to evaluate and select the best model for a given problem, which is a crucial skill in the field of machine learning."
+        ],
+        "Day 85 - 94: ML Projects": [
+            "Now, it's time to get some hands-on experience with machine learning. So, here are some projects mentioned below that will help you to understand the functionality and practical implementation of machine learning techniques.",
+            "Boston House Price Prediction",
+            "Waiter Tip Prediction",
+            "Calories Burnt Prediction",
+            "Titanic Classification",
+            "Breast Cancer Prediction",
+            "Diabetes Prediction"
+        ],
+        "Day 95 - 100: Introduction to Deep Learning": [
+            "Deep learning is a specialized area of machine learning that deploys neural networks to assimilate knowledge from data. Its impact has been transformative in numerous domains such as computer vision, natural language processing, and speech recognition. To gain a comprehensive understanding, it is advisable to study in the final days of your ML journey:",
+            "Biological Neurons Vs Artificial Neurons",
+            "Single Layer Perceptron",
+            "Multi-Layer Perceptron",
+            "Forward and backward propagation",
+            "Feed-forward neural networks",
+            "Neural Network layers",
+            "Introduction to Activation Function",
+            "Types Of Activation Function",
+            "Understanding Activation Functions in Depth",
+            "Cost function in Neural Networks",
+            "How does Gradient Descent work",
+            "Vanishing or Exploding Gradients Problems",
+            "Choose the optimal number of epochs",
+            "Fine-Tuning & Hyperparameters",
+            "Deep learning utilizes neural networks to extract knowledge from data and has produced remarkable results in several complex tasks. To develop a comprehensive understanding of this area, learners need to study the architecture of neural networks. By mastering these concepts, learners can gain a solid foundation in deep learning and neural networks, which will enable them to work on exciting and challenging projects in this field."
+        ],
+        "Conclusion:": [
+            "Machine learning is a rapidly growing field with immense potential to revolutionize almost everything around us. By grasping the fundamentals of machine learning, data preprocessing, and visualization, one can start creating their own machine learning models to tackle real-world situations and provide effective self-sustaining solutions for them. There are numerous algorithms available, from linear regression to deep learning, and selecting the appropriate one depends on the nature of the problem you are attempting to solve.",
+            "In conclusion, the journey of 100 days of Machine Learning will be an incredible learning experience. Through this process, one can gain a strong foundation in Machine Learning and its applications in various fields. The article covered several topics: Machine Learning, Data Preparation, Regression, Classification, Clustering, Natural Language Processing, and Deep Learning, etc.",
+            "The skills acquired during the 100 days of Machine Learning are valuable in today's world, where data is becoming increasingly important in decision-making processes across industries. By going through this article, you will take this important step towards being proficient in Machine Learning and are now better equipped to tackle complex problems in their respective fields. Overall, the 100 days of Machine Learning will be an excellent investment in terms of time and effort, and the you can expect to reap the rewards of their hard work for years to come."
+        ]
+    },
+    "https://www.geeksforgeeks.org/7-major-challenges-faced-by-machine-learning-professionals/?ref=next_article": {
+        "title": "Untitled",
+        "1. Poor Quality of Data": [
+            "Data plays a significant role in the machine learning process. One of the significant issues that machine learning professionals face is the absence of good quality data. Unclean and noisy data can make the whole process extremely exhausting. We don’t want our algorithm to make inaccurate or faulty predictions. Hence the quality of data is essential to enhance the output. Therefore, we need to ensure that the process of data preprocessing which includes removing outliers, filtering missing values, and removing unwanted features, is done with the utmost level of perfection."
+        ],
+        "2. Underfitting of Training Data": [
+            "This process occurs when data is unable to establish an accurate relationship between input and output variables. It simply means trying to fit in undersized jeans. It signifies the data is too simple to establish a precise relationship. To overcome this issue:",
+            "Maximize the training time",
+            "Enhance the complexity of the model",
+            "Add more features to the data",
+            "Reduce regular parameters",
+            "Increasing the training time of model"
+        ],
+        "3. Overfitting of Training Data": [
+            "Overfitting refers to a machine learning model trained with a massive amount of data that negatively affect its performance. It is like trying to fit in Oversized jeans. Unfortunately, this is one of the significant issues faced by machine learning professionals. This means that the algorithm is trained with noisy and biased data, which will affect its overall performance. Let’s understand this with the help of an example. Let’s consider a model trained to differentiate between a cat, a rabbit, a dog, and a tiger. The training data contains 1000 cats, 1000 dogs, 1000 tigers, and 4000 Rabbits. Then there is a considerable probability that it will identify the cat as a rabbit. In this example, we had a vast amount of data, but it was biased; hence the prediction was negatively affected.",
+            "We can tackle this issue by:",
+            "Analyzing the data with the utmost level of perfection",
+            "Use data augmentation technique",
+            "Remove outliers in the training set",
+            "Select a model with lesser features",
+            "To know more, you can visit here."
+        ],
+        "4. Machine Learning is a Complex Process": [
+            "The machine learning industry is young and is continuously changing. Rapid hit and trial experiments are being carried on. The process is transforming, and hence there are high chances of error which makes the learning complex. It includes analyzing the data, removing data bias, training data, applying complex mathematical calculations, and a lot more. Hence it is a really complicated process which is another big challenge for Machine learning professionals."
+        ],
+        "5. Lack of Training Data": [
+            "The most important task you need to do in the machine learning process is to train the data to achieve an accurate output. Less amount training data will produce inaccurate or too biased predictions. Let us understand this with the help of an example. Consider a machine learning algorithm similar to training a child. One day you decided to explain to a child how to distinguish between an apple and a watermelon. You will take an apple and a watermelon and show him the difference between both based on their color, shape, and taste. In this way, soon, he will attain perfection in differentiating between the two. But on the other hand, a machine-learning algorithm needs a lot of data to distinguish. For complex problems, it may even require millions of data to be trained. Therefore we need to ensure that Machine learning algorithms are trained with sufficient amounts of data."
+        ],
+        "6. Slow Implementation": [
+            "This is one of the common issues faced by machine learning professionals. The machine learning models are highly efficient in providing accurate results, but it takes a tremendous amount of time. Slow programs, data overload, and excessive requirements usually take a lot of time to provide accurate results. Further, it requires constant monitoring and maintenance to deliver the best output."
+        ],
+        "7. Imperfections in the Algorithm When Data Grows": [
+            "So you have found quality data, trained it amazingly, and the predictions are really concise and accurate. Yay, you have learned how to create a machine learning algorithm!! But wait, there is a twist; the model may become useless in the future as data grows. The best model of the present may become inaccurate in the coming Future and require further rearrangement. So you need regular monitoring and maintenance to keep the algorithm working. This is one of the most exhausting issues faced by machine learning professionals."
+        ],
+        "Conclusion": [
+            "Machine learning is all set to bring a big bang transformation in technology. It is one of the most rapidly growing technologies used in medical diagnosis, speech recognition, robotic training, product recommendations, video surveillance, and this list goes on. This continuously evolving domain offers immense job satisfaction, excellent opportunities, global exposure, and exorbitant salary. It is a high risk and a high return technology. Before starting your machine learning journey, ensure that you carefully examine the challenges mentioned above. To learn this fantastic technology, you need to plan carefully, stay patient, and maximize your efforts. Once you win this battle, you can conquer the Future of work and land your dream job!"
+        ]
+    }
+}

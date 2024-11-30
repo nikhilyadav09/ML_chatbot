@@ -1,0 +1,279 @@
+{
+    "https://www.geeksforgeeks.org/ml-introduction-data-machine-learning/": {
+        "title": "Untitled",
+        "Implementation:": [
+            "Example: 1",
+            "Output:",
+            "If you run the code I provided, the output will be the prediction made by the model. In this case, the prediction will be either 0 or 1, depending on the specific parameters learned by the model during training.",
+            "For example, if the model learned that input data with a high second element is more likely to have a label of 1, then the prediction for [6, 7] would be 1."
+        ],
+        "Advantages Or Disadvantages:Advantages of using data in Machine Learning:": [
+            "Improved accuracy: With large amounts of data, machine learning algorithms can learn more complex relationships between inputs and outputs, leading to improved accuracy in predictions and classifications.",
+            "Automation: Machine learning models can automate decision-making processes and can perform repetitive tasks more efficiently and accurately than humans.",
+            "Personalization: With the use of data, machine learning algorithms can personalize experiences for individual users, leading to increased user satisfaction.",
+            "Cost savings: Automation through machine learning can result in cost savings for businesses by reducing the need for manual labor and increasing efficiency."
+        ],
+        "Disadvantages of using data in Machine Learning:": [
+            "Bias: Data used for training machine learning models can be biased, leading to biased predictions and classifications.",
+            "Privacy: Collection and storage of data for machine learning can raise privacy concerns and can lead to security risks if the data is not properly secured.",
+            "Quality of data: The quality of data used for training machine learning models is critical to the performance of the model. Poor quality data can lead to inaccurate predictions and classifications.",
+            "Lack of interpretability: Some machine learning models can be complex and difficult to interpret, making it challenging to understand how they are making decisions.",
+            "Use of Machine Learning :",
+            "Machine learning is a powerful tool that can be used in a wide range of applications. Here are some of the most common uses of machine learning:",
+            "Predictive modeling: Machine learning can be used to build predictive models that can predict future outcomes based on historical data. This can be used in many applications, such as stock market prediction, fraud detection, weather forecasting, and customer behavior prediction.",
+            "Image recognition: Machine learning can be used to train models that can recognize objects, faces, and other patterns in images. This is used in many applications, such as self-driving cars, facial recognition systems, and medical image analysis.",
+            "Natural language processing: Machine learning can be used to analyze and understand natural language, which is used in many applications, such as chatbots, voice assistants, and sentiment analysis.",
+            "Recommendation systems: Machine learning can be used to build recommendation systems that can suggest products, services, or content to users based on their past behavior or preferences.",
+            "Data analysis: Machine learning can be used to analyze large datasets and identify patterns and insights that would be difficult or impossible for humans to detect.",
+            "Robotics: Machine learning can be used to train robots to perform tasks autonomously, such as navigating through a space or manipulating objects.",
+            "Issues of using data in Machine Learning:",
+            "Data quality: One of the biggest issues with using data in machine learning is ensuring that the data is accurate, complete, and representative of the problem domain. Low-quality data can result in inaccurate or biased models.",
+            "Data quantity: In some cases, there may not be enough data available to train an accurate machine learning model. This is especially true for complex problems that require a large amount of data to accurately capture all the relevant patterns and relationships.",
+            "Bias and fairness: Machine learning models can sometimes perpetuate bias and discrimination if the training data is biased or unrepresentative. This can lead to unfair outcomes for certain groups of people, such as minorities or women.",
+            "Overfitting and underfitting: Overfitting occurs when a model is too complex and fits the training data too closely, resulting in poor generalization to new data. Underfitting occurs when a model is too simple and does not capture all the relevant patterns in the data.",
+            "Privacy and security: Machine learning models can sometimes be used to infer sensitive information about individuals or organizations, raising concerns about privacy and security.",
+            "Interpretability: Some machine learning models, such as deep neural networks, can be difficult to interpret and understand, making it challenging to explain the reasoning behind their predictions and decisions."
+        ]
+    },
+    "https://www.geeksforgeeks.org/ml-understanding-data-processing/?ref=next_article": {
+        "title": "Untitled",
+        "Advantages of data processing in Machine Learning:": [
+            "Improved model performance: Data processing helps improve the performance of the ML model by cleaning and transforming the data into a format that is suitable for modeling.",
+            "Better representation of the data: Data processing allows the data to be transformed into a format that better represents the underlying relationships and patterns in the data, making it easier for the ML model to learn from the data.",
+            "Increased accuracy: Data processing helps ensure that the data is accurate, consistent, and free of errors, which can help improve the accuracy of the ML model."
+        ],
+        "Disadvantages of data processing in Machine Learning:": [
+            "Time-consuming: Data processing can be a time-consuming task, especially for large and complex datasets.",
+            "Error-prone: Data processing can be error-prone, as it involves transforming and cleaning the data, which can result in the loss of important information or the introduction of new errors.",
+            "Limited understanding of the data: Data processing can lead to a limited understanding of the data, as the transformed data may not be representative of the underlying relationships and patterns in the data."
+        ],
+        "Reference books:": [
+            "“Data Science from Scratch: First Principles with Python” by Joel Grus.",
+            "“Data Preparation for Data Mining” by Dorian Pyle.",
+            "“Data Wrangling with Python” by Jacqueline Kazil and Katharine Jarmul."
+        ]
+    },
+    "https://www.geeksforgeeks.org/data-cleansing-introduction/?ref=next_article": {
+        "title": "Untitled",
+        "What is Data Cleaning?": [
+            "Data cleaning is a crucial step in the machine learning (ML) pipeline, as it involves identifying and removing any missing, duplicate, or irrelevant data. The goal of data cleaning is to ensure that the data is accurate, consistent, and free of errors, as incorrect or inconsistent data can negatively impact the performance of the ML model. Professional data scientists usually invest a very large portion of their time in this step because of the belief that “Better data beats fancier algorithms”.",
+            "Data cleaning, also known as data cleansing or data preprocessing, is a crucial step in the data science pipeline that involves identifying and correcting or removing errors, inconsistencies, and inaccuracies in the data to improve its quality and usability. Data cleaning is essential because raw data is often noisy, incomplete, and inconsistent, which can negatively impact the accuracy and reliability of the insights derived from it."
+        ],
+        "Why is Data Cleaning Important?": [
+            "Data cleansing is a crucial step in the data preparation process, playing an important role in ensuring the accuracy, reliability, and overall quality of a dataset.",
+            "For decision-making, the integrity of the conclusions drawn heavily relies on the cleanliness of the underlying data. Without proper data cleaning, inaccuracies, outliers, missing values, and inconsistencies can compromise the validity of analytical results. Moreover, clean data facilitates more effective modeling and pattern recognition, as algorithms perform optimally when fed high-quality, error-free input.",
+            "Additionally, clean datasets enhance the interpretability of findings, aiding in the formulation of actionable insights."
+        ],
+        "Data Cleaning in Data Science": [
+            "Data clean-up is an integral component of data science, playing a fundamental role in ensuring the accuracy and reliability of datasets. In the field of data science, where insights and predictions are drawn from vast and complex datasets, the quality of the input data significantly influences the validity of analytical results. Data cleaning involves the systematic identification and correction of errors, inconsistencies, and inaccuracies within a dataset, encompassing tasks such as handling missing values, removing duplicates, and addressing outliers. This meticulous process is essential for enhancing the integrity of analyses, promoting more accurate modeling, and ultimately facilitating informed decision-making based on trustworthy and high-quality data."
+        ],
+        "Steps to Perform Data Cleanliness": [
+            "Performing data cleaning involves a systematic process to identify and rectify errors, inconsistencies, and inaccuracies in a dataset. The following are essential steps to perform data cleaning.",
+            "Removal of Unwanted Observations: Identify and eliminate irrelevant or redundant observations from the dataset. The step involves scrutinizing data entries for duplicate records, irrelevant information, or data points that do not contribute meaningfully to the analysis. Removing unwanted observations streamlines the dataset, reducing noise and improving the overall quality.",
+            "Fixing Structure errors: Address structural issues in the dataset, such as inconsistencies in data formats, naming conventions, or variable types. Standardize formats, correct naming discrepancies, and ensure uniformity in data representation. Fixing structure errors enhances data consistency and facilitates accurate analysis and interpretation.",
+            "Managing Unwanted outliers: Identify and manage outliers, which are data points significantly deviating from the norm. Depending on the context, decide whether to remove outliers or transform them to minimize their impact on analysis. Managing outliers is crucial for obtaining more accurate and reliable insights from the data.",
+            "Handling Missing Data: Devise strategies to handle missing data effectively. This may involve imputing missing values based on statistical methods, removing records with missing values, or employing advanced imputation techniques. Handling missing data ensures a more complete dataset, preventing biases and maintaining the integrity of analyses."
+        ],
+        "How to Perform Data Cleanliness": [
+            "Performing data cleansing involves a systematic approach to enhance the quality and reliability of a dataset. The process begins with a thorough understanding of the data, inspecting its structure and identifying issues such as missing values, duplicates, and outliers. Addressing missing data involves strategic decisions on imputation or removal, while duplicates are systematically eliminated to reduce redundancy. Managing outliers ensures that extreme values do not unduly influence analysis. Structural errors are corrected to standardize formats and variable types, promoting consistency.",
+            "Throughout the process, documentation of changes is crucial for transparency and reproducibility. Iterative validation and testing confirm the effectiveness of the data cleansing steps, ultimately resulting in a refined dataset ready for meaningful analysis and insights."
+        ],
+        "Python Implementation for Database Cleaning": [
+            "Let’s understand each step for Database Cleaning, using titanic dataset. Below are the necessary steps:",
+            "Import the necessary libraries",
+            "Load the dataset",
+            "Check the data information using df.info()",
+            "Output:"
+        ],
+        "Data Inspection and Exploration": [
+            "Let’s first understand the data by inspecting its structure and identifying missing values, outliers, and inconsistencies and check the duplicate rows with below python code:",
+            "Output:",
+            "Check the data information using df.info()",
+            "Output:",
+            "From the above data info, we can see that Age and Cabin have an unequal number of counts. And some of the columns are categorical and have data type objects and some are integer and float values.",
+            "Check the Categorical and Numerical Columns.",
+            "Output:",
+            "Output:",
+            "Steps to Perform Data Cleansing"
+        ],
+        "Removal of all Above Unwanted Observations": [
+            "This includes deleting duplicate/ redundant or irrelevant values from your dataset. Duplicate observations most frequently arise during data collection and Irrelevant observations are those that don’t actually fit the specific problem that you’re trying to solve.",
+            "Redundant observations alter the efficiency to a great extent as the data repeats and may add towards the correct side or towards the incorrect side, thereby producing unfaithful results.",
+            "Irrelevant observations are any type of data that is of no use to us and can be removed directly.",
+            "Now we have to make a decision according to the subject of analysis, which factor is important for our discussion.",
+            "As we know our machines don’t understand the text data. So, we have to either drop or convert the categorical column values into numerical types. Here we are dropping the Name columns because the Name will be always unique and it hasn’t a great influence on target variables. For the ticket, Let’s first print the 50 unique tickets.",
+            "Output:",
+            "From the above tickets, we can observe that it is made of two like first values ‘A/5 21171’ is joint from of ‘A/5’ and ‘21171’ this may influence our target variables. It will the case of Feature Engineering. where we derived new features from a column or a group of columns. In the current case, we are dropping the “Name” and “Ticket” columns.",
+            "Drop Name and Ticket Columns",
+            "Output:"
+        ],
+        "Handling Missing Data": [
+            "Missing data is a common issue in real-world datasets, and it can occur due to various reasons such as human errors, system failures, or data collection issues. Various techniques can be used to handle missing data, such as imputation, deletion, or substitution.",
+            "Let’s check the % missing values columns-wise for each row using df.isnull() it checks whether the values are null or not and gives returns boolean values. and .sum() will sum the total number of null values rows and we divide it by the total number of rows present in the dataset then we multiply to get values in % i.e per 100 values how much values are null.",
+            "Output:",
+            "We cannot just ignore or remove the missing observation. They must be handled carefully as they can be an indication of something important.",
+            "Dropping Observations with missing values.The fact that the value was missing may be informative in itself.Plus, in the real world, you often need to make predictions on new data even if some of the features are missing!",
+            "The fact that the value was missing may be informative in itself.",
+            "Plus, in the real world, you often need to make predictions on new data even if some of the features are missing!",
+            "As we can see from the above result that Cabin has 77% null values and Age has 19.87% and Embarked has 0.22% of null values.",
+            "So, it’s not a good idea to fill 77% of null values. So, we will drop the Cabin column. Embarked column has only 0.22% of null values so, we drop the null values rows of Embarked column.",
+            "Output:",
+            "Imputing the missing values from past observations.Again, “missingness” is almost always informative in itself, and you should tell your algorithm if a value was missing.Even if you build a model to impute your values, you’re not adding any real information. You’re just reinforcing the patterns already provided by other features.",
+            "Again, “missingness” is almost always informative in itself, and you should tell your algorithm if a value was missing.",
+            "Even if you build a model to impute your values, you’re not adding any real information. You’re just reinforcing the patterns already provided by other features.",
+            "We can use Mean imputation or Median imputations for the case.",
+            "Note:",
+            "Mean imputation is suitable when the data is normally distributed and has no extreme outliers.",
+            "Median imputation is preferable when the data contains outliers or is skewed.",
+            "Output:"
+        ],
+        "Handling Outliers": [
+            "Outliers are extreme values that deviate significantly from the majority of the data. They can negatively impact the analysis and model performance. Techniques such as clustering, interpolation, or transformation can be used to handle outliers.",
+            "To check the outliers, We generally use a box plot. A box plot, also referred to as a box-and-whisker plot, is a graphical representation of a dataset’s distribution. It shows a variable’s median, quartiles, and potential outliers. The line inside the box denotes the median, while the box itself denotes the interquartile range (IQR). The whiskers extend to the most extreme non-outlier values within 1.5 times the IQR. Individual points beyond the whiskers are considered potential outliers. A box plot offers an easy-to-understand overview of the range of the data and makes it possible to identify outliers or skewness in the distribution.",
+            "Let’s plot the box plot for Age column data.",
+            "Output:",
+            "As we can see from the above Box and whisker plot, Our age dataset has outliers values. The values less than 5 and more than 55 are outliers.",
+            "Output:",
+            "Similarly, we can remove the outliers of the remaining columns."
+        ],
+        "Data Transformation": [
+            "Data transformation involves converting the data from one form to another to make it more suitable for analysis. Techniques such as normalization, scaling, or encoding can be used to transform the data.",
+            "Data validation and verification involve ensuring that the data is accurate and consistent by comparing it with external sources or expert knowledge.",
+            "For the machine learning prediction, First, we separate independent and target features. Here we will consider only ‘Sex’ ‘Age’ ‘SibSp’, ‘Parch’ ‘Fare’ ‘Embarked’ only as the independent features and Survived as target variables. Because PassengerId will not affect the survival rate.",
+            "Data formatting involves converting the data into a standard format or structure that can be easily processed by the algorithms or models used for analysis. Here we will discuss commonly used data formatting techniques i.e. Scaling and Normalization.",
+            "Scaling",
+            "Scaling involves transforming the values of features to a specific range. It maintains the shape of the original distribution while changing the scale.",
+            "Particularly useful when features have different scales, and certain algorithms are sensitive to the magnitude of the features.",
+            "Common scaling methods include Min-Max scaling and Standardization (Z-score scaling).",
+            "Min-Max Scaling: Min-Max scaling rescales the values to a specified range, typically between 0 and 1. It preserves the original distribution and ensures that the minimum value maps to 0 and the maximum value maps to 1.",
+            "Output:",
+            "Standardization (Z-score scaling): Standardization transforms the values to have a mean of 0 and a standard deviation of 1. It centers the data around the mean and scales it based on the standard deviation. Standardization makes the data more suitable for algorithms that assume a Gaussian distribution or require features to have zero mean and unit variance.",
+            "Where,",
+            "X = Data",
+            "μ = Mean value of X",
+            "σ = Standard deviation of X"
+        ],
+        "Data Cleansing Tools": [
+            "Some data cleansing tools:",
+            "OpenRefine",
+            "Trifacta Wrangler",
+            "TIBCO Clarity",
+            "Cloudingo",
+            "IBM Infosphere Quality Stage"
+        ],
+        "Advantages of Data Cleaning in Machine Learning:": [
+            "Improved model performance: Removal of errors, inconsistencies, and irrelevant data, helps the model to better learn from the data.",
+            "Increased accuracy: Helps ensure that the data is accurate, consistent, and free of errors.",
+            "Better representation of the data: Data cleaning allows the data to be transformed into a format that better represents the underlying relationships and patterns in the data.",
+            "Improved data quality: Improve the quality of the data, making it more reliable and accurate.",
+            "Improved data security: Helps to identify and remove sensitive or confidential information that could compromise data security."
+        ],
+        "Disadvantages of Data Cleaning in Machine Learning": [
+            "Time-consuming: Time-Consuming task, especially for large and complex datasets.",
+            "Error-prone: Data cleaning can be error-prone, as it involves transforming and cleaning the data, which can result in the loss of important information or the introduction of new errors.",
+            "Cost and resource-intensive: Resource-intensive process that requires significant time, effort, and expertise. It can also require the use of specialized software tools, which can add to the cost and complexity of data cleaning.",
+            "Overfitting: Data cleaning can inadvertently contribute to overfitting by removing too much data."
+        ],
+        "Conclusion": [
+            "So, we have discussed four different steps in data cleaning to make the data more reliable and to produce good results. After properly completing the Data Cleaning steps, we’ll have a robust dataset that avoids many of the most common pitfalls. In summary, data cleaning is a crucial step in the data science pipeline that involves identifying and correcting errors, inconsistencies, and inaccuracies in the data to improve its quality and usability."
+        ]
+    },
+    "https://www.geeksforgeeks.org/machine-learning-models/?ref=next_article": {
+        "title": "Untitled",
+        "Types of Machine Learning Models": [
+            "Machine learning models can be broadly categorized into four main paradigms based on the type of data and learning goals:"
+        ],
+        "1. Supervised Models": [
+            "Supervised learning is the study of algorithms that use labeled data in which each data instance has a known category or value to which it belongs. This results in the model to discover the relationship between the input features and the target outcome."
+        ],
+        "1.1 Classification": [
+            "The classifier algorithms are designed to indicate whether a new data point belongs to one or another among several predefined classes. Imagine when you are organising emails into spam or inbox, categorising images as cat or dog, or predicting whether a loan applicant is a credible borrower. In the classification models, there is a learning process by the use of labeled examples from each category. In this process, they discover the correlations and relations within the data that help to distinguish class one from the other classes. After learning these patterns, the model is then capable of assigning these class labels to unseen data points.",
+            "Common Classification Algorithms:",
+            "Logistic Regression: A very efficient technique for the classification problems of binary nature (two types, for example, spam/not spam).",
+            "Support Vector Machine (SVM): Good for tasks like classification, especially when the data has a large number of features.",
+            "Decision Tree: Constructs a decision tree having branches and proceeds to the class predictions through features.",
+            "Random Forest: The model generates an \"ensemble\" of decision trees that ultimately raise the accuracy and avoid overfitting (meaning that the model performs great on the training data but lousily on unseen data).",
+            "K-Nearest Neighbors (KNN): Assigns a label of the nearest neighbors for a given data point."
+        ],
+        "1.2 Regression": [
+            "Regression algorithms are about forecasting of a continuous output variable using the input features as their basis. This value could be anything such as predicting real estate prices or stock market trends to anticipating customer churn (how likely customers stay) and sales forecasting. Regression models make the use of features to understand the relationship among the continuous features and the output variable. That is, they use the pattern that is learned to determine the value of the new data points.",
+            "Common Regression Algorithms",
+            "Linear Regression: Fits depth of a line to the data to model for the relationship between features and the continuous output.",
+            "Polynomial Regression: Similiar to linear regression but uses more complex polynomial functions such as quadratic, cubic, etc, for accommodating non-linear relationships of the data.",
+            "Decision Tree Regression: Implements a decision tree-based algorithm that predicts a continuous output variable from a number of branching decisions.",
+            "Random Forest Regression: Creates one from several decision trees to guarantee error-free and robust regression prediction results.",
+            "Support Vector Regression (SVR): Adjusts the Support Vector Machine ideas for regression tasks, where we are trying to find one hyperplane that most closely reflects continuous output data."
+        ],
+        "2. Unsupervised Models": [
+            "Unsupervised learning involves a difficult task of working with data which is not provided with pre-defined categories or label."
+        ],
+        "2.1 Clustering": [
+            "Visualize being given a basket of fruits with no labels on them. The fruits clustering algorithms are to group them according to the inbuilt similarities. Techniques like K-means clustering are defined by exact number of clusters (\"red fruits\" and \"green fruits\") and then each data point (fruit) is assigned to the cluster with the highest similarity within based on features (color, size, texture). Contrary to this, hierarchical clustering features construction of hierarchy of clusters which makes it more easy to study the system of groups. Spatial clustering algorithm Density-Based Spatial Clustering of Applications with Noise (DBSCAN) detects groups of high-density data points, even in those areas where there is a lack of data or outliers."
+        ],
+        "2.2 Dimensionality Reduction": [
+            "Sometimes it is difficult to both visualize and analyze the data when you have a large feature space (dimensions). The purpose of dimensionality reduction methods is to decrease the dimensions needed to maintain the key features. Dimensions of greatest importance are identified by principal component analysis (PCA), which is the reason why data is concentrated in fewer dimensions with the highest variations. This speeds up model training as well as offers a chance for more efficient visualization. LDA (Linear Discriminant Analysis) also resembles PCA but it is made for classification tasks where it concentrates on dimensions that can differentiate the present classes in the dataset."
+        ],
+        "2.3 Anomaly Detection": [
+            "Unsupervised learning can also be applied to find those data points which greatly differ than the majorities. The statistics model may identify these outliers, or anomalies as signaling of errors, fraud or even something unusual. Local Outlier Factor (LOF) makes a comparison of a given data point's local density with those surrounding it. It then flags out the data points with significantly lower densities as outliers or potential anomalies. Isolation Forest is the one which uses different approach, which is to recursively isolate data points according to their features. Anomalies usually are simple to contemplate as they often necessitate fewer steps than an average normal point."
+        ],
+        "3. Semi-Supervised Model": [
+            "Besides, supervised learning is such a kind of learning with labeled data that unsupervised learning, on the other hand, solves the task where there is no labeled data. Lastly, semi-supervised learning fills the gap between the two. It reveals the strengths of both approaches by training using data sets labeled along with unlabeled one. This is especially the case when labeled data might be sparse or prohibitively expensive to acquire, while unlabeled data is undoubtedly available in abundance."
+        ],
+        "3.1 Generative Semi-Supervised Learning": [
+            "Envision having a few pictures of cats with labels and a universe of unlabeled photos. The big advantage of generative semi-supervised learning is its utilization of such a scenario. It exploits a generative model to investigate the unlabeled pictures and discover the orchestrating factors that characterize the data. This technique can then be used to generate the new synthetic data points that have the same features with the unlabeled data. The synthetic data is then labeled with the pseudo-labels that the generative model has interpreted from the data. This approach combines the existing labeled data with the newly generated labeled data to train the final model which is likely to perform better than the previous model that was trained with only the limited amount of the original labeled data."
+        ],
+        "3.2 Graph-based Semi-Supervised Learning": [
+            "This process makes use of the relationships between data points and propagates labels to unmarked ones via labeled ones. Picture a social network platform where some of the users have been marked as fans of sports (labeled data). Cluster-based methods can analyze the links between users (friendships) and even apply this information to infer that if a user is connected to someone with a \"sports\" label then this user might also be interested in sports (unbiased labels with propagated label). While links and the entire structure of the network are also important for the distribution of labels. This method is beneficial when the data points are themselves connected to each other and this connection can be exploiting during labelling of new data."
+        ],
+        "4. Reinforcement learning Models": [
+            "Reinforcement learning takes a dissimilar approach from supervised learning and unsupervised learning. Different from supervised learning or just plain discovery of hidden patterns, reinforcement learning adopt an agent as it interacts with the surrounding and learns. This agent is a learning one which develops via experiment and error, getting rewarded for the desired actions and punished for the undesired ones. The main purpose is to help players play the game that can result in the highest rewards."
+        ],
+        "4.1 Value-based learning:": [
+            "Visualize a robot trying to find its way through a maze. It has neither a map nor instructions, but it gets points for consuming the cheese at the end and fails with deduction of time when it runs into a wall. Value learning is an offshoot of predicting the anticipated future reward of taking a step in a particular state. For example, the algorithm Q-learning will learn a Q-value for each state-action combination. This Q-value is the expected reward for that action at that specific state. Through a repetitive process of assessing the state, gaining rewards, and updating the Q-values the agent manages to determine that which actions are most valuable in each state and eventually guides it to the most rewarding path. In contrast, SARSA (State-Action-Reward-State-Action) looks at the value of the succeeding state-action pair that influences the exploration strategy."
+        ],
+        "4.2 Policy-based learning:": [
+            "In contrast to the value-based learning, where we are learning a specific value for each state-action pair, in policy-based learning we are trying to directly learn a policy which maps states to actions. This policy in essence commands the agent to act in different situations as specified by the way it is written. Actor-Critic is a common approach that combines two models: an actor that retrains the policy and a critic that retrains the value function (just like value-based methods). The actor witnesses the critic's feedback which updates the policy that the actor uses for better decision making. Proximal Policy Optimization (PPO) is a specific policy-based method which focuses on high variance issues that complicate early policy-based learning methods."
+        ],
+        "Deep Learning": [
+            "Deep learning is a subfield of machine learning that utilizes artificial neural networks with multiple layers to achieve complex pattern recognition. These networks are particularly effective for tasks involving large amounts of data, such as image recognition and natural language processing.",
+            "Artificial Neural Networks (ANNs) - This is a popular model that refers to the structure and function of the human brain. It consists of interconnected nodes based on various layers and is used for various ML tasks.",
+            "Convolutional Neural Networks (CNNs) - A CNN is a deep learning model that automates the spatial hierarchies of features from input data. This model is commonly used in image recognition and classification.",
+            "Recurrent Neural Networks (RNNs) - This model is designed for the processing of sequential data. It enables the memory input which is known for Neural network architectures.",
+            "Long Short-Term Memory Networks (LSTMs) - This model is comparatively similar to Recurrent Neural Networks and allows learners to learn the long-term dependencies from sequential data."
+        ],
+        "How Machine Learning Works?": [
+            "Model Represntation: Machine Learning Models are represented by mathematical functions that map input data to output predictions. These functions can take various forms, such as linear equations, decision trees , or complex neural networks.",
+            "Learning Algorithm: The learning algorithm is the main part of behind the model's ability to learn from data. It adjusts the parameters of the model's mathematical function iteratively during the training phase to minimize the difference between the model's prediction and the actual outcomes in the training data .",
+            "Training Data: Training data is used to teach the model to make accurate predictions. It consists of input features(e.g variables, attributes) and corresponding output labels(in supervised learning) or is unalabeled(in supervised learning). During training , the model analyzes the patterns in the training data to update its parameters accordingly.",
+            "Objective Function: The objective function, also known as the loss function, measures the difference between the model's predictions and the actual outcomes in the training data. The goal during training is to minimize this function, effectively reducing the errors in the model's predictions.",
+            "Optimization Process: Optimization is the process of finding the set of model parameters that minimize the objective function. This is typically achieved using optimization algorithms such as gradient descent, which iteratively adjusts the model's parameters in the direction that reduces the objective function.",
+            "Generalization: Once the model is trained, it is evaluated on a separate set of data called the validation or test set to assess its performance on new, unseen data. The model's ability to perform well on data it hasn't seen before is known as generalization.",
+            "Final Output: After training and validation, the model can be used to make predictions or decisions on new, unseen data. This process, known as inference, involves applying the trained model to new input data to generate predictions or classifications."
+        ],
+        "Advanced Machine Learning Models": [
+            "Neural Networks: You must have heard about deep neural network which helps solve complex problems of data. It is made up of interconnected nodes of multiple layers which we also call neurons. Many things have been successful from this model such as image recognition, NLP, and speech recognition.",
+            "Convolutional Neural Networks (CNNs): This is a type of model that is built in the framework of a neural network and it is made to handle data that are of symbolic type, like images. From this model, the hierarchy of spatial features can be determined.",
+            "Recurrent Neural Networks (RNNs): These can be used to process data that is sequentially ordered, such as reading categories or critical language. These networks are built with loops in their architectures that allow them to store information over time.",
+            "Long Short-Term Memory Networks (LSTMs): LSTMs, which are a type of RNNs, recognize long-term correlation objects. These models do a good job of incorporating information organized into long categories.",
+            "Generative Adversarial Networks (GANs): GANs are a type of neural networks that generate data by studying two networks over time. A product generates network data, while a determination attempts to distinguish between real and fake samples.",
+            "Transformer Models: This model become popular in natural language processing. These models process input data over time and capture long-range dependencies."
+        ],
+        "Real-world examples of ML Models": [
+            "The ML model uses predictive analysis to maintain the growth of various Industries-",
+            "Financial Services: Banks and financial institutions are using machine learning models to provide better services to their customers. Using intelligent algorithms, they understand customers' investment preferences, speed up the loan approval process, and receive alerts for non-ordinary transactions.",
+            "Healthcare: In medicine, ML models are helpful in disease prediction, treatment recommendations, and prognosis. For example, physicians can use a machine learning model to predict the right cold medicine for a patient.",
+            "Manufacturing Industry: In the manufacturing sector, ML has made the production process more smooth and optimized. For example, Machine Learning is being used in automated production lines to increase production efficiency and ensure manufacturing quality.",
+            "Commercial Sector: In the marketing and marketing sector, ML models analyze huge data and predict production trends. This helps in understanding the marketing system and the products can be customized for their target customers."
+        ],
+        "Future of Machine Learning Models": [
+            "There are several important aspects to consider when considering the challenges and future of machine learning models. One challenge is that there are not enough resources and tools available to contextualize large data sets. Additionally, machine learning models need to be updated and restarted to understand new data patterns.",
+            "In the future, another challenge for machine learning may be to collect and aggregate collections of data between different existing technology versions. This can be important for scientific development along with promoting the discovery of new possibilities. Finally, good strategy, proper resources, and technological advancement are important concepts for success in developing machine learning models. To address all these challenges, appropriate time and attention is required to further expand machine learning capabilities."
+        ],
+        "Conclusion": [
+            "We first saw the introduction of machine learning in which we know what a model is and what is the benefit of implementing it in our system. Then look at the history and evolution of machine learning along with the selection criteria to decide which model to use specifically. Next, we read data preparation where you can read all the steps. Then we researched advanced model that has future benefits but some challenges can also be faced but the ML model is a demand for the future."
+        ]
+    },
+    "https://www.geeksforgeeks.org/flowchart-for-basic-machine-learning-models/?ref=next_article": {
+        "title": "Untitled"
+    }
+}

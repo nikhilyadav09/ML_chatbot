@@ -1,0 +1,526 @@
+{
+    "01_introduction.html": {
+        "1. IntroductionÂ¶": [
+            "Machine learning is a subset of artificial intelligence in the field of computer science that often uses statistical techniques to give computers the ability to learn\n(i.e., progressively improve performance on a specific task) with data, without being explicitly programmed. Machine learning is the design and study of software artifacts\nthat use past experience to make future decisions. It is the study of programs that learn from data. The fundamental goal of machine learning is to generalize,\nor to induce an unknown rule from examples of the ruleâs application. Machine learning systems are often described as learning from experience either with or without\nsupervision from humans.",
+            "The Basic three different learning styles in machine learning algorithms:"
+        ],
+        "1.1. Supervised LearningÂ¶": [
+            "A model is prepared through a training process in which it is required to make predictions and is corrected when those predictions are wrong. The training process\ncontinues until the model achieves a desired level of accuracy on the training data. A program predicts an output for an input by learning from pairs of labeled inputs\nand outputs, the program learns from examples of the right answers.",
+            "Input data is called training data and has a known label or result such as spam/not-spam or a stock price at a time.Example problems are classification and regression.Example algorithms include Logistic Regression and the Back Propagation Neural Network."
+        ],
+        "1.2. Unsupervised LearningÂ¶": [
+            "A model is prepared by deducing structures present in the input data. This may be to extract general rules.\nIt may be through a mathematical process to systematically reduce redundancy, or it may be to organize data by similarity. A program does not learn from labeled data.\nInstead, it attempts to discover patterns in the data.",
+            "Input data is not labeled and does not have a known result.Example problems are clustering, dimensionality reduction and association rule learning.Example algorithms include: the Apriori algorithm and k-Means."
+        ],
+        "1.3. Semi-Supervised LearningÂ¶": [
+            "There is a desired prediction problem but the model must learn the structures to organize the data as well as make predictions. Semi-supervised learning problems, make\nuse of both supervised and unsupervised data; these problems are located on the spectrum between supervised and unsupervised learning",
+            "Input data is a mixture of labeled and unlabeled examples.Example problems are classification and regression.Example algorithms are extensions to other flexible methods that make assumptions about how to model the unlabeled data."
+        ],
+        "1.4. Key TermsÂ¶": [],
+        "1.4.1. ModelÂ¶": [
+            "A machine learning model can be a mathematical representation of a real-world process. To generate a machine learning model you will need to provide training data\nto a machine learning algorithm to learn from."
+        ],
+        "1.4.2. AlgorithmÂ¶": [
+            "Machine Learning algorithm is the hypothesis set that is taken at the beginning before the training starts with real-world data. When we say Linear Regression\nalgorithm, it means a set of functions that define similar characteristics as defined by Linear Regression and from those set of functions we will choose one function\nthat fits the most by the training data."
+        ],
+        "1.4.3. TrainingÂ¶": [
+            "While training for machine learning, you pass an algorithm with training data. The learning algorithm finds patterns in the training data such that the input\nparameters correspond to the target. The output of the training process is a machine learning model which you can then use to make predictions.\nThis process is also called âlearningâ."
+        ],
+        "1.4.4. RegressionÂ¶": [
+            "Regression techniques are used when the output is real-valued based on continuous variables. For example, any time series data. This technique involves fitting a line."
+        ],
+        "1.4.5. ClassificationÂ¶": [
+            "In classification, you will need to categorize data into predefined classes. For example, an email can either be âspamâ or ânot spamâ."
+        ],
+        "1.4.6. TargetÂ¶": [
+            "The target is whatever the output of the input variables. It could be the individual classes that the input variables maybe mapped to in case of a\nclassification problem or the output value range in a regression problem. If the training set is considered then the target is the training output values that will be\nconsidered."
+        ],
+        "1.4.7. FeatureÂ¶": [
+            "Features are individual independent variables that act as the input in your system. Prediction models use features to make predictions. New features can\nalso be obtained from old features using a method known as âfeature engineeringâ. More simply, you can consider one column of your data set to be one feature. Sometimes\nthese are also called attributes. And the number of features are called dimensions."
+        ],
+        "1.4.8. LabelÂ¶": [
+            "Labels are the final output. You can also consider the output classes to be the labels. When data scientists speak of labeled data, they mean groups of samples\nthat have been tagged to one or more labels."
+        ],
+        "1.4.9. OverfittingÂ¶": [
+            "An important consideration in machine learning is how well the approximation of the target function that has been trained using training data, generalizes\nto new data. Generalization works best if the signal or the sample that is used as the training data has a high signal to noise ratio. If that is not the case, generalization\nwould be poor and we will not get good predictions. A model is overfitting if it fits the training data too well and there is a poor generalization of new data."
+        ],
+        "1.4.10. RegularizationÂ¶": [
+            "Regularization is the method to estimate a preferred complexity of the machine learning model so that the model generalizes and the over-fit/under-fit\nproblem is avoided. This is done by adding a penalty on the different parameters of the model thereby reducing the freedom of the model."
+        ],
+        "1.4.11. Parameter and Hyper-ParameterÂ¶": [
+            "Parameters are configuration variables that can be thought to be internal to the model as they can be estimated from the training data.\nAlgorithms have mechanisms to optimize parameters. On the other hand, hyperparameters cannot be estimated from the training data. Hyperparameters of a model are set and\ntuned depending on a combination of some heuristics.",
+            "Citations",
+            "Footnotes",
+            "References",
+            "Machine Learning Types"
+        ]
+    },
+    "02_learning_models.html": {
+        "2. Learning ModelsÂ¶": [
+            "The process of training an ML model involves providing an ML algorithm (that is, the learning algorithm) with training data to learn from. The term ML model refers to the\nmodel artifact that is created by the training process.",
+            "The training data must contain the correct answer, which is known as a target or target attribute. The learning algorithm finds patterns in the training data that map the\ninput data attributes to the target (the answer that you want to predict), and it outputs an ML model that captures these patterns. You can then use the ML model to get\npredictions on new data for which you do not know the target.",
+            "Organizing machine learning algorithms is useful because it forces you to think about the roles of the input data and the model preparation process and select one that is\nthe most appropriate for your problem in order to get the best result. Algorithms are often grouped by similarity in terms of their function."
+        ],
+        "2.1. Regression AlgorithmsÂ¶": [
+            "Regression is concerned with modeling the relationship between variables that is iteratively refined using a measure of error in the predictions made by the model.\nRegression methods are a workhorse of statistics and have been co-opted into statistical machine learning. This may be confusing because we can use regression to refer to\nthe class of problem and the class of algorithm. Really, regression is a process.",
+            "Ordinary Least Squares Regression (OLSR)Linear RegressionLogistic RegressionStepwise RegressionMultivariate Adaptive Regression Splines (MARS)Locally Estimated Scatterplot Smoothing (LOESS)"
+        ],
+        "2.2. Instance-based AlgorithmsÂ¶": [
+            "Instance-based learning model is a decision problem with instances or examples of training data that are deemed important or required to the model.\nSuch methods typically build up a database of example data and compare new data to the database using a similarity measure in order to find the best match and make a\nprediction. For this reason, instance-based methods are also called winner-take-all methods and memory-based learning. Focus is put on the representation of the stored\ninstances and similarity measures used between instances.",
+            "k-Nearest Neighbor (kNN)Learning Vector Quantization (LVQ)Self-Organizing Map (SOM)Locally Weighted Learning (LWL)"
+        ],
+        "2.3. Regularization AlgorithmsÂ¶": [
+            "An extension made to another method (typically regression methods) that penalizes models based on their complexity, favoring simpler models that are also better at generalizing.\nregularization algorithms",
+            "Ridge RegressionLeast Absolute Shrinkage and Selection Operator (LASSO)Elastic NetLeast-Angle Regression (LARS)"
+        ],
+        "2.4. Decision Tree AlgorithmsÂ¶": [
+            "Decision tree methods construct a model of decisions made based on actual values of attributes in the data. Decisions fork in tree structures until a prediction decision\nis made for a given record. Decision trees are trained on data for classification and regression problems. Decision trees are often fast and accurate and a big favorite\nin machine learning.",
+            "Classification and Regression Tree (CART)Iterative Dichotomiser 3 (ID3)C4.5 and C5.0 (different versions of a powerful approach)Chi-squared Automatic Interaction Detection (CHAID)Decision StumpM5Conditional Decision Trees"
+        ],
+        "2.5. Bayesian AlgorithmsÂ¶": [
+            "Bayesian methods are those that explicitly apply Bayesâ Theorem for problems such as classification and regression. In simple terms, a Naive Bayes classifier assumes that\nthe presence of a particular feature in a class is unrelated to the presence of any other feature. Even if these features depend on each other or upon the existence of the\nother features, all of these properties independently contribute to the probability of the response variable belonging to a particular value.",
+            "Naive BayesGaussian Naive BayesMultinomial Naive BayesAveraged One-Dependence Estimators (AODE)Bayesian Belief Network (BBN)Bayesian Network (BN)"
+        ],
+        "2.6. Clustering AlgorithmsÂ¶": [
+            "Clustering, like regression, describes the class of problem and the class of methods. Clustering methods are typically organized by the modeling approaches such as\ncentroid-based and hierarchal. All methods are concerned with using the inherent structures in the data to best organize the data into groups of maximum commonality.",
+            "k-Meansk-MediansExpectation Maximisation (EM)Hierarchical Clustering"
+        ],
+        "2.7. Association Rule Learning AlgorithmsÂ¶": [
+            "Association rule learning methods extract rules that best explain observed relationships between variables in data. These rules can discover important and commercially\nuseful associations in large multidimensional datasets that can be exploited by an organization.",
+            "Apriori algorithmEclat algorithm"
+        ],
+        "2.8. Dimensionality Reduction AlgorithmsÂ¶": [
+            "Like clustering methods, dimensionality reduction seek and exploit the inherent structure in the data, but in this case in an unsupervised manner or order to summarize\nor describe data using less information. This can be useful to visualize dimensional data or to simplify data which can then be used in a supervised learning method. Many\nof these methods can be adapted for use in classification and regression.",
+            "Principal Component Analysis (PCA)Principal Component Regression (PCR)Partial Least Squares Regression (PLSR)Sammon MappingMultidimensional Scaling (MDS)Projection PursuitLinear Discriminant Analysis (LDA)Mixture Discriminant Analysis (MDA)Quadratic Discriminant Analysis (QDA)Flexible Discriminant Analysis (FDA)"
+        ],
+        "2.9. Ensemble AlgorithmsÂ¶": [
+            "Ensemble methods are models composed of multiple weaker models that are independently trained and whose predictions are combined in some way to make the overall prediction.\nMuch effort is put into what types of weak learners to combine and the ways in which to combine them. This is a very powerful class of techniques and as such is very popular.",
+            "BoostingBootstrapped Aggregation (Bagging)AdaBoostStacked Generalization (blending)Gradient Boosting Machines (GBM)Gradient Boosted Regression Trees (GBRT)Random Forest",
+            "Citations",
+            "Footnotes",
+            "References",
+            "Machine Learning Algorithms"
+        ]
+    },
+    "03_bias_variance.html": {
+        "3. Bias and VarianceÂ¶": [],
+        "3.1. BiasÂ¶": [
+            "It is the difference between the average prediction of our model and the correct value which we are trying to predict. Model with high bias pays very little attention\nto the training data and oversimplifies the model. It always leads to high error on training and test data."
+        ],
+        "3.2. VarianceÂ¶": [
+            "It is the variability of model prediction for a given data point or a value which tells us spread of our data. Model with high variance pays a lot of attention to\ntraining data and does not generalize on the data which it hasnât seen before. As a result, such models perform very well on training data but has high error rates on test\ndata."
+        ],
+        "3.3. DifferencesÂ¶": [
+            "Bias is the algorithmâs tendency to consistently learn the wrong thing by not taking into account all the information in the data (underfitting). Variance is the\nalgorithmâs tendency to learn random things irrespective of the real signal by fitting highly flexible models that follow the error/noise in the data too closely\n(overfitting).Bias is also used to denote by how much the average accuracy of the algorithm changes as input/training data changes. Similarly, Variance is used to denote how\nsensitive the algorithm is to the chosen input data. Bias is prejudice in favor of or against one thing, person, or group compared with another, usually in a way\nconsidered to be unfair. Variance is the state or fact of disagreeing or quarreling."
+        ],
+        "3.4. Mathematical RepresentationÂ¶": [
+            "Let the variable we are trying to predict as\\(y\\)and other covariates as\\(x\\). We assume there is a relationship between the two such that",
+            "The expected squared error at a point\\(x\\)is:",
+            "The\\(Err(x)\\)can be further decomposed as :",
+            "where",
+            "\\(e\\)is the error term and itâs normally distributed with a mean of 0.\\(f\\)= Target function\\(\\hat{f}\\)= estimation of Target function"
+        ],
+        "3.4.1. Irreducible errorÂ¶": [
+            "The above error canât be reduced by creating good models. It is a measure of the amount of noise in our data. Here it is important to understand that no matter how good\nwe make our model, our data will have certain amount of noise or irreducible error that can not be removed."
+        ],
+        "3.4.2. Bias errorÂ¶": [
+            "The above equation is little confusing because we can learn only one estimate for the target function\\(\\hat{f}\\)using the data we sampled, but the above equation\ntakes expectation for\\(\\hat{f}\\). Assume that we sampled a data for\\(n\\)times and make a model for each sampled data. We canât expect same data every time\ndue to irreducible error influence in the target function. As the data changes every time, our estimation of target function also change every time.",
+            "Most of the parametric methods make assumption(s) to learn a target function. The methods which make more assumptions to learn a target function are high biased method.\nSimilarly, the methods which make very less assumptions to learn a target function are low biased method.",
+            "Examples of low-bias machine learning algorithms: Decision Trees, k-Nearest Neighbors and Support Vector Machines.Examples of high-bias machine learning algorithms: Linear Regression, Linear Discriminant Analysis and Logistic Regression"
+        ],
+        "3.4.3. Variance errorÂ¶": [
+            "As mentioned before, for different data set, we will get different estimation for the target function. The variance error measure how much our target function\\((\\hat{f})\\)would differ if a new training data was used. For example, let the target fucntion be given as\\(f=\\beta_0 + \\beta_1 â X\\); if we use regression method to learn the\ngiven target function and assume the same functional form to estimate the target function, then the number of possible estimated function will be limited. Even though we\nget different\\((\\hat{f})\\)for different training data, our search space is limited due to functional form.",
+            "If we sample different training data for the same variables and the estimated function suggests small changes from the previous\\((\\hat{f})\\), then our model is\nlow variance one.If we sample different training data for the same variables and the estimated function suggests large changes from the previous\\((\\hat{f})\\), then our model is\nhigh variance one."
+        ],
+        "3.5. Bias-Variance TradeoffÂ¶": [
+            "If our model is too simple and has very few parameters then it may have high bias and low variance. On the other hand if our model has large number of parameters then itâs\ngoing to have high variance and low bias. So we need to find the right/good balance without overfitting and underfitting the data. This tradeoff in complexity is why there\nis a tradeoff between bias and variance. An algorithm canât be more complex and less complex at the same time.",
+            "At its root, dealing with bias and variance is really about dealing with over- and under-fitting. Bias is reduced and variance is increased in relation to model complexity.\nAs more and more parameters are added to a model, the complexity of the model rises and variance becomes our primary concern while bias steadily falls. For example, as more\npolynomial terms are added to a linear regression, the greater the resulting modelâs complexity will be. In other words, bias has a negative first-order derivative in response\nto model complexity while variance has a positive slope.",
+            "Understanding bias and variance is critical for understanding the behavior of prediction models, but in general what you really care about is overall error, not the specific\ndecomposition. The sweet spot for any model is the level of complexity at which the increase in bias is equivalent to the reduction in variance.",
+            "If our model complexity exceeds this sweet spot, we are in effect over-fitting our model; while if our complexity falls short of the sweet spot, we are under-fitting the\nmodel. In practice, there is not an analytical way to find this location. Instead we must use an accurate measure of prediction error and explore differing levels of model\ncomplexity and then choose the complexity level that minimizes the overall error. A key to this process is the selection of an accurate error measure as often grossly\ninaccurate measures are used which can be deceptive.",
+            "Citations",
+            "Footnotes",
+            "References",
+            "Bias Variance"
+        ]
+    },
+    "04_covariance_correlation.html": {
+        "4. Covariance and CorrelationÂ¶": [
+            "Covariance and correlation describe how two variables are related.",
+            "Variables are positively related if they move in the same direction.Variables are inversely related if they move in opposite directions.",
+            "Both covariance and correlation indicate whether variables are positively or inversely related. Correlation also tells you the degree to which the variables tend to move\ntogether."
+        ],
+        "4.1. CovarianceÂ¶": [
+            "Covariance measures how two variables move with respect to each other and is an extension of the concept of variance (which tells about how a single variable varies).\nIt can take any value from\\(-{\\infty}\\)to\\(+{\\infty}\\)",
+            "Higher this value, more dependent is the relationship. A positive number signifies positive covariance and denotes that there is a direct relationship. Effectively this\nmeans that an increase in one variable would also lead to a corresponding increase in the other variable provided other conditions remain constant.On the other hand, a negative number signifies negative covariance which denotes an inverse relationship between the two variables. Though covariance is perfect for\ndefining the type of relationship, it is bad for interpreting its magnitude.",
+            "where,",
+            "x = the independent variabley = the dependent variablen = number of data points in the sample\\(\\bar{x}\\)= the mean of the independent variable x\\(\\bar{y}\\)= the mean of the dependent variable y"
+        ],
+        "4.2. CorrelationÂ¶": [
+            "Correlation is another way to determine how two variables are related. In addition to telling you whether variables are positively or inversely related, correlation also\ntells you the degree to which the variables tend to move together.",
+            "Correlation standardizes the measure of interdependence between two variables and, consequently, tells you how closely the two variables move. The correlation measurement,\ncalled a correlation coefficient, will always take on a value between\\(1\\)and\\(â 1\\)",
+            "If the correlation coefficient is\\(1\\), the variables have a perfect positive correlation. This means that if one variable moves a given amount, the second moves\nproportionally in the same direction. A positive correlation coefficient less than one indicates a less than perfect positive correlation, with the strength of the\ncorrelation growing as the number approaches one.If correlation coefficient is\\(0\\), no relationship exists between the variables. If one variable moves, you can make no predictions about the movement of the other\nvariable; they are uncorrelated.If correlation coefficient is\\(â1\\), the variables are perfectly negatively correlated (or inversely correlated) and move in opposition to each other. If one variable\nincreases, the other variable decreases proportionally. A negative correlation coefficient greater than\\(â1\\)indicates a less than perfect negative correlation,\nwith the strength of the correlation growing as the number approaches\\(â1\\).",
+            "where,",
+            "\\(\\sigma_{x}\\)= sample standard deviation of the random variable x\\(\\sigma_{y}\\)= sample standard deviation of the random variable y"
+        ],
+        "4.3. DifferenceÂ¶": [
+            "MeaningCovariance is an indicator of the extent to which two random variables are dependent on each other. A higher number denotes higher dependency.Correlation is an indicator of how strongly these two variables are related provided other conditions are constant. A maximum value is\\(+1\\)denoting perfect\ndependent relationship.RelationshipCorrelation can be deduced from covariance.Correlation provides a measure of covariance on a standard scale. It is deduced by dividing the calculated covariance with standard deviation.ValueThe value of covariance lies in the range of\\(-{\\infty}\\)and\\(+{\\infty}\\).Correlation is limited to values between the range\\(-1\\)and\\(+1\\).ScalabilityCorrelation is not affected by a change in scales or multiplication by a constant.Covariance affects CorrelationUnitsCovariance has a definite unit as it is deduced by the multiplication of two numbers and their units.Correlation is a unitless absolute number between\\(-1\\)and\\(+1\\)including decimal values.",
+            "Citations",
+            "Footnotes",
+            "References",
+            "Covariance Correlation"
+        ]
+    },
+    "05_model_metrics.html": {
+        "5. Model MetricsÂ¶": [
+            "Evaluating your machine learning algorithm is an essential. Your model may give you satisfying results when evaluated using a metric sayaccuracy_scorebut may give\npoor results when evaluated against other metrics such aslogarithmic_lossor any other such metric. Most of the times we use classification accuracy to measure the\nperformance of our model, however it is not enough to truly judge our model. Different performance metrics are used to evaluate different Machine Learning Algorithms.\nWe can use classification performance metrics such asLog-Loss,Accuracy,AUC(Area under Curve)etc. Another example of metric for evaluation of machine learning\nalgorithms isprecision,recall, which can be used for sorting algorithms primarily used by search engines.",
+            "The metrics that you choose to evaluate your machine learning model is very important. Choice of metrics influences how the performance of machine learning algorithms is\nmeasured and compared."
+        ],
+        "5.1. Mean Absolute ErrorÂ¶": [
+            "Mean Absolute Error(MAE)is the average of the difference between the Original Values and the Predicted Values. It gives us the measure of how far the predictions were\nfrom the actual output. However, they donât gives us any idea of the direction of the error i.e. whether we are under predicting the data or over predicting the data.",
+            "If\\(\\hat{y_i}\\)is the predicted value of the\\(i^{th}\\)sample, and\\(y_i\\)is the corresponding true value, then the mean absolute error (MAE) estimated\nover\\(n_{\\text{samples}}\\)is defined as:"
+        ],
+        "5.2. Mean Squared ErrorÂ¶": [
+            "Mean Squared Error(MSE)is quite similar to Mean Absolute Error, the only difference being that MSE takes the average of the square of the difference between the original\nvalues and the predicted values. The advantage of MSE being that it is easier to compute the gradient, whereas Mean Absolute Error requires complicated linear programming\ntools to compute the gradient. As, we take square of the error, the effect of larger errors become more pronounced then smaller error, hence the model can now focus more\non the larger errors.",
+            "If\\(\\hat{y_i}\\)is the predicted value of the\\(i^{th}\\)sample, and\\(y_i\\)is the corresponding true value, then the mean absolute error (MAE) estimated over\\(n_{\\text{samples}}\\)is defined as:"
+        ],
+        "5.3. Log LossÂ¶": [
+            "Log loss, also calledlogistic regressionloss orcross-entropy loss, is defined on probability estimates. It is commonly used in(multinomial)logistic regression\nand neural networks, as well as in some variants of expectation-maximization, and can be used to evaluate the probability outputs of a model instead of its discrete predictions."
+        ],
+        "5.3.1. Binary ClassificationÂ¶": [
+            "For binary classification with a true label\\(y \\in \\{0,1\\}\\)and a probability estimate\\(p = \\operatorname{Pr}(y = 1)\\), the log loss per sample is the negative\nlog-likelihood of the classifier given the true label:"
+        ],
+        "5.3.2. Multiclass ClassificationÂ¶": [
+            "Let the true labels for a set of samples be encoded as a 1-of-K binary indicator matrix\\(Y\\), i.e.,\\(y_{i,k} = 1\\)if sample\\(i\\)has label\\(k\\)taken from a set of\\(K\\)labels. Let\\(P\\)be a matrix of probability estimates, with\\(p_{i,k} = \\operatorname{Pr}(t_{i,k} = 1)\\).\nThen the log loss of the whole set is:",
+            "where,",
+            "\\(y_{i,k}\\), indicates whether sample\\(i\\)belongs to class\\(k\\)or not\\(p_{i,k}\\), indicates the probability of sample\\(i\\)belonging to class\\(j\\)",
+            "In simpler terms, Log Loss works by penalizing the false classifications. It works well for multi-class classification."
+        ],
+        "5.4. Confusion MatrixÂ¶": [
+            "TheConfusion matrixis one of the most intuitive and easiest metric used for finding the correctness and accuracy of the model. It is used for Classification problem\nwhere the output can be of two or more types of classes. It in itself is not a performance measure as such, but almost all of the performance metrics are based on Confusion\nMatrix.",
+            "Lets say we have a classification problem where we are predicting if a person has cancer or not.",
+            "P :a person testspositivefor cancerN :a person testsnegativefor cancer",
+            "The confusion matrix, is a table with two dimensions (âActualâ and âPredictedâ), and sets of âclassesâ in both dimensions. Our Actual classifications are rows and Predicted\nones are Columns."
+        ],
+        "5.4.1. Key TermsÂ¶": [
+            "True Positives (TP):True positives are the cases when the actual class of the data point wasPositiveand the predicted is alsoPositive. Ex: The case where a person is actually\nhaving cancer (Positive) and the model classifying his case as cancer (Positive) comes under True positive.True Negatives (TN):True negatives are the cases when the actual class of the data point wasNegativeand the predicted is alsoNegative. Ex: The case where a person NOT having\ncancer and the model classifying his case as Not cancer comes under True Negatives.False Positives (FP):False positives are the cases when the actual class of the data point wasNegativeand the predicted isPositive. False is because the model has predicted incorrectly\nand positive because the class predicted was a positive one. (Positive). Ex: A person NOT having cancer and the model classifying his case as cancer comes under\nFalse Positives.False Negatives (FN):False negatives are the cases when the actual class of the data point wasPositive(True) and the predicted isNegative. False is because the model has predicted\nincorrectly and negative because the class predicted was a negative one. (Negative). Ex: A person having cancer and the model classifying his case as No-cancer\ncomes under False Negatives."
+        ],
+        "5.5. Classification AccuracyÂ¶": [
+            "Classification Accuracyis what we usually mean, when we use the term accuracy. If\\(\\hat{y}_i\\)is the predicted value of the\\(i^{th}\\)sample and\\(y_i\\)is the corresponding true value, then the fraction of correct predictions over\\(n_\\text{samples}\\)is defined as:",
+            "In short, it is the ratio of number of correct predictions to the total number of input samples:",
+            "Accuracy is a good measure when the target variable classes in the data are nearly balanced.\nEx: 60% classes in our fruits images data are apple and 40% are oranges. A model which predicts whether a new image is Apple or an Orange, 97% of times correctly is a\nvery good measure in this example.Accuracy should NEVER be used as a measure when the target variable classes in the data are a majority of one class.\nEx: In a cancer detection example with 100 people, only 5 people has cancer. Letâs say our model is very bad and predicts every case as No Cancer. In doing so, it has\nclassified those 95 non-cancer patients correctly and 5 cancerous patients as Non-cancerous. Now even though the model is terrible at predicting cancer, The accuracy of\nsuch a bad model is also 95%."
+        ],
+        "5.6. PrecisionÂ¶": [
+            "Using our cancer detection example,Precisionis a measure that tells us what proportion of patients that we diagnosed as having cancer, actually had cancer. The\npredicted positives (People predicted as cancerous are TP and FP) and the people actually having a cancer are TP.",
+            "Ex: In our cancer example with 100 people, only 5 people have cancer. Letâs say our model is very bad and predicts every case as Cancer. Since we are predicting everyone\nas having cancer, our denominator(True positives and False Positives) is 100 and the numerator, person having cancer and the model predicting his case as cancer is 5. So\nin this example, we can say that Precision of such model is 5%."
+        ],
+        "5.7. Recall or SensitivityÂ¶": [
+            "Recallis a measure that tells us what proportion of patients that actually had cancer was diagnosed by the algorithm as having cancer. The actual positives (People having\ncancer are TP and FN) and the people diagnosed by the model having a cancer are TP. (Note: FN is included because the Person actually had a cancer even though the model\npredicted otherwise).",
+            "Ex: In our cancer example with 100 people, 5 people actually have cancer. Letâs say that the model predicts every case as cancer. So our denominator(True positives and\nFalse Negatives) is 5 and the numerator, person having cancer and the model predicting his case as cancer is also 5(Since we predicted 5 cancer cases correctly). So in\nthis example, we can say that the Recall of such model is 100%. And Precision of such a model(As we saw above) is 5%.",
+            "Precisionis about being precise. So even if we managed to capture only one cancer case, and we captured it correctly, then we are 100% precise.Recallis not so much about capturing cases correctly but more about capturing all cases that have âcancerâ with the answer as âcancerâ. So if we simply always\nsay every case as âcancerâ, we have 100% recall."
+        ],
+        "5.8. F1 ScoreÂ¶": [
+            "F1 Score, also known as theSÃ¸rensenâDice coefficientorDice similarity coefficient(DSC), is the Harmonic Mean between precision and recall. The range for F1 Score\nis [0, 1]. It tells you how precise your classifier is (how many instances it classifies correctly), as well as how robust it is (it does not miss a significant number\nof instances).",
+            "High precision but lower recall, gives you an extremely accurate, but it then misses a large number of instances that are difficult to classify. The greater the F1 Score,\nthe better is the performance of our model.",
+            "Two other commonly used F measures are the\\(F_{2}\\)measure, which weighs recall higher than precision (by placing more emphasis on false negatives), and the\\(F_{0.5}\\)measure, which weighs recall lower than precision (by attenuating the influence of false negatives)."
+        ],
+        "5.9. Receiver operating characteristic (ROC)Â¶": [
+            "Receiver operating characteristic (ROC), or simplyROC curve, is a graphical plot which illustrates the performance of a binary classifier system as its discrimination\nthreshold is varied. It is created by plotting the fraction of true positives out of the positives (TPR = true positive rate) vs. the fraction of false positives out of\nthe negatives (FPR = false positive rate), at various threshold settings. TPR is also known as sensitivity, and FPR is one minus the specificity or true negative rate."
+        ],
+        "5.9.1. True Positive Rate (Sensitivity)Â¶": [
+            "True Positive Rate corresponds to the proportion of positive data points that are correctly considered as positive, with respect to all positive data points."
+        ],
+        "5.9.2. False Positive Rate (Specificity)Â¶": [
+            "False Positive Rate corresponds to the proportion of negative data points that are mistakenly considered as positive, with respect to all negative data points.",
+            "This function requires the true binary value and the target scores, which can either be probability estimates of the positive class, confidence values, or binary decisions.\nFalse Positive Rate and True Positive Rate both have values in the range [0, 1]. FPR and TPR both are computed at threshold values such as (0.00, 0.02, 0.04, â¦., 1.00) and\na graph is drawn.",
+            "Lowering the classification threshold classifies more items as positive, thus increasing both False Positives and True Positives. To compute the points in an ROC curve,\nwe could evaluate a logistic regression model many times with different classification thresholds."
+        ],
+        "5.10. AUC: Area Under the ROC CurveÂ¶": [
+            "Area under the ROC Curve, is the measure of an entire two-dimensional area underneath the entire ROC curve (think integral calculus) from (0,0) to (1,1). AUC provides\nan aggregate measure of performance across all possible classification thresholds. AUC ranges in value from 0 to 1. A model whose predictions are 100% wrong has an AUC of\n0.0; one whose predictions are 100% correct has an AUC of 1.0.",
+            "One way of interpreting AUC is as the probability that the model ranks a random positive example more highly than a random negative example. Ex: given the following\nexamples, which are arranged from left to right in ascending order of logistic regression predictions; AUC represents the probability that a random positive (green)\nexample is positioned to the right of a random negative (red)."
+        ],
+        "5.10.1. PropertiesÂ¶": [
+            "AUC isscale-invariant. It measures how well predictions are ranked, rather than their absolute values.AUC isclassification-threshold-invariant. It measures the quality of the modelâs predictions irrespective of what classification threshold is chosen.Scale invariance is not always desirable. For example, sometimes we really do need well calibrated probability outputs, and AUC wonât tell us about that.Classification-threshold invariance is not always desirable. In cases where there are wide disparities in the cost of false negatives vs. false positives, it may\nbe critical to minimize one type of classification error. AUC isnât a useful metric for this type of optimization.",
+            "Citations",
+            "Footnotes",
+            "References",
+            "Metrics EvaluationMetrics Performance"
+        ]
+    },
+    "06_underfitting_overfitting.html": {
+        "6. Underfitting and OverfittingÂ¶": [
+            "In machine learning we describe the learning of the target function from training data as inductive learning. Induction refers to learning general concepts from specific\nexamples which is exactly the problem that supervised machine learning problems aim to solve. This is different from deduction that is the other way around and seeks to\nlearn specific concepts from general rules.",
+            "Generalization refers to how well the concepts learned by a machine learning model apply to specific examples not seen by the model when it was learning. The goal of a\ngood machine learning model is to generalize well from the training data to any data from the problem domain. This allows us to make predictions in the future on data the\nmodel has never seen.",
+            "There is a terminology used in machine learning when we talk about how well a machine learning model learns and generalizes to new data, namely overfitting and underfitting.\nOverfitting and underfitting are the two biggest causes for poor performance of machine learning algorithms."
+        ],
+        "6.1. OverfittingÂ¶": [
+            "Overfitting refers to a model that models the training data too well. Overfitting happens when a model learns the detail and noise in the training data to the extent that\nit negatively impacts the performance of the model on new data. This means that the noise or random fluctuations in the training data is picked up and learned as concepts\nby the model. The problem is that these concepts do not apply to new data and negatively impact the models ability to generalize.",
+            "Overfitting is more likely with nonparametric and nonlinear models that have more flexibility when learning a target function. As such, many nonparametric machine learning\nalgorithms also include parameters or techniques to limit and constrain how much detail the model learns.",
+            "Overfitting occurs when a statistical model or machine learning algorithm captures the noise of the data.  Intuitively, overfitting occurs when the model or the algorithm\nfits the data too well.  Specifically, overfitting occurs if the model or algorithm shows low bias but high variance.  Overfitting is often a result of an excessively\ncomplicated model, and it can be prevented by fitting multiple models and using validation or cross-validation to compare their predictive accuracies on test data."
+        ],
+        "6.2. UnderfittingÂ¶": [
+            "Underfitting refers to a model that can neither model the training data nor generalize to new data. An underfit machine learning model is not a suitable model and will be\nobvious as it will have poor performance on the training data. Underfitting is often not discussed as it is easy to detect given a good performance metric. The remedy is\nto move on and try alternate machine learning algorithms. Nevertheless, it does provide a good contrast to the problem of overfitting.",
+            "Underfitting occurs when a statistical model or machine learning algorithm cannot capture the underlying trend of the data.  Intuitively, underfitting occurs when the\nmodel or the algorithm does not fit the data well enough.  Specifically, underfitting occurs if the model or algorithm shows low variance but high bias.  Underfitting is\noften a result of an excessively simple model."
+        ],
+        "6.3. ExampleÂ¶": [
+            "This example demonstrates the problems of underfitting and overfitting and how we can use linear regression with polynomial features to approximate nonlinear functions.\nThe plot shows the function that we want to approximate, which is a part of the cosine function. In addition, the samples from the real function and the approximations of\ndifferent models are displayed. The models have polynomial features of different degrees. We can see that a linear function (polynomial with degree 1) is not sufficient to\nfit the training samples. This is called underfitting. A polynomial of degree 4 approximates the true function almost perfectly. However, for higher degrees the model will\noverfit the training data, i.e. it learns the noise of the training data. We evaluate quantitatively overfitting / underfitting by using cross-validation. We calculate the\nmean squared error (MSE) on the validation set, the higher, the less likely the model generalizes correctly from the training data.",
+            "Citations",
+            "Footnotes",
+            "References",
+            "Underfitting vs Overfitting"
+        ]
+    },
+    "07_model_performance.html": {
+        "7. Model PerformanceÂ¶": [
+            "When training ML Models, it is important to avoidoverfittingthe training data. Overfitting occurs when the ML model learns the noise in the training data and thus\ndoes not generalize well to data it has not been trained on. Onehyperparameterthat affects whether the ML model will overfit or not is the number of epochs or complete\npasses through the training split. If we use too many epochs, then the ML model is likely to overfit. On the other hand, if we use too few epochs, the ML model might not\nhave the chance to learn fully from the training data.",
+            "Important terms",
+            "Training datais the data given to the model, from which the model build your model.Training accuracytells about how much your model learns to map the input and output.Validation datais the data with which the training process is validated.Validation accuracytells about the generalizing power of the model.Validation accuracydecreasing means lower generalization over the training data. Validation accuracy is evaluated while Training.Test dataassess the performance of a trained model.Test accuracygives the final generalization power. Test accuracy is evaluated after training.Iftraining and validationare both low, you are probably under fitting and you can probably increase the capacity of your model and train more or longer (increase\nthe number of epochs)."
+        ],
+        "7.1. Data SplittingÂ¶": [
+            "In practice, detecting that our model is overfitting is difficult. Itâs not uncommon that our trained model is already in production and then we start to realize that\nsomething is wrong. In fact, it is only by confronting new data that you can make sure that everything is working properly. However, during the training we should try to\nreproduce the real conditions as much as possible. For this reason, it is good practice todivideour dataset into three parts -training set,dev set (also known\nas cross-validation or hold-out)andtest set. Our model learns by seeing only the first of these parts. Hold-out is used to track our progress and draw conclusions\nto optimize the model. While, we use a test set at the end of the training process to evaluate the performance of our model.",
+            "It is very important to make sure that your cross-validation and test set come from the same distribution as well as that they accurately reflect data that we expect to\nreceive in the future. Only then we can be sure that the decisions we make during the learning process bring us closer to a better solution. Our dev and test sets should\nbe simply large enough to give us high confidence in the performance of our model."
+        ],
+        "7.2. ValidationÂ¶": [
+            "We need to create a model with the best settings (the degree), but we donât want to have to keep going through training and testing. There are no consequences in our\nexample from poor test performance, but in a real application where we might be performing a critical task such as diagnosing cancer, there would be serious downsides to\ndeploying a faulty model. We need some sort of pre-test to use for model optimization and evaluate. This pre-test is known as a validation set. A basic approach would be\nto use a validation set in addition to the training and testing set. This presents a few problems though: we could just end up overfitting to the validation set and we\nwould have less training data. A smarter implementation of the validation concept is k-fold cross-validation.",
+            "The idea is straightforward: rather than using a separate validation set, we split the training set into a number of subsets, called folds. Letâs use five folds as an\nexample. We perform a series of train and evaluate cycles where each time we train on 4 of the folds and test on the 5th, called the hold-out set. We repeat this cycle 5\ntimes, each time using a different fold for evaluation. At the end, we average the scores for each of the folds to determine the overall performance of a given model.\nThis allows us to optimize the model before deployment without having to use additional data."
+        ],
+        "7.3. Cost functionÂ¶": [
+            "Whenever a model is trained on a training data and is used to predict values on a testing set, there exists a difference between the true and predicted values. The closer\nthe predicted values to their corresponding real values, the better the model. That means, acost functionis used to measure how close the predicted values are to\ntheir corresponding real values. The function can be minimized or maximized, given the situation/problem.",
+            "For example, in case of ordinary least squares (OLS), the cost function(to be minimized) would be:",
+            "where,",
+            "\\(J\\)denotes the cost function,\\(m\\)is the number of observations in the dataset,\\(h(x)\\)is the predicted value of the response\\(y\\)is the true value of the response"
+        ],
+        "7.4. High Bias and High VarianceÂ¶": [
+            "If a model is under-performing (e.g. if the test or training error is too high), there are several ways to improve performance. To find out which of these many techniques\nis the right one for the situation, the first step is to determine the root of the problem.",
+            "The graph above plots the training error and the test error and can be divided into two overarching regimes. In the first regime (on the left side of the graph), training\nerror is below the desired error threshold (denoted by Ïµ), but test error is significantly higher. In the second regime (on the right side of the graph), test error is\nremarkably close to training error, but both are above the desired tolerance of Ïµ."
+        ],
+        "7.4.1. Regime 1 (High Variance)Â¶": [
+            "In the first regime, the cause of the poor performance is high variance.",
+            "SymptomsTraining error is much lower than test errorTraining error is lower than ÏµTest error is above ÏµRemediesAdd more training dataReduce model complexity â complex models are prone to high varianceBagging (will be covered later in the course)"
+        ],
+        "7.4.2. Regime 2 (High Bias)Â¶": [
+            "Unlike the first regime, the second regime indicates high bias: the model being used is not robust enough to produce an accurate prediction.",
+            "SymptomsTraining error is higher than ÏµRemediesUse more complex model (e.g. kernelize, use non-linear models)Add featuresBoosting"
+        ],
+        "7.5. RegularizationsÂ¶": [
+            "One of the first methods we should try when we need to reduce overfitting isregularization. It involves adding an extra element to the loss function, which punishes\nour model for being too complex or, in simple words, for using too high values in the weight matrix. This way we try to limit its flexibility, but also encourage it to\nbuild solutions based on multiple features. Two popular versions of this method are:",
+            "L1 regularization (Lasso Regression):(Least Absolute Shrinkage and Selection Operator)addsabsolute value of magnitudeof coefficient as penalty term to the\nloss function.",
+            "L2 Regularization (Ridge regression): addssquared magnitudeof coefficient as penalty term to the loss function.",
+            "In addition to the cost function we had in case of OLS, there is an additional term added, which is the regularization term.\\(\\theta(\\text{norm of the coefficients})\\),\nthe addition is of\\(\\lambda(\\text{the regularization parameter})\\)and\\(\\theta^{2}(\\text{norm of coefficient squared})\\). The addition of regularization term\npenalizes big coefficients and tries to minimize them to zero, although not making them exactly to zero. This means that if the\\(Î¸âs\\)take on large values, the optimization\nfunction is penalized. We would prefer to take smaller\\(Î¸\\)âs, or\\(Î¸\\)âs that are close to zero to drive the penalty term small."
+        ],
+        "7.5.1. Key pointsÂ¶": [
+            "Lasso shrinks the less important featureâs coefficient to zero thus, removing some feature altogether. So, this works well for feature selection in case we have a huge\nnumber of features.Built-in feature selection is frequently mentioned as a useful property of the L1-norm, which the L2-norm does not. This is actually a result of the L1-norm, which\ntends to produces sparse coefficients.Computational efficiency, L1-norm does not have an analytical solution, but L2-norm does. This allows the L2-norm solutions to be calculated computationally efficiently.\nHowever, L1-norm solutions does have the sparsity properties which allows it to be used along with sparse algorithms, which makes the calculation more computationally\nefficient.When there are many predictors (with some col-linearity among them) in the dataset and not all of them have the same predicting power, L2 regression can be used to\nestimate the predictor importance and penalize predictors that are not important. One issue with co-linearity is that the variance of the parameter estimate is huge.\nIn cases where the number of features are greater than the number of observations, the matrix used in the OLS may not be invertible but Ridge Regression enables this\nmatrix to be inverted. It seeks to reduce the MSE by adding some bias and, at the same time, reducing the variance. Remember high variance correlates to a over-fitting\nmodel.One of the things that Ridge canât be used is variable selection since it retains all the predictors. Lasso on the other hand overcomes this problem by forcing some of\nthe predictors to zero.As the\\(\\lambda\\)is increased, variance is reduced and bias is added in the model, so getting the right value of the lambda is essential. Cross-validation is\ngenerally used to estimate the value of lambda."
+        ],
+        "7.6. Early StoppingÂ¶": [
+            "When youâre training a learning algorithm iteratively, you can measure how well each iteration of the model performs. Up until a certain number of iterations, new\niterations improve the model. After that point, however, the modelâs ability to generalize can weaken as it begins to overfit the training data. Early stopping refers\nstopping the training process before the learner passes that point.",
+            "Today, this technique is mostly used in deep learning while other techniques (e.g. regularization) are preferred for classical machine learning."
+        ],
+        "7.7. Hyperparameter OptimizationÂ¶": [
+            "In machine learning, hyperparameter optimization or tuning is the problem of choosing a set of optimal hyperparameters for a learning algorithm. A hyperparameter is a\nparameter whose value is used to control the learning process. By contrast, the values of other parameters (typically node weights) are learned.",
+            "The same kind of machine learning model can require different constraints, weights or learning rates to generalize different data patterns. These measures are called\nhyperparameters, and have to be tuned so that the model can optimally solve the machine learning problem. Hyperparameter optimization finds a tuple of hyperparameters\nthat yields an optimal model which minimizes a predefined loss function on given independent data.[1] The objective function takes a tuple of hyperparameters and returns\nthe associated loss. Cross-validation is often used to estimate this generalization performance."
+        ],
+        "7.7.1. Grid searchÂ¶": [
+            "The traditional way of performing hyperparameter optimization has been grid search, or a parameter sweep, which is simply an exhaustive searching through a manually\nspecified subset of the hyperparameter space of a learning algorithm. A grid search algorithm must be guided by some performance metric, typically measured by cross-validation\non the training set or evaluation on a held-out validation set."
+        ],
+        "7.7.2. Random searchÂ¶": [
+            "Random Search replaces the exhaustive enumeration of all combinations by selecting them randomly. This can be simply applied to the discrete setting described above, but\nalso generalizes to continuous and mixed spaces. It can outperform Grid search, especially when only a small number of hyperparameters affects the final performance of the\nmachine learning algorithm"
+        ],
+        "7.7.3. Bayesian optimizationÂ¶": [
+            "Bayesian optimization is a global optimization method for noisy black-box functions. Applied to hyperparameter optimization, Bayesian optimization builds a probabilistic\nmodel of the function mapping from hyperparameter values to the objective evaluated on a validation set. By iteratively evaluating a promising hyperparameter configuration\nbased on the current model, and then updating it, Bayesian optimization, aims to gather observations revealing as much information as possible about this function and, in\nparticular, the location of the optimum. It tries to balance exploration (hyperparameters for which the outcome is most uncertain) and exploitation (hyperparameters expected\nclose to the optimum)."
+        ],
+        "7.7.4. Gradient-based optimizationÂ¶": [
+            "For specific learning algorithms, it is possible to compute the gradient with respect to hyperparameters and then optimize the hyperparameters using gradient descent. The\nfirst usage of these techniques was focused on neural networks. Since then, these methods have been extended to other models such as support vector machines or logistic\nregression.",
+            "Citations",
+            "Footnotes",
+            "References",
+            "Model PerformanceModel Evaluation"
+        ]
+    },
+    "08_gradient_decent.html": {
+        "8. Gradient descentÂ¶": [
+            "Gradient Descent is a method used while training a machine learning model. It is an optimization algorithm, based on a convex function, that tweaks\nitâs parameters iteratively to minimize a given function to its local minimum. It is simply used to find the values of a functions parameters\n(coefficients) that minimize a cost function as far as possible. You start by defining the initial parameters values and from there on Gradient\nDescent iteratively adjusts the values, using calculus, so that they minimize the given cost-function"
+        ],
+        "8.1. GradientÂ¶": [
+            "A gradient measures how much the output of a function changes if you change the inputs a little bit. It simply measures the change in all weights\nwith regard to the change in error. You can also think of a gradient as the slope of a function. The higher the gradient, the steeper the slope and\nthe faster a model can learn. But if the slope is zero, the model stops learning. Said it more mathematically, a gradient is a partial derivative\nwith respect to its inputs."
+        ],
+        "8.2. Cost FunctionÂ¶": [
+            "It is a way to determine how well the machine learning model has performed given the different values of each parameters. The linear regression\nmodel, the parameters will be the two coefficients,\\(\\beta\\)and\\(m\\):",
+            "The cost function will be the sum of least square methods. Since the cost function is a function of the parameters\\(\\beta\\)and\\(m\\), we\ncan plot out the cost function with each value of the coefficients. (i.e. Given the value of each coefficient, we can refer to the cost function to\nknow how well the machine learning model has performed). The cost function looks like:",
+            "during the training phase, we are focused on selecting the âbestâ value for the parameters (i.e. the coefficients),\\(x\\)âs will remain the\nsame throughout the training phasefor the case of linear regression, we are finding the value of the coefficients that will reduce the cost to the minimum a.k.a the lowest point\nin the mountainous region."
+        ],
+        "8.3. MethodÂ¶": [
+            "The Cost function will take in a\\((m,b)\\)pair and return an error value based on how well the line fits our data. To compute this error for a\ngiven line, weâll iterate through each\\((x,y)\\)point in our data set and sum the square distances between each pointâs\\(y\\)value and\nthe candidate lineâs\\(y\\)value(computed at mx + b). Itâs conventional to square this distance to ensure that it is positive and to make\nour error function differentiable.",
+            "Lines that fit our data better (where better is defined by our error function) will result in lower error values. If we minimize this function,\nwe will get the best line for our data. Since our error function consists of two parameters (m and b) we can visualize it as a two-dimensional\nsurface.",
+            "Each point in this two-dimensional space represents a line. The height of the function at each point is the error value for that line. Some lines\nyield smaller error values than others (i.e., fit our data better). When we run gradient descent search, we will start from some location on this\nsurface and move downhill to find the line with the lowest error.",
+            "The horizontal axes represent the parameters (\\(w\\)and\\(\\beta\\)) and the cost function\\(J(w, \\beta)\\)is represented on the\nvertical axes. You can also see in the image that gradient descent is a convex function.we want to find the values of\\(w\\)and\\(\\beta\\)that correspond to the minimum of the cost function (marked with the red arrow). To\nstart with finding the right values we initialize the values of\\(w\\)and\\(\\beta\\)with some random numbers and Gradient Descent then\nstarts at that point.Then it takes one step after another in the steepest downside direction till it reaches the point where the cost function is as small as possible."
+        ],
+        "8.4. AlgorithmÂ¶": [
+            "Moving forward to find the lowest error (deepest valley) in the cost function (with respect to one weight) we need to tweak the parameters of the\nmodel. Using calculus, we know that the slope of a function is the derivative of the function with respect to a value.This slope always points to\nthe nearest valley.",
+            "We can see the graph of the cost function(named\\(Error\\)with symbol\\(J\\)) against just one weight. Now if we calculate the slope(letâs\ncall this\\((\\frac{dJ}{dw})\\)of the cost function with respect to this one weight, we get the direction we need to move towards, in order to\nreach the local minima(nearest deepest valley)."
+        ],
+        "8.4.1. StepsÂ¶": [
+            "Initialize the weights\\(w\\)randomly.Calculate the gradients\\(G\\)of cost function w.r.t parameters. This is done using partial differentiation:\\(G = âJ(w)/âw\\). The value\nof the gradient\\(G\\)depends on the inputs, the current values of the model parameters, and the cost function.Update the weights by an amount proportional to\\(G\\), i.e.\\(w = w - Î·G\\)Repeat until the cost\\(J(w)\\)stops reducing, or some other pre-defined termination criteria is met."
+        ],
+        "8.5. Learning RateÂ¶": [
+            "How big the steps are that Gradient Descent takes into the direction of the local minimum are determined by the so-calledlearning rate. It\ndetermines how fast or slow we will move towards the optimal weights. In order for Gradient Descent to reach the local minimum, we have to set the\nlearning rate to an appropriate value, which is neither too low nor too high.",
+            "This is because if the steps it takes are too big, it maybe will not reach the local minimum because it just bounces back and forth between the\nconvex function of gradient descent like you can see on the left side of the image below. If you set the learning rate to a very small value,\ngradient descent will eventually reach the local minimum but it will maybe take too much time like you can see on the right side of the image."
+        ],
+        "8.6. ConvergenceÂ¶": [
+            "Once the agent, after many steps, realize the cost does not improve by a lot and it is stuck very near a particular point (minima), technically\nthis is known asconvergence. The value of the parameters at that very last step is known as the âbestâ set of parameters, and we have a\ntrained model."
+        ],
+        "8.7. Types of Gradient DescentÂ¶": [
+            "Three popular types of Gradient Descent, that mainly differ in the amount of data they use."
+        ],
+        "8.7.1. Batch Gradient DescentÂ¶": [
+            "Also called vanilla gradient descent, calculates the error for each example within the training dataset, but only after all training examples have\nbeen evaluated, the model gets updated. This whole process is like a cycle and called a training epoch.",
+            "Advantages of it are that itâs computational efficient, it produces a stable error gradient and a stable convergence.Batch Gradient Descent has the disadvantage that the stable error gradient can sometimes result in a state of convergence that isnât the best\nthe model can achieve. It also requires that the entire training dataset is in memory and available to the algorithm."
+        ],
+        "8.7.2. Stochastic gradient descent (SGD)Â¶": [
+            "In vanilla gradient descent algorithms, we calculate the gradients on each observation one by one; In stochastic gradient descent we can chose the\nrandom observations randomly. It is calledstochasticbecause samples are selected randomly (or shuffled) instead of as a single group (as in\nstandard gradient descent) or in the order they appear in the training set. This means that it updates the parameters for each training example,\none by one. This can make SGD faster than Batch Gradient Descent, depending on the problem.",
+            "One advantage is that the frequent updates allow us to have a pretty detailed rate of improvement. The frequent updates are more computationally\nexpensive as the approach of Batch Gradient Descent.The frequency of those updates can also result in noisy gradients, which may cause the error rate to jump around, instead of slowly decreasing."
+        ],
+        "8.7.3. Mini-batch Gradient DescentÂ¶": [
+            "Is a combination of the concepts of SGD and Batch Gradient Descent. It simply splits the training dataset into small batches and performs an update\nfor each of these batches. Therefore it creates a balance between the robustness of stochastic gradient descent and the efficiency of batch gradient\ndescent.",
+            "Common mini-batch sizes range between 50 and 256, but like for any other machine learning techniques, there is no clear rule, because they can\nvary for different applications. It is the most common type of gradient descent within deep learning.",
+            "Citations",
+            "Footnotes",
+            "References",
+            "Gradient DescentGradient Descent Linear Regression"
+        ]
+    },
+    "09_regression.html": {
+        "1. RegressionÂ¶": [
+            "Regression analysis is a form of predictive modelling technique which investigates the relationship between a dependent variable(s) (target) and\nindependent variable(s) (predictor). This technique is used for forecasting, time series modelling and finding the causal effect relationship\nbetween the variables. Regression analysis is an important tool for modelling and analyzing data. Here, we fit a curve / line to the data points,\nin such a manner that the differences between the distances of data points from the curve or line is minimized."
+        ],
+        "1.1. Basic ModelsÂ¶": [
+            "There are various kinds of regression techniques available to make predictions. These techniques are mostly driven by three metrics (number of\nindependent variables, type of dependent variables and shape of regression line)."
+        ],
+        "1.1.1. Continuous variablesÂ¶": [
+            "Continuous variables are a measurement on a continuous scale, such as weight, time, and length."
+        ],
+        "1.1.2. Categorical variablesÂ¶": [
+            "A categorical variable has values that you can put into a countable number of distinct groups based on a characteristic."
+        ],
+        "1.2. Selecting ModelÂ¶": [
+            "Within multiple types of regression models, it is important to choose the best suited technique based on type of independent and dependent variable\n, dimensionality in the data and other essential characteristics of the data.",
+            "Data exploration is an inevitable part of building predictive model. It should be you first step before selecting the right model like identify\nthe relationship and impact of variablesTo compare the goodness of fit for different models, we can analyse different metrics like statistical significance of parameters, R-square,\nAdjusted r-square, AIC, BIC and error term. Another one is the Mallowâs Cp criterion. This essentially checks for possible bias in your model, by\ncomparing the model with all possible submodels (or a careful selection of them).Cross-validation is the best way to evaluate models used for prediction. Here you divide your data set into two group (train and validate). A\nsimple mean squared difference between the observed and predicted values give you a measure for the prediction accuracy.If your data set has multiple confounding variables, you should not choose automatic model selection method because you do not want to put these\nin a model at the same time.Itâll also depend on your objective. It can occur that a less powerful model is easy to implement as compared to a highly statistically\nsignificant model.Regression regularization methods(Lasso, Ridge and ElasticNet) works well in case of high dimensionality and multicollinearity among the\nvariables in the data set.",
+            "Citations",
+            "Footnotes",
+            "References",
+            "Regression GuideRegression AnalysisRegression Types"
+        ]
+    },
+    "10_simple_linear_regression.html": {
+        "2. Simple Linear RegressionÂ¶": [
+            "Linear regression is an approach for predicting aquantitative responseusingfeature predictororinput variable. It is a basic predictive\nanalytics technique that uses historical data to predict an output variable. It takes the following form:",
+            "where,",
+            "\\(y\\)is the response, a function of x\\(x\\)is the feature\\(beta_{0}\\)is the intercept, also calledbias coefficient\\(beta_{1}\\)is the slope, also called thescale factor\\(beta_{0}\\)and\\(\\beta_{1}\\)are called the model coefficients",
+            "Our goal is to find statistically significant values of the parameters\\(\\beta_0\\)and\\(\\beta_1\\)that minimize the difference between\\(y\\)(output) and\\(y_e\\)(estimated / predicted output).",
+            "If we are able to determine the optimum values of these two parameters, then we will have theLine of Best Fitthat we can use to predict the\nvalues of\\(y\\), given the value of\\(x\\).",
+            "It is important to note that, linear regression can often be divided into two basic forms:",
+            "Simple Linear Regression (SLR) which deals with just two variables (the one you saw at first)Multi-linear Regression (MLR) which deals with more than two variables",
+            "So, how do we estimate\\(\\beta_{0}\\)and\\(\\beta_{1}\\)? We can use a method called ordinary least squares."
+        ],
+        "2.1. Ordinary Least SqaureÂ¶": [],
+        "2.1.1. MethodÂ¶": [
+            "Ordinary least squares(OLS) is a type of linear least squares method for estimating the unknown parameters in alinear regression model. OLS\nchooses the parameters of a linear function of a set of explanatory variables by the principle of least squares: minimizing the sum of the squares\nof the differences between the observed dependent variable (values of the variable being predicted) in the given dataset and those predicted by the\nlinear function.",
+            "This is seen as the sum of the squared distances, parallel to the axis of the dependent variable, between each data point in the set and the\ncorresponding point on the regression surface â the smaller the differences, the better the model fits the data.",
+            "The least squares estimates in this case are given by simple formulas:",
+            "where,",
+            "Var(.) and Cov(.) are called sample parameters.\\(\\beta_{1}\\)is the slope\\(\\beta_{0}\\)is the intercept"
+        ],
+        "2.1.2. EvaluationÂ¶": [
+            "There are many methods to evaluate models. We will use RootMean Squared ErrorandCoefficient of Determination",
+            "Root Mean Squared Erroris the square root of sum of all errors divided by number of values:(2)Â¶\\[RMSE = \\sqrt{\\sum_{i=1}^{n}{\\frac{1}{n}(\\hat{y_{i}}-{y_i})^2}}\\]R^2 Errorscore usually range from 0 to 1. It will also become negative if the model is completely wrong:(3)Â¶\\[\\begin{split}\\operatorname{R^2}&=1-\\frac{\\text{Total Sum of Squares}}{\\text{Total Sum of Square of Residuals}} \\\\\n&=1-\\frac{\\sum_{i=1}^{n}(y_{i}-\\hat{y_{i}})^2}{\\sum_{i=1}^{n}(y_{i}-\\bar{y})^2}\\end{split}\\]",
+            "Citations",
+            "Footnotes",
+            "References",
+            "Linear RegressionOrdinary Least Square"
+        ]
+    },
+    "11_example_simple_linear_regression.html": {
+        "3. Example Simple Linear RegressionÂ¶": [
+            "Different methods used to demonstrate Simple Linear Regression",
+            "Ordinary Least SquarePython from scratchScikitGradient DescentPython from scratchScikit"
+        ],
+        "3.1. Ordinary Least SqaureÂ¶": [
+            "Creating sample data :"
+        ],
+        "3.1.1. PythonÂ¶": [
+            "Calculating model coefficiants\\(\\beta_0\\)and\\(\\beta_1\\):",
+            "Making predictions :",
+            "Plotting the regression line :",
+            "Calculate the root mean squared error and r\\(^2\\)error :"
+        ],
+        "3.1.2. ScikitÂ¶": [
+            "Reshape array, scikit cannot use array with rank 1 :",
+            "Initialize model and fit data :",
+            "Making predictions :",
+            "Plotting the regression line :",
+            "Calculate the root mean squared error and r\\(^2\\)error :"
+        ],
+        "3.2. Gradient DescentÂ¶": [
+            "Creating sample data :"
+        ],
+        "3.2.1. PythonÂ¶": [
+            "Perform batch gradeint decent withiteration=5000andlearning_rate=0.001:",
+            "Calculating the Errors :",
+            "Plot usingmatplotlib.animation:"
+        ],
+        "3.2.2. ScikitÂ¶": [
+            "Initialize model, defaultmax_iteration=1000:",
+            "Start training loop.SGDRegressor.partial_fitis used as it setsmax_iterations=1of the model instance as we are already executing it in a\nloop. At the moment there is no callback method implemented in scikit to retrieve parameters of the training instance , therefor calling the model\nusingpartial_fitin a for-loop is used :",
+            "Calculate the Errors :",
+            "Plot the training loop usingmatplotlib.animation:",
+            "Citations",
+            "Footnotes",
+            "References"
+        ]
+    },
+    "12_multiple_linear_regression.html": {
+        "4. Multiple Linear RegressionÂ¶": [
+            "Multiple linear regression (MLR), also known simply as multiple regression, is a statistical technique that uses several explanatory variables to\npredict the outcome of a response variable. The goal of multiple linear regression (MLR) is to model the linear relationship between the explanatory\n(independent) variables and response (dependent) variable.",
+            "Multiple regression is the extension of ordinary least-squares (OLS) regression that involves more than one explanatory variable.",
+            "where",
+            "\\(y_i\\)=  dependent variable\\(x_i\\)=  explanatory variable\\(\\beta_0\\)=  intercept\\(\\beta_1\\)=  slope\\(\\epsilon\\)=  modelâs error term, also called residual",
+            "A simple linear regression is a function that allows to make predictions about one variable based on the information that is known about another\nvariable. Linear regression can only be used when one has two continuous variables â an independent variable and a dependent variable. The\nindependent variable is the parameter that is used to calculate the dependent variable or outcome. A multiple regression model extends to several\nexplanatory variables.",
+            "The multiple regression model is based on the following assumptions:",
+            "There is a linear relationship between the dependent variables and the independent variables.The independent variables are not too highly correlated with each other.\\(y_i\\)observations are selected independently and randomly from the population.Residuals should be normally distributed with a mean of\\(0\\)and variance\\(\\sigma\\)"
+        ],
+        "4.1. Least Squared ResidualÂ¶": [],
+        "4.1.1. MethodÂ¶": [
+            "A general multiple-regression model can be written as",
+            "In matrix form, we can rewrite this model as :",
+            "The strategy in the least squared residual approach (ordinary least square) is the same as in the bivariate linear regression model. The idea of the\nordinary least squares estimator (OLS) consists in choosing\\(\\beta_{i}\\)in such a way that, the sum of squared residual (i.e.\\(\\sum_{i=1\n}^{N} \\epsilon_{i}\\)) in the sample is as small as possible. Mathematically this means that in order to estimate the\\(\\beta\\)we have to\nminimize\\(\\sum_{i=1}^{N} \\epsilon_{i}\\)which in matrix notation is nothing else than\\(e'e\\).",
+            "Consequently we can write\\(e'e\\)as\\((Y-X\\beta)'(Y-X\\beta)\\)by simply plugging in the expression\\(e = Y - X\\beta\\)into\\(e'e.\\)This leaves us with the following minimization problem:",
+            "In order to minimize the expression in (4), we have to differentiate the expression with respect to\\(\\beta\\)and set the derivative equal zero."
+        ],
+        "4.1.2. EvaluationÂ¶": [
+            "The coefficient of determination (R-squared) is a statistical metric that is used to measure how much of the variation in outcome can be explained\nby the variation in the independent variables.\\(R^2\\)always increases as more predictors are added to the MLR model even though the predictors\nmay not be related to the outcome variable.",
+            "\\(R^2\\)by itself canât thus be used to identify which predictors should be included in a model and which should be excluded.\\(R^2\\)can\nonly be between\\(0\\)and\\(1\\), where\\(0\\)indicates that the outcome cannot be predicted by any of the independent variables and\\(1\\)indicates that the outcome can be predicted without error from the independent variables.",
+            "When interpreting the results of a multiple regression, beta coefficients are valid while holding all other variables constant (all else equal).\nThe output from a multiple regression can be displayed horizontally as an equation, or vertically in table form.",
+            "Citations",
+            "Footnotes",
+            "References",
+            "OLS EstimatorYamano Lecture Note"
+        ]
+    },
+    "13_example_multiple_linear_regression.html": {
+        "5. Example Multiple Linear RegressionÂ¶": [
+            "Different methods used to demonstrate Multiple Linear Regression",
+            "Ordinary Least SquarePython from scratchScikitGradient DescentPython from scratchScikit"
+        ],
+        "5.1. Ordinary Least SquareÂ¶": [
+            "Loading Boston house-price from sklearn.datasets :",
+            "Define the data predictors and the target data :"
+        ],
+        "5.1.1. PythonÂ¶": [
+            "Using the Ordinary Least Square method derived in the previous section :",
+            "Set of coefficiants as calculated :"
+        ],
+        "5.1.2. ScikitÂ¶": [
+            "Lets define our regression model :",
+            "Fitting our model :",
+            "Evaluating our model :"
+        ]
+    }
+}

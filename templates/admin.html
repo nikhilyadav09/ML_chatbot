@@ -6,6 +6,7 @@
     <title>Enhanced Admin Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='admin-style.css') }}">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
     <div class="admin-container">
@@ -157,40 +158,26 @@
                         <h1><i class="fas fa-chart-line"></i> Analytics</h1>
                         <span class="header-subtitle">System performance and usage metrics</span>
                     </div>
-                    <div class="header-actions">
-                        <div class="date-filter">
-                            <i class="fas fa-calendar"></i>
-                            <select id="time-range">
-                                <option value="7">Last 7 days</option>
-                                <option value="30">Last 30 days</option>
-                                <option value="90">Last 90 days</option>
-                            </select>
-                        </div>
-                    </div>
                 </div>
                 <div class="admin-content">
-                    <div class="analytics-cards">
-                        <div class="analytics-card">
-                            <h3><i class="fas fa-trophy"></i> Top Users by Search Count</h3>
-                            <div id="top-users-chart" class="chart-container"></div>
-                        </div>
-                        <div class="analytics-card">
-                            <h3><i class="fas fa-clock"></i> User Activity Timeline</h3>
-                            <div id="activity-timeline" class="chart-container"></div>
-                        </div>
-                        <div class="analytics-card">
-                            <h3><i class="fas fa-search"></i> Most Common Search Terms</h3>
-                            <div id="search-terms-chart" class="chart-container"></div>
-                        </div>
+                    <div class="analytics-card">
+                        <h3><i class="fas fa-chart-line"></i> Sentiment Analysis</h3>
+                        <div id="sentiment-analysis-chart" class="chart-container"></div>
+                    </div><br>
+                    <div class="analytics-card">
+                        <h3><i class="fas fa-project-diagram"></i> Document Embeddings Visualization</h3>
+                        <div id="embeddings-chart" class="chart-container"></div>
+                        <div id="embedding-tooltip" class="tooltip" style="display: none;"></div>
                     </div>
+                </div>
                 </div>
             </div>
         </div>
     </div>
+<script>
 
-    <script>
-        // Navigation functionality
-        document.querySelectorAll('.menu-btn').forEach(button => {
+// Navigation functionality
+document.querySelectorAll('.menu-btn').forEach(button => {
             button.addEventListener('click', () => {
                 // Remove active class from all buttons and sections
                 document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('active'));
@@ -297,34 +284,15 @@
                 userCardsContainer.appendChild(userCard);
             });
         }
-
-        // Mock analytics loader
         function loadAnalytics() {
-            // Load charts and analytics data
-            document.getElementById('top-users-chart').innerHTML = `
-                <div class="placeholder-chart">
-                    <div class="chart-bar" style="height: 80%;">
-                        <span class="bar-label">User1</span>
-                        <div class="bar-value">150</div>
-                    </div>
-                    <div class="chart-bar" style="height: 60%;">
-                        <span class="bar-label">User2</span>
-                        <div class="bar-value">89</div>
-                    </div>
-                    <div class="chart-bar" style="height: 40%;">
-                        <span class="bar-label">User3</span>
-                        <div class="bar-value">45</div>
-                    </div>
-                </div>
-            `;
+}
 
-            // Add more analytics visualizations as needed
-        }
-
-        // Initial load
-        loadUserData();
-        loadAnalytics();
-        // Add this to your existing JavaScript
+// Initial load
+loadUserData();
+loadAnalytics();
+loadEmbeddingVisualization();
+// loadQueryClassificationVisualization();
+loadSentimentAnalysisVisualization();
 
 document.querySelectorAll('.menu-btn').forEach(button => {
     button.addEventListener('click', (e) => {
@@ -429,6 +397,285 @@ async function updateStats() {
         console.error('Error updating stats:', error);
     }
 }
+
+
+
+function renderEmbeddingVisualization(data) {
+    // Validate input data
+    if (!data || !data.embeddings || data.embeddings.length === 0) {
+        console.error('No embedding data available');
+        document.getElementById('embeddings-chart').innerHTML = 
+            '<p class="text-center text-danger">No embedding data available for visualization</p>';
+        return;
+    }
+
+    const chartContainer = document.getElementById('embeddings-chart');
+    chartContainer.innerHTML = ''; // Clear previous content
+
+    // Responsive sizing
+    const container = chartContainer;
+    const margin = {top: 50, right: 50, bottom: 50, left: 50};
+    const width = container.clientWidth - margin.left - margin.right;
+    const height = Math.min(600, container.clientWidth * 0.6) - margin.top - margin.bottom;
+
+    // Compute data ranges with padding
+    const xExtent = d3.extent(data.embeddings, d => d[0]);
+    const yExtent = d3.extent(data.embeddings, d => d[1]);
+    const xPadding = (xExtent[1] - xExtent[0]) * 0.1;
+    const yPadding = (yExtent[1] - yExtent[0]) * 0.1;
+
+    // Dynamic color scale based on clusters
+    const clusters = Array.from(new Set(data.clusters));
+    const colorScale = d3.scaleOrdinal()
+        .domain(clusters)
+        .range(d3.schemeCategory10);
+
+    // Create SVG
+    const svg = d3.select('#embeddings-chart')
+        .append('svg')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+        .append('g')
+        .attr('transform', `translate(${margin.left},${margin.top})`);
+
+    // Scales with padding
+    const xScale = d3.scaleLinear()
+        .domain([xExtent[0] - xPadding, xExtent[1] + xPadding])
+        .range([0, width]);
+
+    const yScale = d3.scaleLinear()
+        .domain([yExtent[0] - yPadding, yExtent[1] + yPadding])
+        .range([height, 0]);
+
+    // Grid lines for better readability
+    svg.append('g')
+        .attr('class', 'grid')
+        .attr('transform', `translate(0,${height})`)
+        .call(d3.axisBottom(xScale)
+            .tickSize(-height)
+            .tickFormat('')
+        );
+
+    svg.append('g')
+        .attr('class', 'grid')
+        .call(d3.axisLeft(yScale)
+            .tickSize(-width)
+            .tickFormat('')
+        );
+
+    // Reference line at 0,0
+    svg.append('line')
+        .attr('x1', xScale(0))
+        .attr('y1', 0)
+        .attr('x2', xScale(0))
+        .attr('y2', height)
+        .attr('stroke', 'lightgray')
+        .attr('stroke-dasharray', '5,5');
+
+    svg.append('line')
+        .attr('x1', 0)
+        .attr('y1', yScale(0))
+        .attr('x2', width)
+        .attr('y2', yScale(0))
+        .attr('stroke', 'lightgray')
+        .attr('stroke-dasharray', '5,5');
+
+    // Scatter plot
+    const dots = svg.selectAll('circle')
+        .data(data.embeddings)
+        .enter()
+        .append('circle')
+        .attr('cx', d => xScale(d[0]))
+        .attr('cy', d => yScale(d[1]))
+        .attr('r', 6)
+        .attr('fill', (d, i) => colorScale(data.clusters[i]))
+        .attr('opacity', 0.7)
+        .attr('stroke', 'white')
+        .attr('stroke-width', 1.5);
+
+    // Tooltip interaction
+    const tooltip = d3.select('#embedding-tooltip');
+    dots.on('mouseover', function(event, d) {
+        d3.select(this).attr('r', 10); // Enlarge on hover
+        
+        const index = data.embeddings.indexOf(d);
+        const metadata = data.metadata[index];
+
+        tooltip
+            .style('display', 'block')
+            .style('left', `${event.pageX + 15}px`)
+            .style('top', `${event.pageY - 15}px`)
+            .html(`
+                <div class="tooltip-content">
+                    <strong>Embedding:</strong> [${d[0].toFixed(3)}, ${d[1].toFixed(3)}]<br>
+                    <strong>Cluster:</strong> ${data.clusters[index]}<br>
+                    <strong>Text Snippet:</strong> ${metadata.text.substring(0, 200)}...<br>
+                    <strong>Source:</strong> ${metadata.source}
+                </div>
+            `);
+    })
+    .on('mouseout', function() {
+        d3.select(this).attr('r', 6); // Reset size
+        tooltip.style('display', 'none');
+    });
+
+    // Axes with labels
+    svg.append('g')
+        .attr('transform', `translate(0,${height})`)
+        .call(d3.axisBottom(xScale).ticks(8))
+        .append('text')
+        .attr('x', width/2)
+        .attr('y', 40)
+        .attr('fill', 'black')
+        .attr('text-anchor', 'middle')
+        .style('font-size', '16px')
+        .text('First Principal Component');
+
+    svg.append('g')
+        .call(d3.axisLeft(yScale).ticks(8))
+        .append('text')
+        .attr('transform', 'rotate(-90)')
+        .attr('x', -height/2)
+        .attr('y', -40)
+        .attr('fill', 'black')
+        .attr('text-anchor', 'middle')
+        .style('font-size', '15px')
+        .text('Second Principal Component');
+
+    // Legend for clusters
+    const legend = svg.append('g')
+        .attr('transform', `translate(${width - 120}, 20)`);
+
+    clusters.forEach((cluster, i) => {
+        legend.append('circle')
+            .attr('cx', 0)
+            .attr('cy', i * 25)
+            .attr('r', 6)
+            .attr('fill', colorScale(cluster));
+
+        legend.append('text')
+            .attr('x', 15)
+            .attr('y', i * 25 + 5)
+            .attr('fill', 'black')
+            .text(`Cluster ${cluster}`);
+    });
+}
+async function loadEmbeddingVisualization() {
+    try {
+        console.log('Attempting to fetch embeddings');
+        const response = await fetch('/api/embedding-visualization');
+        
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+        
+        const result = await response.json();
+        console.log('Full response body:', result);
+
+        if (result.status === 'success') {
+            console.log('Rendering embeddings', result.visualizationData);
+            renderEmbeddingVisualization(result.visualizationData);
+        } else {
+            console.error('API returned error:', result.message);
+            const errorEl = document.getElementById('embeddings-chart');
+            errorEl.innerHTML = `<p style="color: black; font-weight: bold;">Error: ${result.message}</p>`;
+        }
+    } catch (error) {
+        console.error('Complete error details:', {
+            message: error.message,
+            stack: error.stack,
+            name: error.name
+        });
+        const errorEl = document.getElementById('embeddings-chart');
+        errorEl.innerHTML = `<p style="color: black; font-weight: bold;">Failed to load embeddings: ${error.message}</p>`;
+    }
+}
+
+async function loadSentimentAnalysisVisualization() {
+    try {
+        const response = await fetch('/api/sentiment-analysis');
+        const result = await response.json();
+
+        if (result.status === 'success') {
+            const sentimentContainer = document.getElementById('sentiment-analysis-chart');
+            
+            // Clear previous content
+            sentimentContainer.innerHTML = '';
+
+            // Create image element for visualization
+            const img = document.createElement('img');
+            img.src = result.image;
+            img.alt = 'Sentiment Analysis Visualization';
+            img.style.maxWidth = '100%';
+            img.style.height = 'auto';
+            sentimentContainer.appendChild(img);
+
+            // Create metrics and insights section with black, bold styling
+            const metricsContainer = document.createElement('div');
+            metricsContainer.className = 'sentiment-metrics';
+            metricsContainer.innerHTML = `
+                <h4 style="color: black; font-weight: bold;">Sentiment Analysis Metrics</h4>
+                <table style="color: black; font-weight: bold; width: 60%;">
+                    <tr>
+                        <th style="color: white; font-weight: bold; border: 1px solid white; padding: 5px;">Metric</th>
+                        <th style="color: white; font-weight: bold; border: 1px solid white; padding: 5px;">Value</th>
+                    </tr>
+                    <tr>
+                        <td style="color: white; font-weight: bold; border: 1px solid white; padding: 5px;">Mean Squared Error</td>
+                        <td style="color: white; font-weight: bold; border: 1px solid white; padding: 5px;">${result.metrics.mean_squared_error.toFixed(4)}</td>
+                    </tr>
+                    <tr>
+                        <td style="color: white; font-weight: bold; border: 1px solid white; padding: 5px;">R² Score</td>
+                        <td style="color: white; font-weight: bold; border: 1px solid white; padding: 5px;">${result.metrics.r2_score.toFixed(4)}</td>
+                    </tr>
+                </table>
+
+                <h4 style="color: black; font-weight: bold;">Top Insights</h4>
+                <ul style="color: black; font-weight: bold;">
+                    ${result.top_insights.map(insight => `<li style="color: black; font-weight: bold;">${insight}</li>`).join('')}
+                </ul>
+
+                <h4 style="color: black; font-weight: bold;">Model Coefficients</h4>
+                <table style="color: black; font-weight: bold; width: 60%;">
+                    <tr>
+                        <th style="color: white; font-weight: bold; border: 1px solid white; padding: 5px;">Feature</th>
+                        <th style="color: white; font-weight: bold; border: 1px solid white; padding: 5px;">Coefficient</th>
+                    </tr>
+                    <tr>
+                        <td style="color: white; font-weight: bold; border: 1px solid white; padding: 5px;">Answer Length</td>
+                        <td style="color: white; font-weight: bold; border: 1px solid white; padding: 5px;">${result.metrics.coefficients[0].toFixed(4)}</td>
+                    </tr>
+                    <tr>
+                        <td style="color: white; font-weight: bold; border: 1px solid white; padding: 5px;">Question Length</td>
+                        <td style="color: white; font-weight: bold; border: 1px solid white; padding: 5px;">${result.metrics.coefficients[1].toFixed(4)}</td>
+                    </tr>
+                    <tr>
+                        <td style="color: white; font-weight: bold; border: 1px solid white; padding: 5px;">Sentiment Score</td>
+                        <td style="color: white; font-weight: bold; border: 1px solid white; padding: 5px;">${result.metrics.coefficients[2].toFixed(4)}</td>
+                    </tr>
+                    <tr>
+                        <td style="color: white; font-weight: bold; border: 1px solid white; padding: 5px;">Intercept</td>
+                        <td style="color: white; font-weight: bold; border: 1px solid white; padding: 5px;">${result.metrics.intercept.toFixed(4)}</td>
+                    </tr>
+                </table>
+            `;
+            sentimentContainer.appendChild(metricsContainer);
+        } else {
+            console.error('Sentiment Analysis API Error:', result.message);
+            const errorEl = document.getElementById('sentiment-analysis-chart');
+            errorEl.innerHTML = `<p style="color: black; font-weight: bold;">Error: ${result.message}</p>`;
+        }
+    } catch (error) {
+        console.error('Error loading sentiment analysis visualization:', error);
+        const errorEl = document.getElementById('sentiment-analysis-chart');
+        errorEl.innerHTML = `<p style="color: black; font-weight: bold;">Failed to load sentiment analysis visualization: ${error.message}</p>`;
+    }
+}
+
+// Call the functions on page load
+window.onload = function() {
+    loadEmbeddingVisualization();
+    loadSentimentAnalysisVisualization();
+};
     </script>
-</body>
+    </body>
 </html>

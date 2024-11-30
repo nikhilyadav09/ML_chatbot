@@ -11,7 +11,22 @@ from pgvector.psycopg2 import register_vector
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from groq import Groq
-
+import psycopg2
+import numpy as np
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+import json
+import os
+import numpy as np
+import psycopg2
+import base64
+import io
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.feature_extraction.text import CountVectorizer
 
 
 class InformationRetrievalSystem:
@@ -35,6 +50,8 @@ class InformationRetrievalSystem:
                 id SERIAL PRIMARY KEY,
                 username VARCHAR(50) UNIQUE NOT NULL,
                 password VARCHAR(255) NOT NULL,
+                search_count INTEGER DEFAULT 0,
+                last_active TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 role VARCHAR(20) NOT NULL
             );
             
@@ -194,7 +211,7 @@ class InformationRetrievalSystem:
         finally:
             if not cursor.closed:
                 cursor.close()
-   
+
     def search_documents(self, query, user_id, top_k=1):  # Default top_k to 1 for single best match
         query_embedding = self.model.encode(query).tolist()
         
@@ -351,8 +368,310 @@ def index():
     chat_history = ir_system.get_user_chat_history(session['user_id'])
     return render_template('index.html', chat_history=chat_history)  # Fixed variable name
 
+# Function to establish database connection
+def get_database_connection(DB_PARAMS):
+    """Establish a connection to the PostgreSQL database."""
+    return psycopg2.connect(**DB_PARAMS)
 
- 
+# Fetch embeddings from the database
+def fetch_embeddings(db_params):
+    """Fetch embeddings from the database."""
+    try:
+        with get_database_connection(db_params) as conn:
+            with conn.cursor() as cur:
+                # Fetch all embeddings
+                cur.execute("""
+                    SELECT embedding 
+                    FROM document_embeddings 
+                    WHERE embedding IS NOT NULL
+                """)
+                rows = cur.fetchall()
+                
+                # Return embeddings as numpy arrays
+                if not rows:
+                    print("No embeddings found in database")
+                    return None
+                
+                embeddings = [np.frombuffer(row[0], dtype=np.float32) for row in rows]
+                return np.array(embeddings)
+    except Exception as e:
+        print(f"Error fetching embeddings: {e}")
+        return None
+
+# Process embeddings with PCA and clustering
+def process_embeddings(embeddings, n_clusters=3):
+    """Process embeddings with dimensionality reduction and clustering."""
+    if embeddings is None or len(embeddings) == 0:
+        return None, None
+    
+    # Dimensionality Reduction using PCA
+    pca = PCA(n_components=2)
+    reduced_embeddings = pca.fit_transform(embeddings)
+    
+    # Clustering using KMeans
+    kmeans = KMeans(n_clusters=n_clusters, random_state=42)
+    clusters = kmeans.fit_predict(embeddings)
+    
+    return reduced_embeddings, clusters
+
+# Generate embedding visualization data
+def generate_embedding_visualization(db_params):
+    """Generate visualization data for embeddings."""
+    embeddings = fetch_embeddings(db_params)
+    
+    if embeddings is None:
+        return None
+    
+    reduced_embeddings, clusters = process_embeddings(embeddings)
+    
+    # Prepare data for frontend
+    visualization_data = {
+        'embeddings': reduced_embeddings.tolist(),
+        'clusters': clusters.tolist()
+    }
+    
+    return visualization_data
+
+# API endpoint to generate embedding visualization data
+@app.route('/api/embedding-visualization', methods=['GET'])
+def embedding_visualization():
+    """API endpoint to generate embedding visualization data."""
+    try:
+        # Generate embedding visualization data
+        visualization_data = generate_embedding_visualization(DB_PARAMS)
+        
+        if visualization_data is None:
+            return jsonify({
+                'status': 'error',
+                'message': 'No embeddings found in the database.'
+            }), 404
+        
+        return jsonify({
+            'status': 'success',
+            'visualizationData': visualization_data
+        })
+    except Exception as e:
+        print(f"Error in embedding visualization API: {e}")
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+    
+@app.route('/api/query-classification', methods=['GET'])
+def query_classification():
+    """API endpoint to classify queries from chat history."""
+    try:
+        # Establish database connection
+        conn = psycopg2.connect(**DB_PARAMS)
+        cur = conn.cursor()
+
+        # Fetch all queries from chat_history table
+        cur.execute("""
+            SELECT query FROM chat_history
+        """)
+        queries = cur.fetchall()
+
+        if not queries:
+            return jsonify({
+                'status': 'error',
+                'message': 'No queries found in chat history.'
+            }), 404
+
+        # Flatten the list of tuples to a list of strings
+        queries = [query[0] for query in queries]
+
+        # Example classification logic (you can replace this with a trained model)
+        vectorizer = CountVectorizer()
+        classifier = MultinomialNB()
+
+        # Assume we have predefined training data
+        training_data = [
+            "how to train a machine learning model",
+            "best practices for natural language processing",
+            "spam email example",
+            "example of phishing email"
+        ]
+        training_labels = ["ml_related", "ml_related", "spam", "spam"]
+
+        # Fit the model with the training data
+        vectors = vectorizer.fit_transform(training_data)
+        classifier.fit(vectors, training_labels)
+
+        # Classify all queries from chat history
+        query_vectors = vectorizer.transform(queries)
+        predicted_classes = classifier.predict(query_vectors)
+
+        # Combine queries with their predicted classes
+        results = [
+            {"query": query, "predictedClass": predicted_class}
+            for query, predicted_class in zip(queries, predicted_classes)
+        ]
+
+        # Close the database connection
+        cur.close()
+        conn.close()
+
+        return jsonify({
+            'status': 'success',
+            'classifiedQueries': results
+        })
+
+    except Exception as e:
+        print(f"Error in query classification API: {e}")
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
+@app.route('/api/sentiment-analysis', methods=['GET'])
+def sentiment_analysis_visualization():
+    import pandas as pd
+    import numpy as np
+    from sklearn.linear_model import LinearRegression
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import mean_squared_error, r2_score
+    from nltk.sentiment import SentimentIntensityAnalyzer
+    import nltk
+    import matplotlib.pyplot as plt
+    import io
+    import base64
+
+    # Ensure VADER lexicon is downloaded
+    nltk.download('vader_lexicon', quiet=True)
+
+    # Initialize VADER Sentiment Analyzer
+    sia = SentimentIntensityAnalyzer()
+
+    try:
+        # Load the data
+        file_path = 'analysis.csv'  # Ensure this path is correct
+        df = pd.read_csv(file_path)
+
+        # Feature Extraction
+        df['answer_length'] = df['answer'].apply(lambda x: len(str(x).split()))
+        df['question_length'] = df['question'].apply(lambda x: len(str(x).split()))
+        df['sentiment_score'] = df['feedback'].apply(lambda feedback: sia.polarity_scores(str(feedback))['compound'])
+
+        # Prepare data for Linear Regression
+        X = df[['answer_length', 'question_length', 'sentiment_score']]
+        y = df['sentiment_score']
+
+        # Split the dataset
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+        # Train the Linear Regression model
+        regressor = LinearRegression()
+        regressor.fit(X_train, y_train)
+
+        # Make predictions
+        y_pred = regressor.predict(X_test)
+
+        # Calculate metrics
+        mse = mean_squared_error(y_test, y_pred)
+        r2 = r2_score(y_test, y_pred)
+
+        # Create visualization
+        plt.figure(figsize=(10, 6))
+        df['question_index'] = np.arange(len(df))
+        plt.scatter(df['question_index'], df['sentiment_score'], color='blue', label='Actual Sentiment Score', alpha=0.7)
+        plt.plot(df['question_index'], regressor.predict(X), color='red', label='Predicted Sentiment Score')
+
+        plt.xlabel('Question Index')
+        plt.ylabel('Sentiment Score')
+        plt.title('Sentiment Analysis Trend Prediction')
+        plt.legend()
+
+        # Save plot to buffer
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+        image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+        plt.close()
+
+        return jsonify({
+            'status': 'success',
+            'image': f'data:image/png;base64,{image_base64}',
+            'metrics': {
+                'mean_squared_error': mse,
+                'r2_score': r2,
+                'coefficients': regressor.coef_.tolist(),
+                'intercept': regressor.intercept_
+            },
+            'top_insights': [
+                f'Average Sentiment Score: {df["sentiment_score"].mean():.2f}',
+                f'Sentiment Score Standard Deviation: {df["sentiment_score"].std():.2f}',
+                f'Correlation between Answer Length and Sentiment: {df["answer_length"].corr(df["sentiment_score"]):.2f}'
+            ]
+        })
+
+    except Exception as e:
+        print(f"Error in sentiment analysis: {e}")
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
+
+@app.route('/api/top-users-chart', methods=['GET'])
+def top_users_chart():
+    """Generate bar chart for top users."""
+    try:
+        # Retrieve top users data
+        conn = psycopg2.connect(**DB_PARAMS)
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT username, search_count 
+            FROM users 
+            ORDER BY search_count DESC 
+            LIMIT 5
+        """)
+        top_users = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        # Create bar chart
+        plt.figure(figsize=(10, 6))
+        usernames = [user[0] for user in top_users]
+        search_counts = [user[1] for user in top_users]
+
+        plt.bar(usernames, search_counts, color='skyblue')
+        plt.title('Top 5 Users by Search Count')
+        plt.xlabel('Username')
+        plt.ylabel('Search Count')
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+
+        # Save plot to buffer
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+        image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+        plt.close()
+
+        return jsonify({
+            'status': 'success',
+            'chart': f'data:image/png;base64,{image_base64}'
+        })
+
+    except Exception as e:
+        print(f"Error generating top users chart: {e}")
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+@app.route('/admin', methods=['GET', 'POST'])
+def admin_dashboard():
+    if not session.get('is_admin'):
+        return redirect(url_for('login'))
+    
+    if request.method == 'POST':
+        csv_path = request.form['csv_path']
+        result = ir_system.embed_csv_documents(csv_path)
+        return jsonify({"status": "success", "message": result})
+    
+    return render_template('admin.html')
 
 def use_api(text, trial, question):
     key1 = "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"
@@ -540,17 +859,6 @@ def validate_user(self, username, password):
         return result[0]  # Return user ID
     return None
 
-@app.route('/admin', methods=['GET', 'POST'])
-def admin_dashboard():
-    if not session.get('is_admin'):
-        return redirect(url_for('login'))
-    
-    if request.method == 'POST':
-        csv_path = request.form['csv_path']
-        result = ir_system.embed_csv_documents(csv_path)
-        return jsonify({"status": "success", "message": result})
-    
-    return render_template('admin.html')
 
 @app.route('/search', methods=['POST'])
 def search_documents():
@@ -695,4 +1003,4 @@ if __name__ == '__main__':
     # First-time admin registration (run once)
     ir_system.register_admin('nikhilyadav09', '9301')
     
-    app.run(debug=True, host='0.0.0.0', port=8000)
+    app.run(debug=True, host='0.0.0.0', port=5000)

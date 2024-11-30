@@ -189,11 +189,11 @@ async function submitQuery(event) {
                             </div>
                     <p>${result.text}</p>
                     <div class="similarity">Similarity: ${(result.similarity * 100).toFixed(1) || 'N/A'}%</div>
-                    <p>Llama response: ${result.api_response || 'N/A'}</p>
+                    <p><strong>Llama response:</strong> ${result.api_response || 'N/A'}</p>
                     <div class="source-info">
                         <strong><i class="fas fa-book"></i> Chapter:</strong> ${result.chapter_name || 'N/A'}<br>
                         <strong><i class="fas fa-file-alt"></i> Source:</strong> 
-                        <a href="${result.source || '#'}" target="_blank">${result.source ? 'Source Link' : 'N/A'}</a>
+                        <a href="${result.source || '#'}" target="_blank">${result.source ? ' Link' : 'N/A'}</a>
                     </div>
                     <div class="response-type">
                         <button class="speak-btn" onclick="speakResponse(\`${result.text.replace(/`/g, '\\`')}\`)" title="Speak Response">
@@ -265,11 +265,11 @@ async function viewChat(chatId) {
                                 </button>
                             </div>
                             <p>${data.response}</p>
-                            <div class="similarity">Similarity: ${data.similarity ? (data.similarity * 100).toFixed(1) + '%' : 'N/A'}</div>
+                            <strong><div class="similarity">Similarity: ${data.similarity ? (data.similarity * 100).toFixed(1) + '%' : 'N/A'}</div></strong>
                             <div class="source-info">
-                                <i class="fas fa-book"></i> Chapter: ${data.chapter_name || 'N/A'}<br>
+                            <strong><i class="fas fa-book"></i> Chapter:</strong> ${data.chapter_name || 'N/A'}<br>
                                 <i class="fas fa-file-alt"></i> 
-                                Source: <a href="${data.source || '#'}" target="_blank">${data.source ? 'Source Link' : 'N/A'}</a>
+                            <strong> Source: <a href="${data.source || '#'}" target="_blank"></strong>${data.source ? 'Link' : 'N/A'}</a>
                             </div>
                             <div class="timestamp">
                                 <i class="far fa-clock"></i> ${data.timestamp || 'N/A'}

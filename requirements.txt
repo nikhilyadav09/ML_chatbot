@@ -12,3 +12,5 @@ sentence-transformers==2.2.2
 Werkzeug==2.3.7
 groq==0.13.0
 gunicorn==21.2.0
+sentence-transformers==2.2.2
+huggingface-hub==0.13.4

@@ -666,9 +666,10 @@ def admin_dashboard():
     return render_template('admin.html')
 
 def use_api(text, trial, question):
-    key1 = "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"
-    key2 = "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"
-    key3 = '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'
+    key1 = os.getenv('key1')
+    key2= os.getenv('key2')
+    key3 = os.getenv('key3')
+
     if trial%3==1:
         key = key1
     elif trial%3==2:

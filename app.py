@@ -996,4 +996,4 @@ if __name__ == '__main__':
     # First-time admin registration (run once)
     ir_system.register_admin('nikhilyadav09', '9301')
     
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True)

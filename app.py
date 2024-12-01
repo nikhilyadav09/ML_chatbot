@@ -22,6 +22,8 @@ from sklearn.metrics import mean_squared_error, r2_score
 from nltk.sentiment import SentimentIntensityAnalyzer
 import nltk
 
+nltk.download('vader_lexicon', quiet=True)
+
 
 class InformationRetrievalSystem:
     def __init__(self, db_params):
@@ -530,7 +532,6 @@ def query_classification():
 @app.route('/api/sentiment-analysis', methods=['GET'])
 def sentiment_analysis_visualization():
     # Ensure VADER lexicon is downloaded
-    nltk.download('vader_lexicon', quiet=True)
 
     # Initialize VADER Sentiment Analyzer
     sia = SentimentIntensityAnalyzer()

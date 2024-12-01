@@ -22,6 +22,8 @@ from sklearn.metrics import mean_squared_error, r2_score
 from nltk.sentiment import SentimentIntensityAnalyzer
 import nltk
 
+nltk.download('vader_lexicon', quiet=True)
+
 
 class InformationRetrievalSystem:
     def __init__(self, db_params):
@@ -530,7 +532,6 @@ def query_classification():
 @app.route('/api/sentiment-analysis', methods=['GET'])
 def sentiment_analysis_visualization():
     # Ensure VADER lexicon is downloaded
-    nltk.download('vader_lexicon', quiet=True)
 
     # Initialize VADER Sentiment Analyzer
     sia = SentimentIntensityAnalyzer()
@@ -666,9 +667,10 @@ def admin_dashboard():
     return render_template('admin.html')
 
 def use_api(text, trial, question):
-    key1 = "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"
-    key2 = "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"
-    key3 = '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'
+    key1 = os.getenv('key1')
+    key2= os.getenv('key2')
+    key3 = os.getenv('key3')
+
     if trial%3==1:
         key = key1
     elif trial%3==2:
@@ -995,4 +997,4 @@ if __name__ == '__main__':
     # First-time admin registration (run once)
     ir_system.register_admin('nikhilyadav09', '9301')
     
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True)

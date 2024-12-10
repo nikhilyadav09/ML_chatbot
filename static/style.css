@@ -1068,7 +1068,38 @@ history-item {
 .raw-data-container::-webkit-scrollbar-thumb:hover {
     background: #2c5cd4;
 }
+.feedback-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+}
 
+.feedback-input {
+    flex-grow: 1;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.feedback-submit-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.feedback-submit-btn:hover {
+    background-color: #0056b3;
+}
+
+.feedback-status {
+    margin-left: 10px;
+    font-size: 12px;
+}
 
 
 .main-content {

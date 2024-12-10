@@ -208,8 +208,36 @@ class InformationRetrievalSystem:
             if not cursor.closed:
                 cursor.close()
 
+    def rewrite_question(self, query):
+        key1 = os.getenv('key1')
+        
+        client = Groq(
+            api_key=key1
+        )
+        chat_completion = client.chat.completions.create(
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"""
+    You are an expert in language refinement. Rephrase the following question to improve its clarity, fluency, and readability while preserving its original intent:
+
+    Original question: "{query}"
+
+    Make sure the rewritten version:
+    - Is grammatically correct and concise.
+    - Retains the original meaning.
+    - Sounds natural and professional.
+                    """,
+                }
+            ],
+            model="llama3-8b-8192",
+        )
+        return chat_completion.choices[0].message.content
+
+
     def search_documents(self, query, user_id, top_k=1):  # Default top_k to 1 for single best match
-        query_embedding = self.model.encode(query).tolist()
+        rewritten_query  = self.rewrite_question(query)
+        query_embedding = self.model.encode(rewritten_query).tolist()
         
         cursor = self.conn.cursor()
         try:
@@ -222,6 +250,7 @@ class InformationRetrievalSystem:
             """, (query_embedding, top_k))
             
             results = cursor.fetchall()
+            
             if not results:
                 # No matches found
                 response_text = "No relevant matches found."
@@ -668,30 +697,75 @@ def admin_dashboard():
 
 def use_api(text, trial, question):
     key1 = os.getenv('key1')
-    key2= os.getenv('key2')
+    key2 = os.getenv('key2')
     key3 = os.getenv('key3')
 
-    if trial%3==1:
-        key = key1
-    elif trial%3==2:
-        key = key2
-    else:
-        key = key3
-    client = Groq(
-        # api_key="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"
-        api_key=key
-    )
-    chat_completion = client.chat.completions.create(
-        messages=[
+    # Rotate API keys
+    key = key1 if trial % 3 == 1 else (key2 if trial % 3 == 2 else key3)
+    
+    client = Groq(api_key=key)
+    
+    # Define a list of greeting patterns
+    greeting_patterns = [
+        "hi", "hello", "hey", "greetings", "good morning", 
+        "good afternoon", "good evening", "what's up", "howdy"
+    ]
+    
+    # Check if the question is a greeting
+    is_greeting = any(pattern in question.lower() for pattern in greeting_patterns)
+    
+    # Prepare the prompt based on the type of query
+    if is_greeting:
+        # Handle greetings with a friendly, concise response
+        messages = [
             {
-                "role": "user",
-                "content": f" this is asked question by a user :{question} and this is the text retreive from database on based of question :  {text}. Now you need to generate a answer based on given question and based on retrival answer from database. and you have to just give the answer, you don't need to",
+                "role": "user", 
+                "content": f"""
+                    Respond to the greeting: "{question}"
+                    Provide a friendly, professional, and concise greeting in return.
+                    Do not generate a long explanation or go into detail about the system.
+                    """
             }
-        ],
+        ]
+    else:
+        # Regular query handling
+        messages = [
+            {
+                "role": "user", 
+                "content": f"""
+                You are an intelligent ML-based assistant focused on providing precise and helpful information.
+
+                Context:
+                - User Question: {question}
+                - Retrieved Context: {text}
+
+                Key Instructions:
+                1. Generate a concise, direct answer strictly based on the extracted text but dont mention this.
+                - Summarize the information in the extracted text relevant to the user's question.
+                - Do not add information beyond what is explicitly mentioned in the extracted text.
+                - Ensure the response is clear and to the point
+                -Do not give extra things , just summury and dont ask anyting , just give your.
+
+                2. If the retrieved text is irrelevant:
+                - Politely indicate that the specific context doesn't match the question
+                - Offer a general, helpful response based on your knowledge
+                - If unsure, ask for clarification
+
+                3. Maintain a professional, helpful tone
+                4. Keep responses succinct and informative
+                """
+            }
+        ]
+    
+    # Make the API call
+    chat_completion = client.chat.completions.create(
+        messages=messages,
         model="llama3-8b-8192",
+        max_tokens=150  # Limit response length
     )
+    
     return chat_completion.choices[0].message.content
- 
+
 @app.route('/save_feedback', methods=['POST'])
 def save_feedback():
     # Check user session

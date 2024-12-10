@@ -182,7 +182,7 @@ async function submitQuery(event) {
         let aiResponse = '<div class="message ai-message"><div class="message-content"><i class="fas fa-robot"></i><div class="ai-responses">';
 results.forEach((result, index) => {
     aiResponse += `
-        <div class="response-item">
+        <div class="response-item" id="response-item-${index}">
             <div class="response-header">
                 <button class="copy-btn" onclick="copyToClipboard(\`${result.api_response.replace(/`/g, '\\`')}\`, this)" title="Copy Response">
                     <i class="fas fa-copy"></i>
@@ -190,11 +190,11 @@ results.forEach((result, index) => {
             </div>
             <p> ${result.api_response || 'N/A'}</p>
             <div class="result-container">
-                <span class="raw-data-toggle" onclick="toggleRawData(${index})">
+                <span class="raw-data-toggle" onclick="toggleRawData(event)">
                     <i class="fas fa-file-alt raw-data-icon"></i>
                     Show Raw Data
                 </span>
-                <pre class="raw-data-container" id="raw-data-${index}" style="display:none;">${result.text || 'No raw data available'}</pre>
+                <pre class="raw-data-container" style="display:none;">${result.text || 'No raw data available'}</pre>
             </div>
             <div class="similarity">Similarity: ${(result.similarity * 100).toFixed(1) || 'N/A'}%</div>
             <div class="source-info">
@@ -214,9 +214,12 @@ results.forEach((result, index) => {
                     onclick="saveFeedback(event, 'bad')">
                     <i class="fas fa-thumbs-down"></i>
                 </button>
-                <input type="text" class="feedback-input" placeholder="Add feedback" 
-                    onchange="saveFeedback(event, '', this.value)">
-                <div class="feedback-status"></div>
+<div class="feedback-container">
+    <input type="text" class="feedback-input" placeholder="Add feedback" id="feedback-input">
+        <button class="feedback-submit-btn" onclick="submitFeedback(event)">
+            <i class="fas fa-check-circle"></i>
+                </div>
+            <div class="feedback-status"></div>
             </div>
         </div>
     `;
@@ -238,6 +241,47 @@ chatHistory.innerHTML += aiResponse;
         `;
     }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const feedbackInput = document.getElementById('feedback-input');
+    const feedbackSubmitBtn = document.getElementById('feedback-submit-btn');
+    const feedbackStatus = document.getElementById('feedback-status');
+
+    // Function to submit feedback
+    function submitFeedback() {
+        const feedbackValue = feedbackInput.value.trim();
+
+        if (feedbackValue === '') {
+            feedbackStatus.textContent = 'Please enter feedback';
+            feedbackStatus.style.color = 'red';
+            return;
+        }
+
+        try {
+            // Call the existing saveFeedback function
+            saveFeedback(event, '', feedbackValue);
+            
+            // Clear input and show success message
+            feedbackInput.value = '';
+            feedbackStatus.textContent = 'Feedback submitted successfully';
+            feedbackStatus.style.color = 'green';
+        } catch (error) {
+            feedbackStatus.textContent = 'Error submitting feedback';
+            feedbackStatus.style.color = 'red';
+            console.error(error);
+        }
+    }
+
+    // Submit button click event
+    feedbackSubmitBtn.addEventListener('click', submitFeedback);
+
+    // Enter key submit
+    feedbackInput.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            submitFeedback();
+        }
+    });
+});
 async function viewChat(chatId) {
     console.log('Attempting to view chat', chatId);
     try {
@@ -332,6 +376,30 @@ async function deleteChat(chatId) {
         alert(error.message);
     }
 }
+function submitFeedback(event) {
+    // Find the closest response item
+    const responseItem = event.target.closest('.response-item');
+    const feedbackInput = responseItem.querySelector('.feedback-input');
+    const feedbackStatus = responseItem.querySelector('.feedback-status');
+    
+    const feedbackValue = feedbackInput.value.trim();
+
+    if (feedbackValue === '') {
+        if (feedbackStatus) {
+            feedbackStatus.textContent = 'Please enter feedback';
+            feedbackStatus.style.color = 'red';
+        }
+        return;
+    }
+
+    // Call saveFeedback with an empty feedback type for custom text input
+    saveFeedback(event, '', feedbackValue);
+    
+    // Clear input
+    feedbackInput.value = '';
+}
+
+// The existing saveFeedback function remains the same as you provided
 function saveFeedback(event, feedbackType = '', feedbackText = '') {
     // Find the closest response item
     const responseItem = event.target.closest('.response-item');
@@ -357,9 +425,9 @@ function saveFeedback(event, feedbackType = '', feedbackText = '') {
     .then(response => response.json())
     .then(data => {
         console.log('Feedback save response:', data);
+        const feedbackStatus = responseItem.querySelector('.feedback-status');
         if (data.status === 'success') {
             // Show success message
-            const feedbackStatus = responseItem.querySelector('.feedback-status');
             if (feedbackStatus) {
                 feedbackStatus.textContent = 'Feedback saved successfully';
                 feedbackStatus.style.color = 'green';
@@ -370,7 +438,6 @@ function saveFeedback(event, feedbackType = '', feedbackText = '') {
         } else {
             // Show error message
             console.error('Feedback save failed:', data);
-            const feedbackStatus = responseItem.querySelector('.feedback-status');
             if (feedbackStatus) {
                 feedbackStatus.textContent = 'Failed to save feedback';
                 feedbackStatus.style.color = 'red';
@@ -432,17 +499,16 @@ function speakResponse(text) {
 
 
 
+function toggleRawData(event) {
+    const rawDataContainer = event.target.closest('.result-container').querySelector('.raw-data-container');
+    const toggleButton = event.target;
 
-function toggleRawData(index) {
-    const rawDataContainer = document.getElementById(`raw-data-${index}`);
-    const toggleButton = document.querySelector(`#response-item-${index} .raw-data-toggle`);
-    
     if (rawDataContainer.style.display === 'none' || rawDataContainer.style.display === '') {
         rawDataContainer.style.display = 'block';
-        toggleButton.textContent = 'Hide Raw Data';
+        toggleButton.innerHTML = '<i class="fas fa-file-alt raw-data-icon"></i> Hide Raw Data';
     } else {
         rawDataContainer.style.display = 'none';
-        toggleButton.textContent = 'Show Raw Data';
+        toggleButton.innerHTML = '<i class="fas fa-file-alt raw-data-icon"></i> Show Raw Data';
     }
 }
     </script>
